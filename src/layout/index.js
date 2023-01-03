@@ -1,5 +1,5 @@
-import React from "react";
-import { Route, Router, Routes } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Route, Routes } from "react-router-dom";
 import GlobalStyles from "../utils/globalStyle";
 
 //pages
@@ -10,17 +10,28 @@ import Register from "../pages/Register";
 // components
 import Sidebar from "../components/Sidebar";
 
+// cookie
+import { Cookies } from "react-cookie";
+export const cookies = new Cookies();
+
 const App = () => {
+  useEffect(() => {}, [cookies.get("Authentication")]);
   return (
     <>
       <GlobalStyles />
-      <Sidebar />
-      {/* <Nav /> */}
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-      </Routes>
+      {cookies.get("Authentication") ? (
+        <Sidebar>
+          <Routes>
+            <Route path="/" element={<Home />} />
+          </Routes>
+        </Sidebar>
+      ) : (
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+        </Routes>
+      )}
     </>
   );
 };

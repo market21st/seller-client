@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
 const Wrap = styled.div`
-  background: gold;
+  /* background: purple; */
   width: 100%;
   height: 100%;
 `;

@@ -21,6 +21,7 @@ time, mark, audio, video {
 	font: inherit;
 	vertical-align: baseline;
 	box-sizing: border-box;
+	font-family: 'SpoqaHanSansNeo-Regular';
 }
 /* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure, 
@@ -58,6 +59,10 @@ textarea {
   outline: none;
   
 }
+
+a {color: #4552CE; text-decoration: none; outline: none}
+a:hover, a:active {text-decoration: none;}
+
 .postmodal{
     background : rgba(0,0,0,0.25);
     position : fixed;
