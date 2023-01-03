@@ -64,7 +64,7 @@ const LogIn = () => {
     color: theme.palette.primary.main,
   }));
 
-  //비밀번호
+  //비밀번호 (미리보기)
   const [values, setValues] = useState({
     amount: "",
     password: "",
