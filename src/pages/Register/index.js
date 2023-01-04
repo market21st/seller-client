@@ -76,11 +76,6 @@ const Register = () => {
   // 이메일 형식
   const emailRegEx =
     /^[A-Za-z0-9]([-_.]?[A-Za-z0-9])*@[A-Za-z0-9]([-_.]?[A-Za-z0-9])*\.[A-Za-z]{2,3}$/;
-  const navigate = useNavigate();
-
-  // select
-  const [bizType, setBizType] = useState("개인사업자");
-  const [taxType, setTaxType] = useState("일반과세");
 
   const [bizFile, setBizFile] = useState("");
   const [corpImage, setCorpImage] = useState("");
@@ -128,8 +123,8 @@ const Register = () => {
     corpAddr2: "",
     corpPost: "",
     corpDesc: "",
-    bizType: "사업자분류",
-    taxType: "과세분류",
+    bizType: "개인사업자",
+    taxType: "단위과세",
     bizNum: "",
   });
 
@@ -165,6 +160,7 @@ const Register = () => {
   };
 
   const submit = async () => {
+    console.log(userInfo);
     if (!idCheckResult) {
       setAlertModal(true);
       setText("아이디 중복확인을 해주세요.");

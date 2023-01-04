@@ -1,5 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import DaumPostcode from "react-daum-postcode";
+import styled from "styled-components";
+
+const postCodeStyle = {
+  display: "block",
+  position: "absolute",
+  top: "65px",
+  left: "50%",
+  transform: "translateX(-50%)",
+  width: "95%",
+  height: "90%",
+  margin: "0 auto",
+  background: "#fff",
+};
 
 const PostModal = (props) => {
   const complete = (data) => {
@@ -16,10 +29,6 @@ const PostModal = (props) => {
       }
       fullAddress += extraAddress !== "" ? ` (${extraAddress})` : "";
     }
-    console.log(data);
-    console.log(fullAddress);
-    console.log(data.zonecode);
-
     props.setcompany({
       ...props.company,
       address1: fullAddress,
@@ -28,9 +37,12 @@ const PostModal = (props) => {
   };
 
   return (
-    <div>
-      <DaumPostcode className="postmodal" autoClose onComplete={complete} />
-    </div>
+    <DaumPostcode
+      style={postCodeStyle}
+      className="postmodal"
+      autoClose
+      onComplete={complete}
+    />
   );
 };
 
