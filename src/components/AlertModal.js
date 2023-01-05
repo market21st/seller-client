@@ -50,9 +50,6 @@ const Text = styled.h2`
 
 const AlertModal = ({ isOpen, onClose, text, closeBtn }) => {
   const navigate = useNavigate();
-  const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
   const nav = () => navigate("/");
   if (text && text?.includes("가입이 완료")) {
     onClose = nav;

@@ -2,13 +2,14 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import CloseIcon from "@mui/icons-material/Close";
 import PostModal from "../Register/PostModal";
+import { useNavigate } from "react-router-dom";
 
 // Components
 import AlertModal from "../../components/AlertModal";
 // Mui
 import { FormControl, Select, MenuItem } from "@mui/material";
 // Api
-import { myInfo } from "../../api/user";
+import { myInfo, editMyInfo } from "../../api/myInfo";
 
 const Container = styled.div`
   position: relative;
@@ -23,8 +24,12 @@ const Container = styled.div`
   & .MuiOutlinedInput-notchedOutline {
     border: none !important;
   }
+  a {
+    display: block;
+    padding: 10px 0 5px;
+  }
 `;
-// 하단바 목록,저장
+
 const Btmbar = styled.div`
   display: flex;
   justify-content: flex-end;
@@ -44,11 +49,6 @@ const Btmbar = styled.div`
   }
 `;
 
-const ListBtn = styled.button`
-  border: 1px solid #000;
-  margin-right: 16px;
-  background: none;
-`;
 const SendBtn = styled.button`
   background: #505bca;
   color: #fff;
@@ -118,6 +118,7 @@ const ModalPost = styled.div`
 
 const ModalBack = styled.div`
   position: absolute;
+  z-index: 88;
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.5);
@@ -146,21 +147,24 @@ const TextArea = styled.textarea`
 `;
 
 const MyPage = () => {
+  const navigator = useNavigate();
   // 이메일 형식
   const emailRegEx =
     /^[A-Za-z0-9]([-_.]?[A-Za-z0-9])*@[A-Za-z0-9]([-_.]?[A-Za-z0-9])*\.[A-Za-z]{2,3}$/;
 
-  const [data, setData] = useState("");
-
   const [bizFile, setBizFile] = useState("");
   const [logoFile, setLogoFile] = useState("");
+
   // Modal
   const [alertModal, setAlertModal] = useState(false);
   const [text, setText] = useState("");
-  const aleatHandleClose = () => setAlertModal(false);
+  const aleatHandleClose = () => {
+    setAlertModal(false);
+    if (text.includes("저장")) {
+      window.location.reload();
+    }
+  };
 
-  const [corpImage, setCorpImage] = useState("");
-  const [idCheckResult, setIdCheckResult] = useState("");
   const [userInfo, setUserInfo] = useState({});
   const [enroll_company, setEnroll_company] = useState({
     address1: "",
@@ -169,24 +173,102 @@ const MyPage = () => {
 
   function onChange(e) {
     const { name, value } = e.target;
-    if (name === "userId") {
-      setIdCheckResult(false);
-    }
     setUserInfo({
       ...userInfo,
       [name]: value,
     });
   }
-  //정보 조회
+  // 내정보 조회
   const getInfo = async () => {
     const { data, statusCode } = await myInfo();
     if (statusCode == 200) {
-      setData(data);
       setUserInfo(data);
       setEnroll_company({
         address1: data.corpAddr1,
-        address2: data.corpAddr2,
+        address2: data.corpPost,
       });
+    }
+  };
+
+  const onSubmit = async () => {
+    const {
+      password,
+      corpName,
+      bankName,
+      bankAccount,
+      corpCeo,
+      corpContact,
+      phone,
+      corpEmail,
+      corpAddr1,
+      corpAddr2,
+      corpPost,
+      corpDesc,
+      bizType,
+      taxType,
+      bizNum,
+    } = userInfo;
+    const list = {
+      password: password,
+      corpName: corpName,
+      bankName: bankName,
+      bankAccount: bankAccount,
+      corpCeo: corpCeo,
+      corpContact: corpContact,
+      phone: phone,
+      corpEmail: corpEmail,
+      corpAddr1: corpAddr1,
+      corpAddr2: corpAddr2,
+      corpPost: corpPost,
+      corpDesc: corpDesc,
+      bizType: bizType,
+      taxType: taxType,
+      bizNum: bizNum,
+    };
+
+    for (let key in list) {
+      if (!list[key]) {
+        setAlertModal(true);
+        setText(`브랜드 로고를 제외한 모든 정보를 기입해주세요.`);
+        return;
+      }
+    }
+
+    if (!list.password || !userInfo.passwordCheck) {
+      setAlertModal(true);
+      setText("비밀번호를 입력해주세요.");
+      return;
+    }
+    if (list.password != userInfo.passwordCheck) {
+      setAlertModal(true);
+      setText("비밀번호가 일치하지 않습니다.");
+      return;
+    }
+    if (!emailRegEx.test(list.corpEmail)) {
+      setAlertModal(true);
+      setText("이메일 형식에 맞지 않습니다.");
+      return;
+    }
+    if (list.phone.slice(0, 3) !== "010" || list.phone.length != 11) {
+      setAlertModal(true);
+      setText("휴대전화 형식에 맞지 않습니다.");
+      return;
+    }
+
+    const formData = new FormData();
+    for (let key in list) {
+      formData.append(key, list[key]);
+    }
+    formData.append("bizFile", bizFile);
+    formData.append("corpImage", logoFile);
+
+    const { statusCode } = await editMyInfo(formData);
+    if (statusCode == 200) {
+      setAlertModal(true);
+      setText(`저장 완료`);
+    } else {
+      setAlertModal(true);
+      setText("에러");
     }
   };
 
@@ -194,15 +276,14 @@ const MyPage = () => {
   const [popup, setPopup] = useState(false);
   const handleComplete = (data) => {
     setPopup(!popup);
+    if (popup === true) {
+      setUserInfo({
+        ...userInfo,
+        corpAddr1: enroll_company.address1,
+        corpPost: enroll_company.address2,
+      });
+    }
   };
-
-  useEffect(() => {
-    setUserInfo({
-      ...userInfo,
-      corpAddr1: enroll_company.address1,
-      corpPost: enroll_company.address2,
-    });
-  }, [enroll_company.address1]);
 
   useEffect(() => {
     getInfo();
@@ -232,19 +313,23 @@ const MyPage = () => {
           <h1>내 정보 수정</h1>
           <IdBox>
             <span>아이디</span>
-            {data.userId || ""}
+            {userInfo.userId}
           </IdBox>
           <Row>
             <RowInner>
               <label>비밀번호*</label>
               <div>
-                <input type="text" name="userId" onChange={onChange} />
+                <input type="password" name="password" onChange={onChange} />
               </div>
             </RowInner>
             <RowInner>
               <label>비밀번호확인*</label>
               <div>
-                <input type="text" name="userId" onChange={onChange} />
+                <input
+                  type="password"
+                  name="passwordCheck"
+                  onChange={onChange}
+                />
               </div>
             </RowInner>
           </Row>
@@ -255,9 +340,9 @@ const MyPage = () => {
                 <input
                   className="area"
                   type="text"
-                  name="userId"
+                  name="corpEmail"
                   onChange={onChange}
-                  defaultValue={data.corpEmail || ""}
+                  defaultValue={userInfo.corpEmail || ""}
                 />
               </div>
             </RowInner>
@@ -266,9 +351,9 @@ const MyPage = () => {
               <div>
                 <input
                   type="text"
-                  name="userId"
+                  name="phone"
                   onChange={onChange}
-                  defaultValue={data.corpEmail || ""}
+                  defaultValue={userInfo.phone || ""}
                 />
               </div>
             </RowInner>
@@ -280,9 +365,9 @@ const MyPage = () => {
                 <input
                   className="area"
                   type="text"
-                  name="userId"
+                  name="corpCeo"
                   onChange={onChange}
-                  defaultValue={data.corpEmail}
+                  defaultValue={userInfo.corpCeo}
                 />
               </div>
             </RowInner>
@@ -294,7 +379,7 @@ const MyPage = () => {
                 <input
                   className="area"
                   type="text"
-                  name="userId"
+                  name="address1"
                   onChange={onChange}
                   value={enroll_company.address1 || ""}
                 />
@@ -302,13 +387,13 @@ const MyPage = () => {
               </div>
             </RowInner>
             <RowInner>
-              <label>유편주소*</label>
+              <label>우편주소*</label>
               <div>
                 <input
                   type="text"
-                  name="userId"
+                  name="corpPost"
                   onChange={onChange}
-                  value={data.corpPost || ""}
+                  value={enroll_company.address2 || ""}
                 />
               </div>
             </RowInner>
@@ -320,9 +405,9 @@ const MyPage = () => {
                 <input
                   className="area"
                   type="text"
-                  name="userId"
+                  name="corpAddr2"
                   onChange={onChange}
-                  defaultValue={enroll_company.address2 || ""}
+                  defaultValue={userInfo.corpAddr2 || ""}
                 />
               </div>
             </RowInner>
@@ -333,9 +418,9 @@ const MyPage = () => {
               <div>
                 <input
                   type="text"
-                  name="userId"
+                  name="corpName"
                   onChange={onChange}
-                  defaultValue={data.corpName || ""}
+                  defaultValue={userInfo.corpName || ""}
                 />
               </div>
             </RowInner>
@@ -346,9 +431,9 @@ const MyPage = () => {
               <div>
                 <input
                   type="text"
-                  name="userId"
+                  name="bankName"
                   onChange={onChange}
-                  defaultValue={data.bankName || ""}
+                  defaultValue={userInfo.bankName || ""}
                 />
               </div>
             </RowInner>
@@ -357,9 +442,9 @@ const MyPage = () => {
               <div>
                 <input
                   type="text"
-                  name="userId"
+                  name="bankAccount"
                   onChange={onChange}
-                  defaultValue={data.bankAccount || ""}
+                  defaultValue={userInfo.bankAccount || ""}
                 />
               </div>
             </RowInner>
@@ -369,11 +454,11 @@ const MyPage = () => {
               <label>사업자분류*</label>
               <div>
                 <FormControl>
-                  {/* <Select
+                  <Select
                     onChange={onChange}
                     displayEmpty
                     inputProps={{ "aria-label": "Without label" }}
-                    // value={userInfo.bizType}
+                    value={userInfo.bizType || ""}
                     name="bizType"
                     sx={{
                       mt: "8px",
@@ -382,9 +467,9 @@ const MyPage = () => {
                       boxShadow: "0px 2px 5px rgba(0, 0, 0, 0.1)",
                     }}
                   >
-                    <MenuItem value={"개인사업자"}>개인사업자</MenuItem>
-                    <MenuItem value={"법인사업자"}>법인사업자</MenuItem>
-                  </Select> */}
+                    <MenuItem value="개인사업자">개인사업자</MenuItem>
+                    <MenuItem value="법인사업자">법인사업자</MenuItem>
+                  </Select>
                 </FormControl>
               </div>
             </RowInner>
@@ -392,11 +477,11 @@ const MyPage = () => {
               <label>과세유형*</label>
               <div>
                 <FormControl>
-                  {/* <Select
+                  <Select
                     onChange={onChange}
                     displayEmpty
                     inputProps={{ "aria-label": "Without label" }}
-                    // value={userInfo.taxType}
+                    value={userInfo.taxType || ""}
                     name="taxType"
                     sx={{
                       mt: "8px",
@@ -405,9 +490,9 @@ const MyPage = () => {
                       boxShadow: "0px 2px 5px rgba(0, 0, 0, 0.1)",
                     }}
                   >
-                    <MenuItem value={"단위과세"}>단위과세</MenuItem>
-                    <MenuItem value={"간이과세"}>간이과세</MenuItem>
-                  </Select> */}
+                    <MenuItem value="단위과세">단위과세</MenuItem>
+                    <MenuItem value="간이과세">간이과세</MenuItem>
+                  </Select>
                 </FormControl>
               </div>
             </RowInner>
@@ -416,6 +501,9 @@ const MyPage = () => {
             <RowInner>
               <label>사업자등록증*</label>
               <div>
+                <a href={userInfo.bizFile} target="_blank">
+                  {userInfo.bizFile}
+                </a>
                 <input
                   id="bizFile"
                   type="file"
@@ -428,12 +516,7 @@ const MyPage = () => {
                   }}
                   style={{ display: "none" }}
                 />
-                <input
-                  type="text"
-                  name="id"
-                  value={bizFile.name || ""}
-                  readOnly
-                />
+                <input type="text" value={bizFile.name || ""} readOnly />
                 <BlueBtn>
                   <label htmlFor="bizFile">파일첨부</label>
                 </BlueBtn>
@@ -448,7 +531,7 @@ const MyPage = () => {
                   type="text"
                   name="userId"
                   onChange={onChange}
-                  defaultValue={data.bizNum || ""}
+                  defaultValue={userInfo.bizNum || ""}
                 />
               </div>
             </RowInner>
@@ -459,9 +542,9 @@ const MyPage = () => {
               <div>
                 <input
                   type="text"
-                  name="userId"
+                  name="corpContact"
                   onChange={onChange}
-                  defaultValue={data.corpEmail || ""}
+                  defaultValue={userInfo.corpContact || ""}
                 />
               </div>
             </RowInner>
@@ -470,6 +553,9 @@ const MyPage = () => {
             <RowInner>
               <label>브랜드로고</label>
               <div>
+                <a href={userInfo.corpImage} target="_blank">
+                  {userInfo.corpImage}
+                </a>
                 <input
                   id="logoFile"
                   type="file"
@@ -480,12 +566,7 @@ const MyPage = () => {
                   accept="jpeg, .jpg, .png"
                   style={{ display: "none" }}
                 />
-                <input
-                  type="text"
-                  name="id"
-                  value={logoFile.name || ""}
-                  readOnly
-                />
+                <input type="text" value={logoFile.name || ""} readOnly />
                 <BlueBtn>
                   <label htmlFor="logoFile">파일첨부</label>
                 </BlueBtn>
@@ -499,15 +580,14 @@ const MyPage = () => {
                 type="text"
                 name="corpDesc"
                 onChange={onChange}
-                defaultValue={data.corpEmail || ""}
+                defaultValue={userInfo.corpDesc || ""}
               />
             </RowInnerArea>
           </Row>
         </Box>
       </Container>
       <Btmbar>
-        <ListBtn>목록</ListBtn>
-        <SendBtn>저장</SendBtn>
+        <SendBtn onClick={onSubmit}>저장</SendBtn>
       </Btmbar>
     </>
   );

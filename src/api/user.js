@@ -25,16 +25,6 @@ export const idCheck = async (params) => {
   }
 };
 
-export const myInfo = async () => {
-  try {
-    const res = await instance.get(`/manage/my`);
-    return res.data;
-  } catch (e) {
-    console.log(e);
-    return;
-  }
-};
-
 // 로그인
 export const LoginUser = async (params) => {
   try {
