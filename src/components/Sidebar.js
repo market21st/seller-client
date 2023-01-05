@@ -15,6 +15,7 @@ import myIcon from "../assets/my.png";
 import paperIcon from "../assets/paper.png";
 import logoutIcon from "../assets/logout.png";
 import { calculateNewValue } from "@testing-library/user-event/dist/utils";
+import { cookies } from "../layout";
 
 // Styled-components
 const LogoImg = styled.img`
@@ -180,7 +181,15 @@ const Sidebar = ({ children }) => {
               사업자등록증
             </div>
           </button>
-          <button>
+          <button
+            onClick={() => {
+              window.localStorage.clear();
+              cookies.remove("Authentication");
+              cookies.remove("Refresh");
+              navigate("/");
+              window.location.reload();
+            }}
+          >
             로그아웃
             <img src={logoutIcon} alt="사업자등록증" />
           </button>

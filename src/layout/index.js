@@ -11,11 +11,15 @@ import MyPage from "../pages/MyPage";
 // components
 import Sidebar from "../components/Sidebar";
 
+// cookie
+import { Cookies } from "react-cookie";
+export const cookies = new Cookies();
+
 const App = () => {
   return (
     <>
       <GlobalStyles />
-      {localStorage.getItem("corpCeo") ? (
+      {cookies.get("Authentication") ? (
         <Sidebar>
           <Routes>
             <Route path="/" element={<Home />} />
@@ -24,8 +28,7 @@ const App = () => {
         </Sidebar>
       ) : (
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
+          <Route path="/" element={<Login />} />
           <Route path="/register" element={<Register />} />
         </Routes>
       )}

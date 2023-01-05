@@ -32,13 +32,13 @@ export const LoginUser = async (params) => {
     const today = new Date();
     const expireDate = today.setDate(today.getDate() + 1);
     if (res.data.statusCode === 200) {
-      cookies.set("accessToken", res.data.data.Authentication, {
+      cookies.set("Authentication", res.data.data.Authentication, {
         secure: false,
         expires: new Date(expireDate),
         // sameSite: "Secure",
         path: "/",
       });
-      cookies.set("refreshToken", res.data.data.Refresh, {
+      cookies.set("Refresh", res.data.data.Refresh, {
         secure: false,
         // sameSite: "Secure",
         expires: new Date(expireDate),
