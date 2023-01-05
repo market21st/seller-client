@@ -57,7 +57,6 @@ textarea {
   margin: 0;
   border: none;
   outline: none;
-  
 }
 
 a {color: #4552CE; text-decoration: none; outline: none}

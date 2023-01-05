@@ -14,6 +14,7 @@ import reviewIcon from "../assets/review.png";
 import myIcon from "../assets/my.png";
 import paperIcon from "../assets/paper.png";
 import logoutIcon from "../assets/logout.png";
+import { calculateNewValue } from "@testing-library/user-event/dist/utils";
 
 // Styled-components
 const LogoImg = styled.img`
@@ -24,7 +25,7 @@ const LogoImg = styled.img`
 `;
 const Logo = styled.div`
   position: relative;
-  height: 75px;
+  height: 7.6vh;
   width: 75%;
   margin: 0 auto;
   border-bottom: 1.5px solid #c7cbf0;
@@ -119,9 +120,9 @@ const ButtonBox = styled.div`
 // 헤더
 const Header = styled.h1`
   background: #cfd4f0;
-  height: 75px;
+  height: 7.6vh;
   width: 100%;
-  line-height: 75px;
+  line-height: 7.6vh;
   padding-left: 59px;
 `;
 
@@ -185,11 +186,16 @@ const Sidebar = ({ children }) => {
           </button>
         </ButtonBox>
       </Grid>
-      <Grid item sx={{ background: "#F1F4F8", width: "calc(100% - 187px);" }}>
-        <Header sx={{ background: "#CFD4F0", height: "75px", width: "100%" }}>
-          아이픽스존 님 안녕하세요!
-        </Header>
-        <Grid sx={{ width: "100%" }}>{children}</Grid>
+      <Grid
+        item
+        sx={{
+          background: "#F1F4F8",
+          width: "calc(100% - 187px)",
+          position: "relative",
+        }}
+      >
+        <Header>아이픽스존 님 안녕하세요.</Header>
+        <Grid sx={{ width: "100%", height: "92.4vh" }}>{children}</Grid>
       </Grid>
     </Grid>
   );

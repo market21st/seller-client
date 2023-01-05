@@ -15,6 +15,7 @@ const postCodeStyle = {
 };
 
 const PostModal = (props) => {
+  const onClose = props.closeEvent;
   const complete = (data) => {
     let fullAddress = data.address;
     let extraAddress = "";
@@ -40,7 +41,8 @@ const PostModal = (props) => {
     <DaumPostcode
       style={postCodeStyle}
       className="postmodal"
-      autoClose
+      // autoClose
+      onClose={onClose}
       onComplete={complete}
     />
   );

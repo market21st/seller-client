@@ -1,11 +1,11 @@
 import axios from "axios";
-// import { Cookies } from "react-cookie";
-// export const cookies = new Cookies();
+import { Cookies } from "react-cookie";
+export const cookies = new Cookies();
+
+axios.defaults.withCredentials = true;
 
 export const instance = axios.create({
   baseURL: process.env.REACT_APP_API_URL,
-  //   timeout: 5000,
-  //   headers: { Authorization: `Bearer ${cookies.get("accessToken")}` },
 });
 
 instance.interceptors.response.use(

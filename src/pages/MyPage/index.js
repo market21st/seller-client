@@ -1,22 +1,73 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import CloseIcon from "@mui/icons-material/Close";
-// Mui
-import { FormControl, Select, MenuItem } from "@mui/material";
+import PostModal from "../Register/PostModal";
 
 // Components
-import PostModal from "./PostModal";
+import AlertModal from "../../components/AlertModal";
+// Mui
+import { FormControl, Select, MenuItem } from "@mui/material";
+// Api
+import { myInfo } from "../../api/user";
 
-const InfoBox = styled.div`
-  width: 100%;
-  height: 66vh;
-
+const Container = styled.div`
+  position: relative;
+  height: 90%;
+  h1 {
+    font-size: 24px;
+    font-weight: blod;
+  }
+  .area {
+    width: 279px;
+  }
   & .MuiOutlinedInput-notchedOutline {
     border: none !important;
   }
 `;
+// 하단바 목록,저장
+const Btmbar = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  background: #fff;
+  padding: 15px 35px;
+  height: 10%;
+  position: relative;
+  z-index: 99;
+  box-shadow: 1px 0px 10px rgba(0, 0, 0, 0.1);
+  button {
+    width: 134px;
+    padding: 12px 49px;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 18px;
+  }
+`;
 
+const ListBtn = styled.button`
+  border: 1px solid #000;
+  margin-right: 16px;
+  background: none;
+`;
+const SendBtn = styled.button`
+  background: #505bca;
+  color: #fff;
+`;
+
+//아이디
+const IdBox = styled.div`
+  width: 100%;
+  padding: 40px 7px;
+  margin: 20px 0 50px;
+  background: #fff;
+  border-radius: 15px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  span {
+    border-right: 2px solid #e1e7ef;
+    padding: 0 40px;
+    margin-right: 40px;
+  }
+`;
 const BlueBtn = styled.button`
   background: #505bca;
   color: #fff;
@@ -26,6 +77,7 @@ const BlueBtn = styled.button`
   margin-left: 14px;
 `;
 
+// 인풋
 const Row = styled.div`
   margin-bottom: 20px;
   display: flex;
@@ -33,39 +85,6 @@ const Row = styled.div`
 
 const RowInner = styled.div`
   margin-right: 14px;
-`;
-const RowInnerArea = styled.div`
-  width: 100%;
-`;
-
-const TextArea = styled.textarea`
-  width: 100%;
-  box-sizing: border-box;
-  height: 400px;
-  border-radius: 5px;
-  padding: 14px;
-  margin-top: 8px;
-  font-weight: 800;
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-  line-height: 1.5;
-`;
-
-const InfoContainer = styled.div`
-  display: none;
-  color: #404040;
-  font-size: 1rem;
-  width: 100%;
-
-  &.active {
-    display: block;
-  }
-  .area {
-    width: 279px;
-  }
-  .textArea {
-    width: 100%;
-  }
-
   input {
     border-radius: 5px;
     padding: 14px;
@@ -75,13 +94,16 @@ const InfoContainer = styled.div`
   }
 `;
 
-const Container = styled.div`
+// 검색 모달
+const ModalPost = styled.div`
   position: absolute;
-  left: 0;
-  top: 0;
-  width: 33.33%;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 350px;
   border: 1px solid #ddd;
-  height: 100vh;
+  height: 560px;
+  overflow: hidden;
   background: #fff;
   h1 {
     font-size: 18px;
@@ -94,79 +116,135 @@ const Container = styled.div`
   }
 `;
 
-const Form = ({
-  active,
-  infoData,
-  changeEvent,
-  setBizFiles,
-  setCorpImages,
-  setUserInfo,
-  idCheck,
-}) => {
-  const [logoFile, setLogoFile] = useState("");
-  const [bizFile, setBizFile] = useState("");
+const ModalBack = styled.div`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+`;
 
+const RowInnerArea = styled.div`
+  width: 100%;
+`;
+const Box = styled.div`
+  width: 100%;
+  height: 100%;
+  overflow-y: scroll;
+  padding: 50px 59px 0;
+`;
+const TextArea = styled.textarea`
+  display: block;
+  width: 80%;
+  box-sizing: border-box;
+  height: 400px;
+  border-radius: 5px;
+  padding: 14px;
+  margin-top: 8px;
+  font-weight: 800;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  line-height: 1.5;
+`;
+
+const MyPage = () => {
+  // 이메일 형식
+  const emailRegEx =
+    /^[A-Za-z0-9]([-_.]?[A-Za-z0-9])*@[A-Za-z0-9]([-_.]?[A-Za-z0-9])*\.[A-Za-z]{2,3}$/;
+
+  const [data, setData] = useState("");
+
+  const [bizFile, setBizFile] = useState("");
+  const [logoFile, setLogoFile] = useState("");
+  // Modal
+  const [alertModal, setAlertModal] = useState(false);
+  const [text, setText] = useState("");
+  const aleatHandleClose = () => setAlertModal(false);
+
+  const [corpImage, setCorpImage] = useState("");
+  const [idCheckResult, setIdCheckResult] = useState("");
+  const [userInfo, setUserInfo] = useState({});
   const [enroll_company, setEnroll_company] = useState({
     address1: "",
     address2: "",
   });
 
-  const [popup, setPopup] = useState(false);
+  function onChange(e) {
+    const { name, value } = e.target;
+    if (name === "userId") {
+      setIdCheckResult(false);
+    }
+    setUserInfo({
+      ...userInfo,
+      [name]: value,
+    });
+  }
+  //정보 조회
+  const getInfo = async () => {
+    const { data, statusCode } = await myInfo();
+    if (statusCode == 200) {
+      setData(data);
+      setUserInfo(data);
+      setEnroll_company({
+        address1: data.corpAddr1,
+        address2: data.corpAddr2,
+      });
+    }
+  };
 
+  // 주소 검색
+  const [popup, setPopup] = useState(false);
   const handleComplete = (data) => {
     setPopup(!popup);
   };
 
   useEffect(() => {
     setUserInfo({
-      ...infoData,
+      ...userInfo,
       corpAddr1: enroll_company.address1,
       corpPost: enroll_company.address2,
     });
   }, [enroll_company.address1]);
 
+  useEffect(() => {
+    getInfo();
+  }, []);
+
   return (
     <>
-      {popup && (
-        <Container>
-          <h1>
-            주소검색
-            <CloseIcon onClick={handleComplete} />
-          </h1>
-          <PostModal
-            closeEvent={handleComplete}
-            handleComplete={handleComplete}
-            company={enroll_company}
-            setcompany={setEnroll_company}
-          />
-        </Container>
-      )}
-      <InfoBox>
-        <InfoContainer className={0 == active ? " active" : ""}>
-          <Row>
-            <RowInner>
-              <label>아이디*</label>
-              <div>
-                <input type="text" name="userId" onChange={changeEvent} />
-                <BlueBtn onClick={idCheck}>중복확인</BlueBtn>
-              </div>
-            </RowInner>
-          </Row>
+      <AlertModal isOpen={alertModal} onClose={aleatHandleClose} text={text} />
+      <Container>
+        {popup && (
+          <ModalBack>
+            <ModalPost>
+              <h1>
+                주소검색
+                <CloseIcon onClick={handleComplete} />
+              </h1>
+              <PostModal
+                closeEvent={handleComplete}
+                handleComplete={handleComplete}
+                company={enroll_company}
+                setcompany={setEnroll_company}
+              />
+            </ModalPost>
+          </ModalBack>
+        )}
+        <Box>
+          <h1>내 정보 수정</h1>
+          <IdBox>
+            <span>아이디</span>
+            {data.userId || ""}
+          </IdBox>
           <Row>
             <RowInner>
               <label>비밀번호*</label>
               <div>
-                <input type="password" name="password" onChange={changeEvent} />
+                <input type="text" name="userId" onChange={onChange} />
               </div>
             </RowInner>
             <RowInner>
               <label>비밀번호확인*</label>
               <div>
-                <input
-                  type="password"
-                  name="passwordCheck"
-                  onChange={changeEvent}
-                />
+                <input type="text" name="userId" onChange={onChange} />
               </div>
             </RowInner>
           </Row>
@@ -177,8 +255,9 @@ const Form = ({
                 <input
                   className="area"
                   type="text"
-                  name="corpEmail"
-                  onChange={changeEvent}
+                  name="userId"
+                  onChange={onChange}
+                  defaultValue={data.corpEmail || ""}
                 />
               </div>
             </RowInner>
@@ -187,9 +266,9 @@ const Form = ({
               <div>
                 <input
                   type="text"
-                  name="phone"
-                  onChange={changeEvent}
-                  maxLength="11"
+                  name="userId"
+                  onChange={onChange}
+                  defaultValue={data.corpEmail || ""}
                 />
               </div>
             </RowInner>
@@ -201,8 +280,9 @@ const Form = ({
                 <input
                   className="area"
                   type="text"
-                  name="corpCeo"
-                  onChange={changeEvent}
+                  name="userId"
+                  onChange={onChange}
+                  defaultValue={data.corpEmail}
                 />
               </div>
             </RowInner>
@@ -214,32 +294,21 @@ const Form = ({
                 <input
                   className="area"
                   type="text"
-                  name="corpAddr1"
-                  onChange={changeEvent}
+                  name="userId"
+                  onChange={onChange}
                   value={enroll_company.address1 || ""}
                 />
-                {/* <input
-                  className="user_enroll_text"
-                  placeholder="주소"
-                  type="text"
-                  required={true}
-                  name="address"
-                  onChange={handleInput}
-                  value={enroll_company.address}
-                /> */}
-                {/* <button onClick={handleComplete}>우편번호 찾기</button> */}
-
                 <BlueBtn onClick={handleComplete}>검색하기</BlueBtn>
               </div>
             </RowInner>
             <RowInner>
-              <label>우편주소*</label>
+              <label>유편주소*</label>
               <div>
                 <input
                   type="text"
-                  name="corpPost"
-                  onChange={changeEvent}
-                  value={enroll_company.address2 || ""}
+                  name="userId"
+                  onChange={onChange}
+                  value={data.corpPost || ""}
                 />
               </div>
             </RowInner>
@@ -251,19 +320,23 @@ const Form = ({
                 <input
                   className="area"
                   type="text"
-                  name="corpAddr2"
-                  onChange={changeEvent}
+                  name="userId"
+                  onChange={onChange}
+                  defaultValue={enroll_company.address2 || ""}
                 />
               </div>
             </RowInner>
           </Row>
-        </InfoContainer>
-        <InfoContainer className={1 == active ? " active" : ""}>
           <Row>
             <RowInner>
               <label>상호명*</label>
               <div>
-                <input type="text" name="corpName" onChange={changeEvent} />
+                <input
+                  type="text"
+                  name="userId"
+                  onChange={onChange}
+                  defaultValue={data.corpName || ""}
+                />
               </div>
             </RowInner>
           </Row>
@@ -271,13 +344,23 @@ const Form = ({
             <RowInner>
               <label>은행명*</label>
               <div>
-                <input type="text" name="bankName" onChange={changeEvent} />
+                <input
+                  type="text"
+                  name="userId"
+                  onChange={onChange}
+                  defaultValue={data.bankName || ""}
+                />
               </div>
             </RowInner>
             <RowInner>
               <label>계좌번호*</label>
               <div>
-                <input type="text" name="bankAccount" onChange={changeEvent} />
+                <input
+                  type="text"
+                  name="userId"
+                  onChange={onChange}
+                  defaultValue={data.bankAccount || ""}
+                />
               </div>
             </RowInner>
           </Row>
@@ -286,11 +369,11 @@ const Form = ({
               <label>사업자분류*</label>
               <div>
                 <FormControl>
-                  <Select
-                    onChange={changeEvent}
+                  {/* <Select
+                    onChange={onChange}
                     displayEmpty
                     inputProps={{ "aria-label": "Without label" }}
-                    value={infoData.bizType}
+                    // value={userInfo.bizType}
                     name="bizType"
                     sx={{
                       mt: "8px",
@@ -301,7 +384,7 @@ const Form = ({
                   >
                     <MenuItem value={"개인사업자"}>개인사업자</MenuItem>
                     <MenuItem value={"법인사업자"}>법인사업자</MenuItem>
-                  </Select>
+                  </Select> */}
                 </FormControl>
               </div>
             </RowInner>
@@ -309,11 +392,11 @@ const Form = ({
               <label>과세유형*</label>
               <div>
                 <FormControl>
-                  <Select
-                    onChange={changeEvent}
+                  {/* <Select
+                    onChange={onChange}
                     displayEmpty
                     inputProps={{ "aria-label": "Without label" }}
-                    value={infoData.taxType}
+                    // value={userInfo.taxType}
                     name="taxType"
                     sx={{
                       mt: "8px",
@@ -324,7 +407,7 @@ const Form = ({
                   >
                     <MenuItem value={"단위과세"}>단위과세</MenuItem>
                     <MenuItem value={"간이과세"}>간이과세</MenuItem>
-                  </Select>
+                  </Select> */}
                 </FormControl>
               </div>
             </RowInner>
@@ -340,13 +423,17 @@ const Form = ({
                   accept=".pdf"
                   onChange={(e) => {
                     if (e.target.files[0]) {
-                      setBizFile(e.target.files[0].name);
-                      setBizFiles(e.target.files[0]);
+                      setBizFile(e.target.files[0]);
                     }
                   }}
                   style={{ display: "none" }}
                 />
-                <input type="text" name="id" value={bizFile || ""} readOnly />
+                <input
+                  type="text"
+                  name="id"
+                  value={bizFile.name || ""}
+                  readOnly
+                />
                 <BlueBtn>
                   <label htmlFor="bizFile">파일첨부</label>
                 </BlueBtn>
@@ -358,10 +445,10 @@ const Form = ({
               <label>사업자번호*</label>
               <div>
                 <input
-                  className="area"
                   type="text"
-                  name="bizNum"
-                  onChange={changeEvent}
+                  name="userId"
+                  onChange={onChange}
+                  defaultValue={data.bizNum || ""}
                 />
               </div>
             </RowInner>
@@ -371,16 +458,14 @@ const Form = ({
               <label>대표번호*</label>
               <div>
                 <input
-                  className="area"
                   type="text"
-                  name="corpContact"
-                  onChange={changeEvent}
+                  name="userId"
+                  onChange={onChange}
+                  defaultValue={data.corpEmail || ""}
                 />
               </div>
             </RowInner>
           </Row>
-        </InfoContainer>
-        <InfoContainer container className={2 == active ? " active" : ""}>
           <Row>
             <RowInner>
               <label>브랜드로고</label>
@@ -390,13 +475,17 @@ const Form = ({
                   type="file"
                   name="corpImage"
                   onChange={(e) => {
-                    setLogoFile(e.target.files[0].name);
-                    setCorpImages(e.target.files[0]);
+                    setLogoFile(e.target.files[0]);
                   }}
                   accept="jpeg, .jpg, .png"
                   style={{ display: "none" }}
                 />
-                <input type="text" name="id" value={logoFile || ""} readOnly />
+                <input
+                  type="text"
+                  name="id"
+                  value={logoFile.name || ""}
+                  readOnly
+                />
                 <BlueBtn>
                   <label htmlFor="logoFile">파일첨부</label>
                 </BlueBtn>
@@ -406,13 +495,21 @@ const Form = ({
           <Row>
             <RowInnerArea>
               <label>셀러소개*</label>
-              <TextArea type="text" name="corpDesc" onChange={changeEvent} />
+              <TextArea
+                type="text"
+                name="corpDesc"
+                onChange={onChange}
+                defaultValue={data.corpEmail || ""}
+              />
             </RowInnerArea>
           </Row>
-        </InfoContainer>
-      </InfoBox>
+        </Box>
+      </Container>
+      <Btmbar>
+        <ListBtn>목록</ListBtn>
+        <SendBtn>저장</SendBtn>
+      </Btmbar>
     </>
   );
 };
-
-export default Form;
+export default MyPage;

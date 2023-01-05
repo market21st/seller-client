@@ -57,6 +57,7 @@ const BtnBox = styled.div`
   padding-top: 30px;
   border-top: 2px solid #d0d6f3;
   margin-top: 40px;
+  transform: translate();
   button {
     padding: 13px 45px;
     border-radius: 5px;
@@ -160,7 +161,6 @@ const Register = () => {
   };
 
   const submit = async () => {
-    console.log(userInfo);
     if (!idCheckResult) {
       setAlertModal(true);
       setText("아이디 중복확인을 해주세요.");
@@ -168,7 +168,6 @@ const Register = () => {
     }
     for (let key in userInfo) {
       if (!userInfo[key] || !bizFile) {
-        console.log(userInfo[key], key);
         setAlertModal(true);
         setText(`브랜드 로고를 제외한 모든 정보를 기입해주세요.`);
         return;
@@ -187,7 +186,6 @@ const Register = () => {
     }
 
     if (userInfo.phone.slice(0, 3) !== "010" || userInfo.phone.length != 11) {
-      console.log(userInfo.phone.length);
       setAlertModal(true);
       setText("휴대전화 형식에 맞지 않습니다.");
       return;

@@ -107,6 +107,7 @@ const LogIn = () => {
       password: pw,
     });
     if (statusCode == 200) {
+      window.location.reload();
       navigate("/");
     }
     if (status === 400) {

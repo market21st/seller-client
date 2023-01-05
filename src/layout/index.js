@@ -6,23 +6,20 @@ import GlobalStyles from "../utils/globalStyle";
 import Home from "../pages/Home";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
+import MyPage from "../pages/MyPage";
 
 // components
 import Sidebar from "../components/Sidebar";
 
-// cookie
-import { Cookies } from "react-cookie";
-export const cookies = new Cookies();
-
 const App = () => {
-  useEffect(() => {}, [cookies.get("Authentication")]);
   return (
     <>
       <GlobalStyles />
-      {cookies.get("Authentication") ? (
+      {localStorage.getItem("corpCeo") ? (
         <Sidebar>
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/mypage" element={<MyPage />} />
           </Routes>
         </Sidebar>
       ) : (
