@@ -7,6 +7,7 @@ import Home from "../pages/Home";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
 import MyPage from "../pages/MyPage";
+import StockList from "../pages/Stock";
 
 // components
 import Sidebar from "../components/Sidebar";
@@ -24,6 +25,7 @@ const App = () => {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/mypage" element={<MyPage />} />
+            <Route path="/stock" element={<StockList />} />
           </Routes>
         </Sidebar>
       ) : (

@@ -146,7 +146,7 @@ const Sidebar = ({ children }) => {
         </Logo>
         <Menu>
           <li>
-            <Link to="/login">
+            <Link to="/stock">
               <img src={stockIcon} alt="재고관리" />
               재고관리
             </Link>

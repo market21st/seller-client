@@ -9,8 +9,8 @@ const InnerBox = styled.div`
   left: 50%;
   transform: translate(-50%, -50%);
   background: #fff;
-  width: 482px;
-  height: 227px;
+  width: 410px;
+  height: 590px;
   box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.25);
   border-radius: 2px;
   outline: none;
@@ -27,10 +27,11 @@ const InnerBtm = styled.div`
 `;
 
 const CancelBtn = styled.button`
-  color: #7e7e7e;
-  font-size: 0.8rem;
+  color: #4a4a4a;
+  font-size: 14px;
   margin-right: 40px;
   background: none;
+  font-weight: bold;
 `;
 
 const CheckBtn = styled.button`
@@ -38,41 +39,57 @@ const CheckBtn = styled.button`
   height: 36px;
   background: #505bca;
   color: #fff;
-  font-size: 0.8rem;
+  font-size: 14px;
   border-radius: 1px;
+  font-weight: bold;
 `;
 
 const Text = styled.h2`
-  /* font-size: 1.2rem; */
-  font-size: 1.2rem;
+  font-size: 1.4rem;
   line-height: 1.5;
   margin: 45px 30px;
 `;
+const Contents = styled.div`
+  padding: 0 30px;
+`;
 
-const AlertModal = ({ isOpen, onClose, text, closeBtn }) => {
+const ContentModal = ({
+  isOpen,
+  onClose,
+  text,
+  closeBtn,
+  contents,
+  postEvent,
+  setState,
+}) => {
   const navigate = useNavigate();
   const nav = () => navigate("/");
   if (text && text?.includes("가입이 완료")) {
     onClose = nav;
   }
+  const stateDelete = () => {
+    setState([]);
+    console.log("state삭제");
+    closeBtn();
+  };
 
   return (
     <Modal
       open={isOpen}
-      onClose={closeBtn ? closeBtn : onClose}
+      onClose={stateDelete}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
       <InnerBox>
         <Text>{text}</Text>
+        <Contents>{contents}</Contents>
         <InnerBtm>
-          {closeBtn && <CancelBtn onClick={closeBtn}>취소</CancelBtn>}
-
-          <CheckBtn onClick={onClose}>확인</CheckBtn>
+          <CancelBtn onClick={stateDelete}>취소</CancelBtn>
+          <CheckBtn onClick={postEvent}>저장</CheckBtn>
         </InnerBtm>
       </InnerBox>
     </Modal>
   );
 };
 
-export default AlertModal;
+export default ContentModal;

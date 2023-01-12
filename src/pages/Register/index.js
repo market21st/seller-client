@@ -173,7 +173,11 @@ const Register = () => {
         return;
       }
     }
-
+    if (userInfo.password.length < 8) {
+      setAlertModal(true);
+      setText("비밀번호는 최소 8글자 이상 입력해주세요.");
+      return;
+    }
     if (userInfo.password != userInfo.passwordCheck) {
       setAlertModal(true);
       setText("비밀번호가 일치하지 않습니다.");

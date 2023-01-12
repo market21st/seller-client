@@ -217,17 +217,6 @@ const Form = ({
                   onChange={changeEvent}
                   value={enroll_company.address1 || ""}
                 />
-                {/* <input
-                  className="user_enroll_text"
-                  placeholder="주소"
-                  type="text"
-                  required={true}
-                  name="address"
-                  onChange={handleInput}
-                  value={enroll_company.address}
-                /> */}
-                {/* <button onClick={handleComplete}>우편번호 찾기</button> */}
-
                 <BlueBtn onClick={handleComplete}>검색하기</BlueBtn>
               </div>
             </RowInner>

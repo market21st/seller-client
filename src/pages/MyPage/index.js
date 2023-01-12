@@ -16,7 +16,7 @@ const Container = styled.div`
   height: 90%;
   h1 {
     font-size: 24px;
-    font-weight: blod;
+    font-weight: bold;
   }
   .area {
     width: 279px;
@@ -237,6 +237,11 @@ const MyPage = () => {
     if (!list.password || !userInfo.passwordCheck) {
       setAlertModal(true);
       setText("비밀번호를 입력해주세요.");
+      return;
+    }
+    if (list.password.length < 8) {
+      setAlertModal(true);
+      setText("비밀번호는 최소 8글자 이상 입력해주세요.");
       return;
     }
     if (list.password != userInfo.passwordCheck) {
