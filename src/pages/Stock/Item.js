@@ -32,6 +32,7 @@ const EditArea = styled.div`
   display: flex;
   width: 30%;
   input {
+    width: 100%;
     border: 1px solid #464646;
     border-radius: 5px;
     padding-right: 12px;
@@ -39,10 +40,21 @@ const EditArea = styled.div`
     margin-right: 14px;
     text-align: right;
   }
-  input:nth-child(1) {
+  p {
+    position: relative;
+    label {
+      position: absolute;
+      top: -10%;
+      left: 10%;
+      background: #fff;
+      font-size: 12px;
+      padding: 0 3px;
+    }
+  }
+  p:nth-child(1) {
     width: 32%;
   }
-  input:nth-child(2) {
+  p:nth-child(2) {
     width: 22%;
   }
 `;
@@ -91,10 +103,46 @@ const Item = ({
   isActive,
 }) => {
   const [stockData, setStockData] = useState({
-    price: price,
-    stock: stock,
+    price: price.toLocaleString(),
+    stock: stock.toLocaleString(),
     isActive: isActive,
   });
+
+  //숫자 컴마
+  const handlePrice = (e) => {
+    if (!e.target.value || e.target.value < 1) {
+      if (e.target.name == "price") {
+        setStockData({
+          ...stockData,
+          price: 0,
+        });
+        return;
+      }
+      if (e.target.name == "stock") {
+        setStockData({
+          ...stockData,
+          stock: 0,
+        });
+        return;
+      }
+    }
+    const numCheck = /^[0-9,]/.test(e.target.value);
+    if (numCheck) {
+      const numValue = e.target.value.replaceAll(",", "");
+      if (e.target.name === "price") {
+        setStockData({
+          ...stockData,
+          price: numValue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+        });
+      }
+      if (e.target.name === "stock") {
+        setStockData({
+          ...stockData,
+          stock: numValue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+        });
+      }
+    }
+  };
 
   function onChange(e) {
     const { name, value } = e.target;
@@ -126,7 +174,7 @@ const Item = ({
 
     const list = {
       price: String(stockData.price).replace(/,/g, ""),
-      stock: Number(stockData.stock),
+      stock: String(stockData.stock).replace(/,/g, ""),
       isActive: stockData.isActive === 0 ? false : true,
     };
 
@@ -174,27 +222,33 @@ const Item = ({
         <h3>{`${optionText.split("-")[0]}\n${optionText.split("-")[1]}-${
           optionText.split("-")[2]
         }`}</h3>
-        {/* <h3>{`iPhone 13 Pro MaxiPhone 13 Pro Max\niPhone 13 Pro Max`}</h3> */}
         <Grade>{gradeText}</Grade>
         <Price>
           <span>최저가</span>
           {lowestPrice.toLocaleString()}
         </Price>
         <EditArea>
-          <input
-            type="text"
-            placeholder="가격"
-            defaultValue={price.toLocaleString() || ""}
-            onChange={onChange}
-            name="price"
-          />
-          <input
-            type="text"
-            placeholder="재고"
-            defaultValue={stock || ""}
-            onChange={onChange}
-            name="stock"
-          />
+          <p>
+            <input
+              type="text"
+              placeholder="0"
+              value={stockData.price || ""}
+              onChange={handlePrice}
+              name="price"
+            ></input>
+            <label>가격</label>
+          </p>
+          <p>
+            <input
+              type="text"
+              placeholder="0"
+              value={stockData.stock || ""}
+              onChange={handlePrice}
+              name="stock"
+            />
+            <label>재고</label>
+          </p>
+
           <FormControl sx={{ width: "28%" }}>
             <Select
               onChange={onChange}

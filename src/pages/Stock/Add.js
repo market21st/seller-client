@@ -263,7 +263,7 @@ const AddModal = ({ isOpen, onClose }) => {
       </InnerBox>
       <InnerBox style={{ margin: "34px 0px 12px" }}>
         <label></label>
-        <span>{`현재 최저가 : ${price}`}</span>
+        <span>{`현재 최저가 : ${price.toLocaleString()}`}</span>
       </InnerBox>
       <InnerBox>
         <label>가격*</label>
