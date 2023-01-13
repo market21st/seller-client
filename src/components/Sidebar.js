@@ -15,6 +15,7 @@ import myIcon from "../assets/my.png";
 import paperIcon from "../assets/paper.png";
 import logoutIcon from "../assets/logout.png";
 import { cookies } from "../layout";
+import bizfile from "../assets/bizfile.jpg";
 
 // Styled-components
 const LogoImg = styled.img`
@@ -150,6 +151,10 @@ const Header = styled.h1`
 const Sidebar = ({ children }) => {
   const navigate = useNavigate();
 
+  const getBiz = () => {
+    window.open(bizfile, "_blank");
+  };
+
   return (
     <Grid container>
       <Grid
@@ -193,7 +198,7 @@ const Sidebar = ({ children }) => {
           내정보
         </MyInfo>
         <ButtonBox>
-          <button>
+          <button onClick={getBiz}>
             <img src={paperIcon} alt="사업자등록증" />
             <div>
               <span>21세기전파상</span>
