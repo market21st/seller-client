@@ -71,6 +71,15 @@ const RowInner = styled.div`
     width: 100%;
   }
 `;
+
+const ItemBox = styled.li`
+  box-shadow: 4px 4px 4px 0px rgba(0, 0, 0, 0.1);
+  h2 {
+    width: 100%;
+    padding: 30px;
+    text-align: center;
+  }
+`;
 // 임시 박스
 const Area = styled.div`
   height: 90px;
@@ -232,6 +241,7 @@ const StockList = () => {
             ? 2
             : "",
       });
+      console.log(data.results);
       if (statusCode == 200) {
         setListData(data.results);
       }
@@ -239,6 +249,7 @@ const StockList = () => {
     }
 
     const { data, statusCode } = await getStockList(list);
+    console.log(data);
     if (statusCode == 200) {
       setListData(data.results);
     }
@@ -348,11 +359,10 @@ const StockList = () => {
             우선판매권을 얻으려면<span>현재 최저가</span>미만의 가격을
             입력해야합니다.
           </p>
-          <div>등급 기준 보기</div>
         </InfoTitle>
         <ListContainer className="scroll">
           <ul>
-            {listData &&
+            {listData.length > 1 ? (
               listData.map((el, idx) => (
                 <Item
                   key={el.id}
@@ -365,7 +375,12 @@ const StockList = () => {
                   stock={el.stock}
                   isActive={el.isActive}
                 />
-              ))}
+              ))
+            ) : (
+              <ItemBox>
+                <h2>등록된 상품이 없습니다.</h2>
+              </ItemBox>
+            )}
           </ul>
         </ListContainer>
       </Container>

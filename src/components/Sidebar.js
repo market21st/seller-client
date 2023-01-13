@@ -14,17 +14,18 @@ import reviewIcon from "../assets/review.png";
 import myIcon from "../assets/my.png";
 import paperIcon from "../assets/paper.png";
 import logoutIcon from "../assets/logout.png";
-import { calculateNewValue } from "@testing-library/user-event/dist/utils";
 import { cookies } from "../layout";
 
 // Styled-components
 const LogoImg = styled.img`
+  width: 80%;
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
 `;
-const Logo = styled.div`
+const Logo = styled.a`
+  display: block;
   position: relative;
   height: 7.6vh;
   width: 75%;
@@ -120,11 +121,30 @@ const ButtonBox = styled.div`
 
 // 헤더
 const Header = styled.h1`
+  font-family: "GmarketSansMedium";
+  display: flex;
+  align-items: center;
   background: #cfd4f0;
   height: 7.6vh;
   width: 100%;
+  font-size: 20px;
+  font-weight: bold;
   line-height: 7.6vh;
   padding-left: 59px;
+  div {
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #fff;
+    margin-right: 17px;
+  }
+  img {
+    width: 80%;
+  }
 `;
 
 const Sidebar = ({ children }) => {
@@ -141,7 +161,7 @@ const Sidebar = ({ children }) => {
           position: "relative",
         }}
       >
-        <Logo>
+        <Logo href="/">
           <LogoImg src={logoImg} alt="크래커 로고" />
         </Logo>
         <Menu>
@@ -203,7 +223,12 @@ const Sidebar = ({ children }) => {
           position: "relative",
         }}
       >
-        <Header>아이픽스존 님 안녕하세요.</Header>
+        <Header>
+          <div>
+            <img src={localStorage.getItem("corpLogo")} alt="브랜드로고" />
+          </div>
+          {localStorage.getItem("corpCeo")}님 안녕하세요!
+        </Header>
         <Grid sx={{ width: "100%", height: "92.4vh" }}>{children}</Grid>
       </Grid>
     </Grid>

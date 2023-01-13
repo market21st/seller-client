@@ -17,12 +17,18 @@ import Form from "./Form";
 import { RegisterUser, idCheck } from "../../api/user";
 
 // Styled-components
-const Logo = styled.img`
+const Logo = styled.a`
+  display: block;
   position: absolute;
   width: auto;
   top: 4%;
   left: 6%;
 `;
+const LogoImg = styled.img`
+  display: block;
+  width: 110px;
+`;
+
 const BackImg = styled.img`
   position: absolute;
   width: 460px;
@@ -52,12 +58,21 @@ const StateBar = styled.div`
 
 const BtnBox = styled.div`
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  align-items: center;
   width: 100%;
   padding-top: 30px;
   border-top: 2px solid #d0d6f3;
   margin-top: 40px;
   transform: translate();
+  font-weight: bold;
+  a {
+    display: block;
+    padding: 14px 23px;
+    border-radius: 5px;
+    background: #fff;
+    box-shadow: 2px 2px 5px 0px rgba(0, 0, 0, 0.1);
+  }
   button {
     padding: 13px 45px;
     border-radius: 5px;
@@ -232,7 +247,10 @@ const Register = () => {
     <Grid container height={"100vh"}>
       <AlertModal isOpen={alertModal} onClose={aleatHandleClose} text={text} />
       <Grid item xs={4} sx={{ position: "relative" }}>
-        <Logo src={logoImg} alt="크래커 로고" />
+        <Logo href="/">
+          <LogoImg src={logoImg} alt="크래커 로고" />
+        </Logo>
+
         <BackImg src={loginImg} alt="로그인 이미지" />
       </Grid>
       <Grid
@@ -265,10 +283,13 @@ const Register = () => {
             idCheck={onCheck}
           />
           <BtnBox>
-            <Prev onClick={prevActive}>이전</Prev>
-            <Next onClick={nextActive}>
-              {active == 2 ? "가입하기" : "다음"}
-            </Next>
+            <a href="/">홈으로 가기</a>
+            <div>
+              <Prev onClick={prevActive}>이전</Prev>
+              <Next onClick={nextActive}>
+                {active == 2 ? "가입하기" : "다음"}
+              </Next>
+            </div>
           </BtnBox>
         </Container>
       </Grid>

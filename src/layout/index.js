@@ -20,7 +20,7 @@ const App = () => {
   return (
     <>
       <GlobalStyles />
-      {cookies.get("Authentication") ? (
+      {cookies.get("Refresh") ? (
         <Sidebar>
           <Routes>
             <Route path="/" element={<Home />} />

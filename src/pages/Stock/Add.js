@@ -78,6 +78,49 @@ const AddModal = ({ isOpen, onClose }) => {
     });
   }
 
+  // 가격, 재고 컴마
+  const handlePrice = (e) => {
+    console.log(e.target.value);
+    if (!e.target.value || e.target.value < 1) {
+      if (e.target.name == "price") {
+        setProductData({
+          ...productData,
+          price: 0,
+        });
+        console.log("price:0");
+        return;
+      }
+      if (e.target.name == "stock") {
+        setProductData({
+          ...productData,
+          stock: 0,
+        });
+        console.log("stock:0");
+        return;
+      }
+    }
+    const numCheck = /^[0-9,]/.test(e.target.value);
+    if (numCheck) {
+      const numValue = e.target.value
+        .replaceAll(",", "")
+        .replace(/(^0+)/, "")
+        .replace(".", "");
+      console.log(e.target.name);
+      if (e.target.name === "price") {
+        setProductData({
+          ...productData,
+          price: numValue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+        });
+      }
+      if (e.target.name === "stock") {
+        setProductData({
+          ...productData,
+          stock: numValue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+        });
+      }
+    }
+  };
+
   // 제품명
   const getProduct = async () => {
     const { data, statusCode } = await getProductInfo();
@@ -85,7 +128,6 @@ const AddModal = ({ isOpen, onClose }) => {
       setData(data);
       setName(data[0].name);
       setProductId(data[0].id);
-      console.log();
     }
   };
 
@@ -128,7 +170,6 @@ const AddModal = ({ isOpen, onClose }) => {
   };
 
   const postEvent = async () => {
-    console.log(productData.price, productData.stock);
     if (
       !productData.price ||
       productData.price < 1 ||
@@ -144,8 +185,8 @@ const AddModal = ({ isOpen, onClose }) => {
       infoId: productId,
       optionId: optionId,
       grade: grade == "B" ? 0 : grade == "A" ? 1 : 2,
-      price: productData.price,
-      stock: productData.stock,
+      price: String(productData.price).replace(/,/g, ""),
+      stock: String(productData.stock).replace(/,/g, ""),
     };
 
     const { data, statusCode } = await postProduct(list);
@@ -270,9 +311,10 @@ const AddModal = ({ isOpen, onClose }) => {
         <RowInner>
           <input
             className="area"
-            type="number"
+            type="text"
             name="price"
-            onChange={onChange}
+            value={productData?.price || ""}
+            onChange={handlePrice}
           />
         </RowInner>
       </InnerBox>
@@ -281,9 +323,10 @@ const AddModal = ({ isOpen, onClose }) => {
         <RowInner>
           <input
             className="area"
-            type="number"
+            type="text"
             name="stock"
-            onChange={onChange}
+            value={productData?.stock || ""}
+            onChange={handlePrice}
           />
         </RowInner>
       </InnerBox>

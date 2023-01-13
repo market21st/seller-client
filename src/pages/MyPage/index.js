@@ -267,8 +267,10 @@ const MyPage = () => {
     formData.append("bizFile", bizFile);
     formData.append("corpImage", logoFile);
 
-    const { statusCode } = await editMyInfo(formData);
+    const { data, statusCode } = await editMyInfo(formData);
     if (statusCode == 200) {
+      localStorage.setItem("corpLogo", data.corpLogo);
+      localStorage.setItem("corpCeo", data.corpCeo);
       setAlertModal(true);
       setText(`저장 완료`);
     } else {

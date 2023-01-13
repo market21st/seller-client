@@ -22,6 +22,7 @@ export const getGrade = async () => {
 export const getStockList = async (params) => {
   try {
     const res = await instance.get(`/product`, { params: params });
+    console.log(res);
     return res.data;
   } catch (e) {
     console.log(e);

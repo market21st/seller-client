@@ -12,7 +12,7 @@ import { editStock, DeleteItem } from "../../api/stock";
 // styled
 const ItemBox = styled.li`
   white-space: pre-line;
-  box-shadow: 4px 4px 4px 0px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.1);
   h3 {
     padding-left: 20px;
     text-align: left;
@@ -108,7 +108,7 @@ const Item = ({
     isActive: isActive,
   });
 
-  //숫자 컴마
+  //가격,재고 컴마
   const handlePrice = (e) => {
     if (!e.target.value || e.target.value < 1) {
       if (e.target.name == "price") {
@@ -128,7 +128,10 @@ const Item = ({
     }
     const numCheck = /^[0-9,]/.test(e.target.value);
     if (numCheck) {
-      const numValue = e.target.value.replaceAll(",", "");
+      const numValue = e.target.value
+        .replaceAll(",", "")
+        .replace(/(^0+)/, "")
+        .replace(".", "");
       if (e.target.name === "price") {
         setStockData({
           ...stockData,
