@@ -80,14 +80,12 @@ const AddModal = ({ isOpen, onClose }) => {
 
   // 가격, 재고 컴마
   const handlePrice = (e) => {
-    console.log(e.target.value);
     if (!e.target.value || e.target.value < 1) {
       if (e.target.name == "price") {
         setProductData({
           ...productData,
           price: 0,
         });
-        console.log("price:0");
         return;
       }
       if (e.target.name == "stock") {
@@ -95,7 +93,6 @@ const AddModal = ({ isOpen, onClose }) => {
           ...productData,
           stock: 0,
         });
-        console.log("stock:0");
         return;
       }
     }
@@ -105,7 +102,6 @@ const AddModal = ({ isOpen, onClose }) => {
         .replaceAll(",", "")
         .replace(/(^0+)/, "")
         .replace(".", "");
-      console.log(e.target.name);
       if (e.target.name === "price") {
         setProductData({
           ...productData,

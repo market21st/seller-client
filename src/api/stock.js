@@ -22,7 +22,7 @@ export const getGrade = async () => {
 export const getStockList = async (params) => {
   try {
     const res = await instance.get(`/product`, { params: params });
-    console.log(res);
+
     return res.data;
   } catch (e) {
     console.log(e);
@@ -87,13 +87,3 @@ export const postProduct = async (params) => {
     return err.response;
   }
 };
-
-// export const getGrade = async (params) => {
-//   try {
-//     const res = await instance.patch(`/manage/my`, params);
-//     return res.data;
-//   } catch (e) {
-//     console.log(e);
-//     return;
-//   }
-// };

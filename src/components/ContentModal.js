@@ -69,7 +69,6 @@ const ContentModal = ({
   }
   const stateDelete = () => {
     setState([]);
-    console.log("state삭제");
     closeBtn();
   };
 

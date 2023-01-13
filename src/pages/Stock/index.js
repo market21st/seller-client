@@ -241,7 +241,7 @@ const StockList = () => {
             ? 2
             : "",
       });
-      console.log(data.results);
+
       if (statusCode == 200) {
         setListData(data.results);
       }
@@ -249,7 +249,7 @@ const StockList = () => {
     }
 
     const { data, statusCode } = await getStockList(list);
-    console.log(data);
+
     if (statusCode == 200) {
       setListData(data.results);
     }

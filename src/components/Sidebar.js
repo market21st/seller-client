@@ -211,6 +211,7 @@ const Sidebar = ({ children }) => {
               window.localStorage.clear();
               cookies.remove("Authentication");
               cookies.remove("Refresh");
+              cookies.remove("accessToken");
               navigate("/");
               window.location.reload();
             }}

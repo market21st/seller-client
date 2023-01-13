@@ -62,7 +62,6 @@ export const getRefreshToken = async (params) => {
     deleteCookie("Authentication");
     window.localStorage.clear();
     window.location.href = "/";
-    console.log(err);
   }
 };
 
