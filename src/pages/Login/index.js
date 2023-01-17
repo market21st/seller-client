@@ -1,13 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import styleds from "styled-components";
+import styled from "styled-components";
 
 // Mui
 import {
   Grid,
   TextField,
   Button,
-  Typography,
   IconButton,
   FormControl,
   InputAdornment,
@@ -15,7 +14,6 @@ import {
 } from "@mui/material";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import { styled } from "@mui/material/styles";
 
 import AlertModal from "../../components/AlertModal";
 
@@ -27,42 +25,45 @@ import logoImg from "../../assets/kracker.png";
 import { LoginUser } from "../../api/user";
 
 // Styled-components
-const Logo = styleds.img`
+const Logo = styled.a`
+  display: block;
   position: absolute;
   width: auto;
   top: 4%;
   left: 3%;
 `;
+const LogoImg = styled.img`
+  display: block;
+  width: 110px;
+`;
 
-const BackImg = styleds.img`
+const BackImg = styled.img`
   position: absolute;
   width: 680px;
   top: 50%;
   left: 50%;
-  transform: translate(-50%,-50%);
+  transform: translate(-50%, -50%);
 `;
 
-const Title = styleds.h2`
-  font-weight:700;
+const Title = styled.h2`
+  font-weight: 700;
   font-size: 2rem;
   margin-bottom: 1.2rem;
+`;
+const Info = styled.p`
+  margin-top: 15px;
+  font-size: 0.9rem;
+  a {
+    display: inline-block;
+    padding-left: 5px;
+    color: #1976d2;
+  }
 `;
 
 const LogIn = () => {
   const navigate = useNavigate();
   const idRef = useRef();
   const pwRef = useRef();
-
-  // MUI style
-  const TypographyStyled = styled(Typography)(({ theme }) => ({
-    fontSize: "0.875rem",
-    marginTop: theme.spacing(1.5),
-  }));
-  const LinkStyled = styled("a")(({ theme }) => ({
-    fontSize: "0.875rem",
-    textDecoration: "none",
-    color: theme.palette.primary.main,
-  }));
 
   //비밀번호 (미리보기)
   const [values, setValues] = useState({
@@ -107,6 +108,7 @@ const LogIn = () => {
       password: pw,
     });
     if (statusCode == 200) {
+      window.location.reload();
       navigate("/");
     }
     if (status === 400) {
@@ -134,7 +136,10 @@ const LogIn = () => {
     <Grid container height={"100vh"}>
       <AlertModal isOpen={alertOpen} onClose={alertHandleClose} text={text} />
       <Grid item xs={8} sx={{ position: "relative" }}>
-        <Logo src={logoImg} alt="dd" />
+        <Logo href="/">
+          <LogoImg src={logoImg} alt="dd" />
+        </Logo>
+
         <BackImg src={loginImg} alt="dd" />
       </Grid>
       <Grid
@@ -186,12 +191,9 @@ const LogIn = () => {
           >
             로그인
           </Button>
-          <TypographyStyled variant="subtitle1">
-            회원이 아니신가요?{" "}
-            <LinkStyled onClick={onClick} sx={{ cursor: "pointer" }}>
-              회원가입하기
-            </LinkStyled>
-          </TypographyStyled>
+          <Info>
+            회원이 아니신가요?<a href="/register">회원가입하기</a>
+          </Info>
         </Grid>
       </Grid>
     </Grid>

@@ -17,12 +17,18 @@ import Form from "./Form";
 import { RegisterUser, idCheck } from "../../api/user";
 
 // Styled-components
-const Logo = styled.img`
+const Logo = styled.a`
+  display: block;
   position: absolute;
   width: auto;
   top: 4%;
   left: 6%;
 `;
+const LogoImg = styled.img`
+  display: block;
+  width: 110px;
+`;
+
 const BackImg = styled.img`
   position: absolute;
   width: 460px;
@@ -52,11 +58,21 @@ const StateBar = styled.div`
 
 const BtnBox = styled.div`
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  align-items: center;
   width: 100%;
   padding-top: 30px;
   border-top: 2px solid #d0d6f3;
   margin-top: 40px;
+  transform: translate();
+  font-weight: bold;
+  a {
+    display: block;
+    padding: 14px 23px;
+    border-radius: 5px;
+    background: #fff;
+    box-shadow: 2px 2px 5px 0px rgba(0, 0, 0, 0.1);
+  }
   button {
     padding: 13px 45px;
     border-radius: 5px;
@@ -76,11 +92,6 @@ const Register = () => {
   // 이메일 형식
   const emailRegEx =
     /^[A-Za-z0-9]([-_.]?[A-Za-z0-9])*@[A-Za-z0-9]([-_.]?[A-Za-z0-9])*\.[A-Za-z]{2,3}$/;
-  const navigate = useNavigate();
-
-  // select
-  const [bizType, setBizType] = useState("개인사업자");
-  const [taxType, setTaxType] = useState("일반과세");
 
   const [bizFile, setBizFile] = useState("");
   const [corpImage, setCorpImage] = useState("");
@@ -128,8 +139,8 @@ const Register = () => {
     corpAddr2: "",
     corpPost: "",
     corpDesc: "",
-    bizType: "사업자분류",
-    taxType: "과세분류",
+    bizType: "개인사업자",
+    taxType: "단위과세",
     bizNum: "",
   });
 
@@ -172,13 +183,16 @@ const Register = () => {
     }
     for (let key in userInfo) {
       if (!userInfo[key] || !bizFile) {
-        console.log(userInfo[key], key);
         setAlertModal(true);
         setText(`브랜드 로고를 제외한 모든 정보를 기입해주세요.`);
         return;
       }
     }
-
+    if (userInfo.password.length < 8) {
+      setAlertModal(true);
+      setText("비밀번호는 최소 8글자 이상 입력해주세요.");
+      return;
+    }
     if (userInfo.password != userInfo.passwordCheck) {
       setAlertModal(true);
       setText("비밀번호가 일치하지 않습니다.");
@@ -191,7 +205,6 @@ const Register = () => {
     }
 
     if (userInfo.phone.slice(0, 3) !== "010" || userInfo.phone.length != 11) {
-      console.log(userInfo.phone.length);
       setAlertModal(true);
       setText("휴대전화 형식에 맞지 않습니다.");
       return;
@@ -234,7 +247,10 @@ const Register = () => {
     <Grid container height={"100vh"}>
       <AlertModal isOpen={alertModal} onClose={aleatHandleClose} text={text} />
       <Grid item xs={4} sx={{ position: "relative" }}>
-        <Logo src={logoImg} alt="크래커 로고" />
+        <Logo href="/">
+          <LogoImg src={logoImg} alt="크래커 로고" />
+        </Logo>
+
         <BackImg src={loginImg} alt="로그인 이미지" />
       </Grid>
       <Grid
@@ -267,10 +283,13 @@ const Register = () => {
             idCheck={onCheck}
           />
           <BtnBox>
-            <Prev onClick={prevActive}>이전</Prev>
-            <Next onClick={nextActive}>
-              {active == 2 ? "가입하기" : "다음"}
-            </Next>
+            <a href="/">홈으로 가기</a>
+            <div>
+              <Prev onClick={prevActive}>이전</Prev>
+              <Next onClick={nextActive}>
+                {active == 2 ? "가입하기" : "다음"}
+              </Next>
+            </div>
           </BtnBox>
         </Container>
       </Grid>

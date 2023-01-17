@@ -6,6 +6,8 @@ import GlobalStyles from "../utils/globalStyle";
 import Home from "../pages/Home";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
+import MyPage from "../pages/MyPage";
+import StockList from "../pages/Stock";
 
 // components
 import Sidebar from "../components/Sidebar";
@@ -15,20 +17,20 @@ import { Cookies } from "react-cookie";
 export const cookies = new Cookies();
 
 const App = () => {
-  useEffect(() => {}, [cookies.get("Authentication")]);
   return (
     <>
       <GlobalStyles />
-      {cookies.get("Authentication") ? (
+      {cookies.get("Refresh") ? (
         <Sidebar>
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/mypage" element={<MyPage />} />
+            <Route path="/stock" element={<StockList />} />
           </Routes>
         </Sidebar>
       ) : (
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
+          <Route path="/" element={<Login />} />
           <Route path="/register" element={<Register />} />
         </Routes>
       )}

@@ -14,17 +14,21 @@ import reviewIcon from "../assets/review.png";
 import myIcon from "../assets/my.png";
 import paperIcon from "../assets/paper.png";
 import logoutIcon from "../assets/logout.png";
+import { cookies } from "../layout";
+import bizfile from "../assets/bizfile.jpg";
 
 // Styled-components
 const LogoImg = styled.img`
+  width: 80%;
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
 `;
-const Logo = styled.div`
+const Logo = styled.a`
+  display: block;
   position: relative;
-  height: 75px;
+  height: 7.6vh;
   width: 75%;
   margin: 0 auto;
   border-bottom: 1.5px solid #c7cbf0;
@@ -118,15 +122,38 @@ const ButtonBox = styled.div`
 
 // 헤더
 const Header = styled.h1`
+  font-family: "GmarketSansMedium";
+  display: flex;
+  align-items: center;
   background: #cfd4f0;
-  height: 75px;
+  height: 7.6vh;
   width: 100%;
-  line-height: 75px;
+  font-size: 20px;
+  font-weight: bold;
+  line-height: 7.6vh;
   padding-left: 59px;
+  div {
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #fff;
+    margin-right: 17px;
+  }
+  img {
+    width: 80%;
+  }
 `;
 
 const Sidebar = ({ children }) => {
   const navigate = useNavigate();
+
+  const getBiz = () => {
+    window.open(bizfile, "_blank");
+  };
 
   return (
     <Grid container>
@@ -139,12 +166,12 @@ const Sidebar = ({ children }) => {
           position: "relative",
         }}
       >
-        <Logo>
+        <Logo href="/">
           <LogoImg src={logoImg} alt="크래커 로고" />
         </Logo>
         <Menu>
           <li>
-            <Link to="/login">
+            <Link to="/stock">
               <img src={stockIcon} alt="재고관리" />
               재고관리
             </Link>
@@ -171,7 +198,7 @@ const Sidebar = ({ children }) => {
           내정보
         </MyInfo>
         <ButtonBox>
-          <button>
+          <button onClick={getBiz}>
             <img src={paperIcon} alt="사업자등록증" />
             <div>
               <span>21세기전파상</span>
@@ -179,17 +206,36 @@ const Sidebar = ({ children }) => {
               사업자등록증
             </div>
           </button>
-          <button>
+          <button
+            onClick={() => {
+              window.localStorage.clear();
+              cookies.remove("Authentication");
+              cookies.remove("Refresh");
+              cookies.remove("accessToken");
+              navigate("/");
+              window.location.reload();
+            }}
+          >
             로그아웃
             <img src={logoutIcon} alt="사업자등록증" />
           </button>
         </ButtonBox>
       </Grid>
-      <Grid item sx={{ background: "#F1F4F8", width: "calc(100% - 187px);" }}>
-        <Header sx={{ background: "#CFD4F0", height: "75px", width: "100%" }}>
-          아이픽스존 님 안녕하세요!
+      <Grid
+        item
+        sx={{
+          background: "#F1F4F8",
+          width: "calc(100% - 187px)",
+          position: "relative",
+        }}
+      >
+        <Header>
+          <div>
+            <img src={localStorage.getItem("corpLogo")} alt="브랜드로고" />
+          </div>
+          {localStorage.getItem("corpCeo")}님 안녕하세요!
         </Header>
-        <Grid sx={{ width: "100%" }}>{children}</Grid>
+        <Grid sx={{ width: "100%", height: "92.4vh" }}>{children}</Grid>
       </Grid>
     </Grid>
   );

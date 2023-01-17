@@ -47,6 +47,7 @@ table {
 	border-collapse: collapse;
 	border-spacing: 0;
 }
+button{ background: none; cursor: pointer;}
 button,
 input,
 optgroup,
@@ -57,7 +58,6 @@ textarea {
   margin: 0;
   border: none;
   outline: none;
-  
 }
 
 a {color: #4552CE; text-decoration: none; outline: none}

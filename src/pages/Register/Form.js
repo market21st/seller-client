@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-
+import CloseIcon from "@mui/icons-material/Close";
 // Mui
 import { FormControl, Select, MenuItem } from "@mui/material";
 
@@ -69,10 +68,28 @@ const InfoContainer = styled.div`
   input {
     border-radius: 5px;
     padding: 14px;
-
     margin-top: 8px;
     font-weight: 800;
     box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  }
+`;
+
+const Container = styled.div`
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 33.33%;
+  border: 1px solid #ddd;
+  height: 100vh;
+  background: #fff;
+  h1 {
+    font-size: 18px;
+    color: #909090;
+    padding: 15px 15px;
+    border-bottom: 1px solid #ddd;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
 `;
 
@@ -85,44 +102,8 @@ const Form = ({
   setUserInfo,
   idCheck,
 }) => {
-  const [bizType, setBizType] = useState("개인사업자");
-  const [taxType, setTaxType] = useState("일반과세");
-
   const [logoFile, setLogoFile] = useState("");
   const [bizFile, setBizFile] = useState("");
-
-  // const onChangeOpenPost = () => {
-  //   setIsOpenPost(!isOpenPost);
-  // };
-
-  // const onCompletePost = (data) => {
-  //   let fullAddr = data.address;
-  //   let extraAddr = "";
-
-  //   if (data.addressType === "R") {
-  //     if (data.bname !== "") {
-  //       extraAddr += data.bname;
-  //     }
-  //     if (data.buildingName !== "") {
-  //       extraAddr +=
-  //         extraAddr !== "" ? `, ${data.buildingName}` : data.buildingName;
-  //     }
-  //     fullAddr += extraAddr !== "" ? ` (${extraAddr})` : "";
-  //   }
-
-  //   setAddress(data.zonecode);
-  //   setAddressDetail(fullAddr);
-  //   setIsOpenPost(false);
-  // };
-
-  // const postCodeStyle = {
-  //   display: "block",
-  //   position: "absolute",
-  //   top: "0%",
-  //   width: "400px",
-  //   height: "400px",
-  //   padding: "7px",
-  // };
 
   const [enroll_company, setEnroll_company] = useState({
     address1: "",
@@ -146,10 +127,18 @@ const Form = ({
   return (
     <>
       {popup && (
-        <PostModal
-          company={enroll_company}
-          setcompany={setEnroll_company}
-        ></PostModal>
+        <Container>
+          <h1>
+            주소검색
+            <CloseIcon onClick={handleComplete} />
+          </h1>
+          <PostModal
+            closeEvent={handleComplete}
+            handleComplete={handleComplete}
+            company={enroll_company}
+            setcompany={setEnroll_company}
+          />
+        </Container>
       )}
       <InfoBox>
         <InfoContainer className={0 == active ? " active" : ""}>
@@ -228,17 +217,6 @@ const Form = ({
                   onChange={changeEvent}
                   value={enroll_company.address1 || ""}
                 />
-                {/* <input
-                  className="user_enroll_text"
-                  placeholder="주소"
-                  type="text"
-                  required={true}
-                  name="address"
-                  onChange={handleInput}
-                  value={enroll_company.address}
-                /> */}
-                {/* <button onClick={handleComplete}>우편번호 찾기</button> */}
-
                 <BlueBtn onClick={handleComplete}>검색하기</BlueBtn>
               </div>
             </RowInner>
@@ -297,12 +275,11 @@ const Form = ({
               <div>
                 <FormControl>
                   <Select
-                    onChange={(e) => {
-                      setBizType(e.target.value);
-                    }}
+                    onChange={changeEvent}
                     displayEmpty
                     inputProps={{ "aria-label": "Without label" }}
-                    value={bizType}
+                    value={infoData.bizType}
+                    name="bizType"
                     sx={{
                       mt: "8px",
                       width: "195px",
@@ -321,12 +298,11 @@ const Form = ({
               <div>
                 <FormControl>
                   <Select
-                    onChange={(e) => {
-                      setTaxType(e.target.value);
-                    }}
+                    onChange={changeEvent}
                     displayEmpty
                     inputProps={{ "aria-label": "Without label" }}
-                    value={taxType}
+                    value={infoData.taxType}
+                    name="taxType"
                     sx={{
                       mt: "8px",
                       width: "195px",
@@ -334,7 +310,7 @@ const Form = ({
                       boxShadow: "0px 2px 5px rgba(0, 0, 0, 0.1)",
                     }}
                   >
-                    <MenuItem value={"일반과세"}>일반과세</MenuItem>
+                    <MenuItem value={"단위과세"}>단위과세</MenuItem>
                     <MenuItem value={"간이과세"}>간이과세</MenuItem>
                   </Select>
                 </FormControl>
