@@ -177,17 +177,17 @@ const Sidebar = ({ children }) => {
             </Link>
           </li>
           <li>
-            <Link to="/login">
+            <Link to="/order">
               <img src={orderIcon} alt="주문관리" />
               주문관리
             </Link>
           </li>
-          <li>
+          {/* <li>
             <Link to="/login">
               <img src={reviewIcon} alt="리뷰관리" />
               리뷰관리
             </Link>
-          </li>
+          </li> */}
         </Menu>
         <MyInfo
           onClick={() => {

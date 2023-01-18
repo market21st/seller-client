@@ -17,7 +17,6 @@ instance.interceptors.response.use(
     return res;
   },
   function (err) {
-    console.log(err);
     if (err.response.data.statusCode === 401) {
       if (process.env.NODE_ENV === "development") {
         getRefreshToken();
@@ -80,6 +79,5 @@ export const getToken = async (params) => {
   } catch (e) {
     window.localStorage.clear();
     window.location.href = "/";
-    console.log(e);
   }
 };

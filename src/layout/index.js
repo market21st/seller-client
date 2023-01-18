@@ -8,6 +8,8 @@ import Login from "../pages/Login";
 import Register from "../pages/Register";
 import MyPage from "../pages/MyPage";
 import StockList from "../pages/Stock";
+import OrderList from "../pages/Order";
+import OrderDetail from "../pages/Order/detail";
 
 // components
 import Sidebar from "../components/Sidebar";
@@ -26,6 +28,8 @@ const App = () => {
             <Route path="/" element={<Home />} />
             <Route path="/mypage" element={<MyPage />} />
             <Route path="/stock" element={<StockList />} />
+            <Route path="/order" element={<OrderList />} />
+            <Route path="/order/item/:id" element={<OrderDetail />} />
           </Routes>
         </Sidebar>
       ) : (
