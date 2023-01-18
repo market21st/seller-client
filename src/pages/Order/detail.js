@@ -518,12 +518,8 @@ const OrderDetails = () => {
               </TableContainer>
             </InputBox>
           </RowInnerTop>
-          {/* <FilterBtn>
-            <button onClick={() => setPayModal(true)}>결제정보확인</button>
-            <button onClick={() => setStateModal(true)}>상태변경내역</button>
-          </FilterBtn> */}
           <BtnBox>
-            <button>목록</button>
+            <button onClick={() => navigator("/order")}>목록</button>
           </BtnBox>
         </EditBox>
       </Container>
