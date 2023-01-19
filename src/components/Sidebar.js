@@ -212,6 +212,8 @@ const Sidebar = ({ children }) => {
               cookies.remove("Authentication");
               cookies.remove("Refresh");
               cookies.remove("accessToken");
+              cookies.remove("PartnerAuth");
+              cookies.remove("PartnerRefresh");
               navigate("/");
               window.location.reload();
             }}

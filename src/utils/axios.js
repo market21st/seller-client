@@ -59,6 +59,8 @@ export const getRefreshToken = async (params) => {
     deleteCookie("Refresh");
     deleteCookie("refreshToken");
     deleteCookie("Authentication");
+    deleteCookie("PartnerAuth");
+    deleteCookie("PartnerRefresh");
     window.localStorage.clear();
     window.location.href = "/";
   }
