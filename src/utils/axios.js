@@ -1,4 +1,5 @@
 import axios from "axios";
+import { logoutUser } from "../api/user";
 import { Cookies } from "react-cookie";
 export const cookies = new Cookies();
 
@@ -6,6 +7,16 @@ axios.defaults.withCredentials = true;
 
 export const deleteCookie = function (name) {
   document.cookie = name + "=; expires=Thu, 01 Jan 1999 00:00:10 GMT;";
+};
+
+//로그아웃 api
+export const logout = async () => {
+  const { statusCode } = await logoutUser();
+  if (statusCode == 200) {
+    window.localStorage.clear();
+    navigate("/");
+    window.location.reload();
+  }
 };
 
 export const instance = axios.create({
@@ -41,28 +52,10 @@ export const getRefreshToken = async (params) => {
         },
       }
     );
-    // const today = new Date();
-    // const expireDate = today.setDate(today.getDate() + 1);
-    // cookies.set("accessToken", res.data.data.accessToken, {
-    //   secure: false,
-    //   expires: new Date(expireDate),
-    //   path: "/",
-    // });
-    // cookies.set("refreshToken", res.data.data.refreshToken, {
-    //   secure: false,
-    //   expires: new Date(expireDate),
-    //   path: "/",
-    // });
     window.location.reload();
     return res.data;
   } catch (err) {
-    // deleteCookie("Refresh");
-    // deleteCookie("refreshToken");
-    // deleteCookie("Authentication");
-    deleteCookie("PartnerAuth");
-    deleteCookie("PartnerRefresh");
-    window.localStorage.clear();
-    window.location.href = "/";
+    logout();
   }
 };
 
@@ -79,9 +72,6 @@ export const getToken = async (params) => {
     window.location.reload();
     return res.data;
   } catch (e) {
-    deleteCookie("PartnerAuth");
-    deleteCookie("PartnerRefresh");
-    window.localStorage.clear();
-    window.location.href = "/";
+    logout();
   }
 };

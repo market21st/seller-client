@@ -158,14 +158,8 @@ const Sidebar = ({ children }) => {
   };
   //로그아웃 api
   const logout = async () => {
-    console.log("로그아웃");
-    const { data, statusCode } = await logoutUser();
+    const { statusCode } = await logoutUser();
     if (statusCode == 200) {
-      // cookies.remove("Authentication");
-      // cookies.remove("Refresh");
-      // cookies.remove("accessToken");
-      // deleteCookie("PartnerAuth");
-      // deleteCookie("PartnerRefresh");
       window.localStorage.clear();
       navigate("/");
       window.location.reload();
