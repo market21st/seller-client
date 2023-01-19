@@ -12,9 +12,15 @@ export const deleteCookie = function (name) {
 
 //로그아웃 api
 export const Logout = async () => {
+  console.log("1");
   const navigate = useNavigate();
+  console.log("2");
   const { statusCode } = await logoutUser();
   if (statusCode == 200) {
+    window.localStorage.clear();
+    navigate("/");
+    window.location.reload();
+  } else {
     window.localStorage.clear();
     navigate("/");
     window.location.reload();
@@ -57,6 +63,7 @@ export const getRefreshToken = async (params) => {
     window.location.reload();
     return res.data;
   } catch (err) {
+    console.log("getRefreshToken 로그아웃");
     Logout();
   }
 };
@@ -74,6 +81,8 @@ export const getToken = async (params) => {
     window.location.reload();
     return res.data;
   } catch (e) {
+    console.log("getToken 로그아웃");
+
     Logout();
   }
 };
