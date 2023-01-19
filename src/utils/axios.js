@@ -1,6 +1,7 @@
 import axios from "axios";
 import { logoutUser } from "../api/user";
 import { Cookies } from "react-cookie";
+import { useNavigate } from "react-router-dom";
 export const cookies = new Cookies();
 
 axios.defaults.withCredentials = true;
@@ -10,7 +11,8 @@ export const deleteCookie = function (name) {
 };
 
 //로그아웃 api
-export const logout = async () => {
+export const Logout = async () => {
+  const navigate = useNavigate();
   const { statusCode } = await logoutUser();
   if (statusCode == 200) {
     window.localStorage.clear();
@@ -55,7 +57,7 @@ export const getRefreshToken = async (params) => {
     window.location.reload();
     return res.data;
   } catch (err) {
-    logout();
+    Logout();
   }
 };
 
@@ -72,6 +74,6 @@ export const getToken = async (params) => {
     window.location.reload();
     return res.data;
   } catch (e) {
-    logout();
+    Logout();
   }
 };
