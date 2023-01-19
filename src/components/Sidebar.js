@@ -148,6 +148,10 @@ const Header = styled.h1`
   }
 `;
 
+export const deleteCookie = function (name) {
+  document.cookie = name + "=; expires=Thu, 01 Jan 1999 00:00:10 GMT;";
+};
+
 const Sidebar = ({ children }) => {
   const navigate = useNavigate();
 
@@ -208,13 +212,13 @@ const Sidebar = ({ children }) => {
           </button>
           <button
             onClick={() => {
-              window.localStorage.clear();
               // cookies.remove("Authentication");
               // cookies.remove("Refresh");
               // cookies.remove("accessToken");
-              cookies.remove("PartnerAuth");
-              cookies.remove("PartnerRefresh");
+              deleteCookie("PartnerAuth");
+              deleteCookie("PartnerRefresh");
               navigate("/");
+              window.localStorage.clear();
               window.location.reload();
             }}
           >
