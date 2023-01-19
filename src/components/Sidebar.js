@@ -167,8 +167,8 @@ const Sidebar = ({ children }) => {
       // deleteCookie("PartnerAuth");
       // deleteCookie("PartnerRefresh");
       window.localStorage.clear();
-      // navigate("/");
-      // window.location.reload();
+      navigate("/");
+      window.location.reload();
     }
   };
 
