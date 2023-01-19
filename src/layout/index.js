@@ -22,7 +22,7 @@ const App = () => {
   return (
     <>
       <GlobalStyles />
-      {cookies.get("Refresh") ? (
+      {cookies.get("PartnerRefresh") ? (
         <Sidebar>
           <Routes>
             <Route path="/" element={<Home />} />

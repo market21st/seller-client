@@ -41,24 +41,24 @@ export const getRefreshToken = async (params) => {
         },
       }
     );
-    const today = new Date();
-    const expireDate = today.setDate(today.getDate() + 1);
-    cookies.set("accessToken", res.data.data.accessToken, {
-      secure: false,
-      expires: new Date(expireDate),
-      path: "/",
-    });
-    cookies.set("refreshToken", res.data.data.refreshToken, {
-      secure: false,
-      expires: new Date(expireDate),
-      path: "/",
-    });
+    // const today = new Date();
+    // const expireDate = today.setDate(today.getDate() + 1);
+    // cookies.set("accessToken", res.data.data.accessToken, {
+    //   secure: false,
+    //   expires: new Date(expireDate),
+    //   path: "/",
+    // });
+    // cookies.set("refreshToken", res.data.data.refreshToken, {
+    //   secure: false,
+    //   expires: new Date(expireDate),
+    //   path: "/",
+    // });
     window.location.reload();
     return res.data;
   } catch (err) {
-    deleteCookie("Refresh");
-    deleteCookie("refreshToken");
-    deleteCookie("Authentication");
+    // deleteCookie("Refresh");
+    // deleteCookie("refreshToken");
+    // deleteCookie("Authentication");
     deleteCookie("PartnerAuth");
     deleteCookie("PartnerRefresh");
     window.localStorage.clear();

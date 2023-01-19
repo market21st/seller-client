@@ -209,9 +209,9 @@ const Sidebar = ({ children }) => {
           <button
             onClick={() => {
               window.localStorage.clear();
-              cookies.remove("Authentication");
-              cookies.remove("Refresh");
-              cookies.remove("accessToken");
+              // cookies.remove("Authentication");
+              // cookies.remove("Refresh");
+              // cookies.remove("accessToken");
               cookies.remove("PartnerAuth");
               cookies.remove("PartnerRefresh");
               navigate("/");
