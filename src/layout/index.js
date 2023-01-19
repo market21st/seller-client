@@ -17,6 +17,7 @@ import Sidebar from "../components/Sidebar";
 // cookie
 import { Cookies } from "react-cookie";
 export const cookies = new Cookies();
+console.log(cookies);
 
 const App = () => {
   return (

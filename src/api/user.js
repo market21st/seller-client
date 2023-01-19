@@ -29,16 +29,16 @@ export const idCheck = async (params) => {
 export const LoginUser = async (params) => {
   try {
     const res = await instance.post(`/auth/login`, params);
-    // const today = new Date();
-    // const expireDate = today.setDate(today.getDate() + 1);
+    const today = new Date();
+    const expireDate = today.setDate(today.getDate() + 1);
     if (res.data.statusCode === 200) {
-      // cookies.set("Authentication", res.data.data.Authentication, {
+      // cookies.set("PartnerRefresh", res.data.data.PartnerRefresh, {
       //   secure: false,
       //   expires: new Date(expireDate),
       //   // sameSite: "Secure",
       //   path: "/",
       // });
-      // cookies.set("Refresh", res.data.data.Refresh, {
+      // cookies.set("PartnerAuth", res.data.data.PartnerAuth, {
       //   secure: false,
       //   // sameSite: "Secure",
       //   expires: new Date(expireDate),
