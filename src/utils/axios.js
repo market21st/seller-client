@@ -1,3 +1,4 @@
+import React from "react";
 import axios from "axios";
 import { logoutUser } from "../api/user";
 import { Cookies } from "react-cookie";
@@ -13,16 +14,17 @@ export const deleteCookie = function (name) {
 //로그아웃 api
 export const Logout = async () => {
   console.log("1");
-  const navigate = useNavigate();
-  console.log("2");
+
   const { statusCode } = await logoutUser();
   if (statusCode == 200) {
+    console.log("2");
     window.localStorage.clear();
-    navigate("/");
+    window.location.href = "/";
     window.location.reload();
   } else {
+    console.log("3");
     window.localStorage.clear();
-    navigate("/");
+    window.location.href = "/";
     window.location.reload();
   }
 };
