@@ -13,20 +13,19 @@ export const deleteCookie = function (name) {
 
 //로그아웃 api
 export const Logout = async () => {
-  console.log("1");
-
-  const { statusCode } = await logoutUser();
-  if (statusCode == 200) {
-    console.log("2");
-    window.localStorage.clear();
-    window.location.href = "/";
-    window.location.reload();
-  } else {
-    console.log("3");
-    window.localStorage.clear();
-    window.location.href = "/";
-    window.location.reload();
-  }
+  // console.log("1");
+  // const { statusCode } = await logoutUser();
+  // if (statusCode == 200) {
+  //   console.log("2");
+  //   window.localStorage.clear();
+  //   window.location.href = "/";
+  //   window.location.reload();
+  // } else {
+  //   console.log("3");
+  //   window.localStorage.clear();
+  //   window.location.href = "/";
+  //   window.location.reload();
+  // }
 };
 
 export const instance = axios.create({
