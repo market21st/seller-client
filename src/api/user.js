@@ -30,18 +30,19 @@ export const LoginUser = async (params) => {
   try {
     const res = await instance.post(`/auth/login`, params);
     const today = new Date();
-    const expireDate = today.setDate(today.getDate() + 1);
+    const expireDate1 = today.setDate(today.getDate() + 10);
+    const expireDate2 = today.setDate(today.getDate() + 300);
     if (res.data.statusCode === 200) {
       // cookies.set("PartnerRefresh", res.data.data.PartnerRefresh, {
       //   secure: false,
-      //   expires: new Date(expireDate),
+      //   expires: new Date(expireDate2),
       //   // sameSite: "Secure",
       //   path: "/",
       // });
       // cookies.set("PartnerAuth", res.data.data.PartnerAuth, {
       //   secure: false,
       //   // sameSite: "Secure",
-      //   expires: new Date(expireDate),
+      //   expires: new Date(expireDate1),
       //   path: "/",
       // });
       window.localStorage.setItem("corpLogo", res.data.data.corpImage);
