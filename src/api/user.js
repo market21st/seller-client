@@ -45,6 +45,8 @@ export const LoginUser = async (params) => {
       //   expires: new Date(expireDate1),
       //   path: "/",
       // });
+
+      window.localStorage.setItem("isLogin", "true");
       window.localStorage.setItem("corpLogo", res.data.data.corpImage);
       window.localStorage.setItem("corpCeo", res.data.data.corpCeo);
     }

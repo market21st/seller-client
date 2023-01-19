@@ -14,23 +14,15 @@ import OrderDetail from "../pages/Order/detail";
 // components
 import Sidebar from "../components/Sidebar";
 
-import { LoginUser } from "../api/user";
-
 // cookie
 import { Cookies } from "react-cookie";
 export const cookies = new Cookies();
-console.log(document.cookie);
 
 const App = () => {
-  // useEffect(()=>{
-  //     const isLogin = await() => {
-  // const {data} = LoginUser();
-  //     }
-  //   },[])
   return (
     <>
       <GlobalStyles />
-      {cookies.get("PartnerRefresh") ? (
+      {localStorage.getItem("isLogin") ? (
         <Sidebar>
           <Routes>
             <Route path="/" element={<Home />} />

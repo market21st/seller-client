@@ -79,6 +79,8 @@ export const getToken = async (params) => {
     window.location.reload();
     return res.data;
   } catch (e) {
+    deleteCookie("PartnerAuth");
+    deleteCookie("PartnerRefresh");
     window.localStorage.clear();
     window.location.href = "/";
   }
