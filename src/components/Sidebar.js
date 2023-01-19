@@ -17,6 +17,8 @@ import logoutIcon from "../assets/logout.png";
 import { cookies } from "../layout";
 import bizfile from "../assets/bizfile.jpg";
 
+import { logoutUser } from "../api/user";
+
 // Styled-components
 const LogoImg = styled.img`
   width: 80%;
@@ -148,15 +150,26 @@ const Header = styled.h1`
   }
 `;
 
-export const deleteCookie = function (name) {
-  document.cookie = name + "=; expires=Thu, 01 Jan 1999 00:00:10 GMT;";
-};
-
 const Sidebar = ({ children }) => {
   const navigate = useNavigate();
 
   const getBiz = () => {
     window.open(bizfile, "_blank");
+  };
+  //로그아웃 api
+  const logout = async () => {
+    console.log("로그아웃");
+    const { data, statusCode } = await logoutUser();
+    if (statusCode == 200) {
+      // cookies.remove("Authentication");
+      // cookies.remove("Refresh");
+      // cookies.remove("accessToken");
+      // deleteCookie("PartnerAuth");
+      // deleteCookie("PartnerRefresh");
+      window.localStorage.clear();
+      // navigate("/");
+      // window.location.reload();
+    }
   };
 
   return (
@@ -210,18 +223,7 @@ const Sidebar = ({ children }) => {
               사업자등록증
             </div>
           </button>
-          <button
-            onClick={() => {
-              // cookies.remove("Authentication");
-              // cookies.remove("Refresh");
-              // cookies.remove("accessToken");
-              deleteCookie("PartnerAuth");
-              deleteCookie("PartnerRefresh");
-              navigate("/");
-              window.localStorage.clear();
-              window.location.reload();
-            }}
-          >
+          <button onClick={logout}>
             로그아웃
             <img src={logoutIcon} alt="사업자등록증" />
           </button>

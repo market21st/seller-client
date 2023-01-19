@@ -25,6 +25,15 @@ export const idCheck = async (params) => {
   }
 };
 
+export const logoutUser = async () => {
+  try {
+    const res = await instance.post(`/auth/logout`);
+    return res.data;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 // 로그인
 export const LoginUser = async (params) => {
   try {
