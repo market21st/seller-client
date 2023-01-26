@@ -366,6 +366,17 @@ const Form = ({
           </Row>
           <Row>
             <RowInner>
+              <label>통신판매업 신고번호*</label>
+              <div>
+                <input
+                  className="area"
+                  type="text"
+                  name="salesNum"
+                  onChange={changeEvent}
+                />
+              </div>
+            </RowInner>
+            <RowInner>
               <label>대표번호*</label>
               <div>
                 <input

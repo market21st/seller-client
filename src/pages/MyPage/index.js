@@ -178,6 +178,7 @@ const MyPage = () => {
       [name]: value,
     });
   }
+
   // 내정보 조회
   const getInfo = async () => {
     const { data, statusCode } = await myInfo();
@@ -200,13 +201,12 @@ const MyPage = () => {
       corpContact,
       phone,
       corpEmail,
-      corpAddr1,
       corpAddr2,
-      corpPost,
       corpDesc,
       bizType,
       taxType,
       bizNum,
+      salesNum,
     } = userInfo;
     const list = {
       password: password,
@@ -217,13 +217,14 @@ const MyPage = () => {
       corpContact: corpContact,
       phone: phone,
       corpEmail: corpEmail,
-      corpAddr1: corpAddr1,
+      corpAddr1: enroll_company.address1,
       corpAddr2: corpAddr2,
-      corpPost: corpPost,
+      corpPost: enroll_company.address2,
       corpDesc: corpDesc,
       bizType: bizType,
       taxType: taxType,
       bizNum: bizNum,
+      salesNum: salesNum,
     };
 
     for (let key in list) {
@@ -285,6 +286,7 @@ const MyPage = () => {
   const [popup, setPopup] = useState(false);
   const handleComplete = (data) => {
     setPopup(!popup);
+
     if (popup === true) {
       setUserInfo({
         ...userInfo,
@@ -388,7 +390,7 @@ const MyPage = () => {
                 <input
                   className="area"
                   type="text"
-                  name="address1"
+                  name="corpAddr1"
                   onChange={onChange}
                   value={enroll_company.address1 || ""}
                 />
@@ -538,9 +540,22 @@ const MyPage = () => {
               <div>
                 <input
                   type="text"
-                  name="userId"
+                  name="bizNum"
                   onChange={onChange}
                   defaultValue={userInfo.bizNum || ""}
+                />
+              </div>
+            </RowInner>
+          </Row>
+          <Row>
+            <RowInner>
+              <label>통신판매업 신고번호*</label>
+              <div>
+                <input
+                  type="text"
+                  name="salesNum"
+                  onChange={onChange}
+                  defaultValue={userInfo.salesNum || ""}
                 />
               </div>
             </RowInner>

@@ -142,6 +142,7 @@ const Register = () => {
     bizType: "개인사업자",
     taxType: "단위과세",
     bizNum: "",
+    salesNum: "",
   });
 
   function onChange(e) {
@@ -218,7 +219,6 @@ const Register = () => {
     }
     formData.append("bizFile", bizFile);
     formData.append("corpImage", corpImage);
-    formData.append("salesNum", "123");
     const { data, statusCode, status } = await RegisterUser(formData);
     if (statusCode == 200) {
       setAlertModal(true);
