@@ -239,6 +239,8 @@ const OrderList = () => {
       uid: e.orderer.name,
       phone: e.orderer.phone,
       productName: `${e.productOption.name} ${e.productOption.optionText}`,
+      productGrade:
+        e.product.grade == "2" ? "S" : e.product.grade == "1" ? "A" : "B",
       productPrice: Number(e.productOption.price).toLocaleString(),
       status: e.statusText,
       new: e.isNew ? "신규주문" : "-",
@@ -282,7 +284,7 @@ const OrderList = () => {
   const getList = async () => {
     const list = {
       take: 10,
-      page: 1,
+      page: page,
       status: checkItems,
       merchantUid: userInfo.merchantUid,
       name: userInfo.name,
@@ -295,6 +297,7 @@ const OrderList = () => {
     };
     const { data, statusCode } = await getOrder(list);
     if (statusCode == 200) {
+      setTotal(data.total);
       setListData(data.results);
     }
   };
@@ -324,7 +327,7 @@ const OrderList = () => {
   useEffect(() => {
     getStateList();
     getList();
-  }, []);
+  }, [pageBtn]);
 
   return (
     <>
@@ -438,9 +441,9 @@ const OrderList = () => {
             sx={gridBtm}
             autoHeight
             rows={rowsData}
+            pageSize={10}
             rowCount={total}
             columns={orderColumns}
-            pageSize={10}
             experimentalFeatures={{ newEditingApi: true }}
             onRowClick={handleRowClick}
             cell--textCenter

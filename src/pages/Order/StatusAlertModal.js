@@ -179,7 +179,6 @@ const StatusAlertModal = ({
       const list999 = {
         status: 999,
         reason: invoiceNoRef.current.value,
-        cancelAmount: cancelAmountRef.current.value,
       };
       mykeydown(list999);
     }
@@ -254,7 +253,7 @@ const StatusAlertModal = ({
     if (stateCode === 300) {
       getDeliveryList();
     }
-  }, []);
+  }, [stateCode]);
 
   return (
     <>

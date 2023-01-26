@@ -29,15 +29,20 @@ const orderColumns = [
     width: 200,
   },
   {
+    field: "productGrade",
+    headerName: "등급",
+    width: 80,
+  },
+  {
     field: "productPrice",
     headerName: "판매가",
-    width: 130,
+    width: 100,
     type: "productOption.price",
   },
   {
     field: "status",
     headerName: "주문상태",
-    width: 150,
+    width: 100,
   },
   {
     field: "new",

@@ -215,8 +215,8 @@ const Item = ({
 
   useEffect(() => {
     if (optionText) {
-      const option1 = optionText.split("-")[0];
-      const resulte = optionText.replace(`${option1}-`, "").replace(/\s/g, "");
+      const option1 = optionText.split(",")[0];
+      const resulte = optionText.replace(`${option1},`, "").replace(/\s/g, "");
       setOption(resulte);
     }
   }, [optionText]);
@@ -231,11 +231,11 @@ const Item = ({
       />
       <ItemBox>
         <img src={thumb} alt={optionText} style={{ width: "50px" }} />
-        <h3>{`${optionText.split("-")[0]}\n${option}`}</h3>
+        <h3>{`${optionText.split(",")[0]}\n${option}`}</h3>
         <Grade>{gradeText}</Grade>
         <Price>
           <span>최저가</span>
-          {lowestPrice.toLocaleString()}
+          {lowestPrice ? lowestPrice.toLocaleString() : "없음"}
         </Price>
         <EditArea>
           <p>
