@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
 import AlertModal from "../../components/AlertModal";
@@ -211,6 +211,15 @@ const Item = ({
   const alertClose = () => {
     setAlertModal(false);
   };
+  const [option, setOption] = useState();
+
+  useEffect(() => {
+    if (optionText) {
+      const option1 = optionText.split("-")[0];
+      const resulte = optionText.replace(`${option1}-`, "").replace(/\s/g, "");
+      setOption(resulte);
+    }
+  }, [optionText]);
 
   return (
     <>
@@ -221,10 +230,8 @@ const Item = ({
         closeBtn={text.includes("정말 삭제") ? alertClose : false}
       />
       <ItemBox>
-        <img src={thumb} alt={optionText} />
-        <h3>{`${optionText.split("-")[0]}\n${optionText.split("-")[1]}-${
-          optionText.split("-")[2]
-        }`}</h3>
+        <img src={thumb} alt={optionText} style={{ width: "50px" }} />
+        <h3>{`${optionText.split("-")[0]}\n${option}`}</h3>
         <Grade>{gradeText}</Grade>
         <Price>
           <span>최저가</span>

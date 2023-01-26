@@ -279,7 +279,7 @@ const Sidebar = ({ children }) => {
           <div>
             <img src={localStorage.getItem("corpLogo")} alt="브랜드로고" />
           </div>
-          {localStorage.getItem("corpCeo")}님 안녕하세요!
+          {localStorage.getItem("corpName")}님 안녕하세요!
         </Header>
         <Grid sx={{ width: "100%", height: "92.4vh" }}>{children}</Grid>
       </Grid>

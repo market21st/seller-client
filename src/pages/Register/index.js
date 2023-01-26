@@ -218,6 +218,7 @@ const Register = () => {
     }
     formData.append("bizFile", bizFile);
     formData.append("corpImage", corpImage);
+    formData.append("salesNum", "123");
     const { data, statusCode, status } = await RegisterUser(formData);
     if (statusCode == 200) {
       setAlertModal(true);

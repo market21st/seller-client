@@ -69,26 +69,30 @@ const searchSelect = {
 };
 
 const Home = () => {
-  const [date, setDate] = useState([]);
+  const [dateList, setDateList] = useState([]);
+  const [date, setDate] = useState("");
   const [userData, setUserData] = useState([]);
 
   const getDate = async () => {
     const { data, statusCode } = await manageDate();
+    setDate(data[0]);
     if (statusCode == 200) {
-      setDate(data);
+      setDateList(data);
     }
   };
-
   const getStatistics = async () => {
-    const { data, statusCode } = await statistics(date);
+    const list = {
+      date: date,
+    };
+    const { data, statusCode } = await statistics(list);
     if (statusCode == 200) {
       setUserData(data);
     }
   };
-
   useEffect(() => {
     getDate();
   }, []);
+
   useEffect(() => {
     getStatistics();
   }, [date]);
@@ -150,8 +154,8 @@ const Home = () => {
                 name="infoId"
                 sx={searchSelect}
               >
-                {date &&
-                  date?.map((el, idx) => (
+                {dateList &&
+                  dateList?.map((el, idx) => (
                     <MenuItem key={idx} value={el}>
                       {el}
                     </MenuItem>

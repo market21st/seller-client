@@ -10,6 +10,7 @@ import AddModal from "./Add";
 import { FormControl, Select, MenuItem } from "@mui/material";
 // Api
 import { getStock, getGrade, getStockList } from "../../api/stock";
+import defaultIcon from "../../assets/default.png";
 
 const searchSelect = {
   background: "#fff",
@@ -217,7 +218,7 @@ const StockList = () => {
   // 전체 리스트 조회
   const getList = async () => {
     const list = {
-      take: 10,
+      take: 999,
       page: 1,
       productInfoId: productId,
       isActive:
@@ -367,7 +368,7 @@ const StockList = () => {
                 <Item
                   key={el.id}
                   id={el.id}
-                  thumb={el.thumb}
+                  thumb={el.thumb ? el.thumb : defaultIcon}
                   optionText={el.optionText}
                   gradeText={el.gradeText}
                   lowestPrice={el.lowestPrice}

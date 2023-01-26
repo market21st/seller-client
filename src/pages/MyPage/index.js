@@ -229,7 +229,7 @@ const MyPage = () => {
     for (let key in list) {
       if (!list[key]) {
         setAlertModal(true);
-        setText(`브랜드 로고를 제외한 모든 정보를 기입해주세요.`);
+        setText(`저장하시려면 비밀번호와 비밀번호확인란을 채워주셔야 합니다.`);
         return;
       }
     }
@@ -272,7 +272,7 @@ const MyPage = () => {
       if (data.corpLogo) {
         localStorage.setItem("corpLogo", data.corpLogo);
       }
-      localStorage.setItem("corpCeo", data.corpCeo);
+      localStorage.setItem("corpName", data.corpName);
       setAlertModal(true);
       setText(`저장 완료`);
     } else {
