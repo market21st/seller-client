@@ -118,14 +118,15 @@ const AddModal = ({ isOpen, onClose }) => {
   };
 
   // 제품명
-  const getProduct = async () => {
-    const { data, statusCode } = await getProductInfo();
-    if (statusCode == 200) {
-      setData(data);
-      setName(data[0].name);
-      setProductId(data[0].id);
-    }
-  };
+  // const getProduct = async () => {
+  //   const { data, statusCode } = await getProductInfo();
+  //   if (statusCode == 200) {
+  //     console.log(data);
+  //     setData(data);
+  //     setName(data[0].name);
+  //     setProductId(data[0].id);
+  //   }
+  // };
 
   // 등급
   const getGrades = async () => {
@@ -139,10 +140,10 @@ const AddModal = ({ isOpen, onClose }) => {
   // 옵션
   const getOptionList = async () => {
     const { data, statusCode } = await getOptions(productId || 1);
-    if (statusCode == 200) {
-      setOption(data[0].optionText);
+    if (statusCode === 200) {
       setOptionList(data);
-      setOptionId(data[0].id);
+      setOption(data[0]?.optionText);
+      setOptionId(data[0]?.id);
     }
   };
 
@@ -199,11 +200,19 @@ const AddModal = ({ isOpen, onClose }) => {
   };
 
   useEffect(() => {
+    const getProduct = async () => {
+      const { data, statusCode } = await getProductInfo();
+      if (statusCode == 200) {
+        setData(data);
+        setName(data[0].name);
+        setProductId(data[0].id);
+      }
+    };
     getProduct();
-    getGrades();
   }, []);
 
   useEffect(() => {
+    getGrades();
     getOptionList();
   }, [name]);
 

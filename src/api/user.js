@@ -38,9 +38,9 @@ export const logoutUser = async () => {
 export const LoginUser = async (params) => {
   try {
     const res = await instance.post(`/auth/login`, params);
-    const today = new Date();
-    const expireDate1 = today.setDate(today.getDate() + 10);
-    const expireDate2 = today.setDate(today.getDate() + 300);
+    // const today = new Date();
+    // const expireDate1 = today.setDate(today.getDate() + 10);
+    // const expireDate2 = today.setDate(today.getDate() + 300);
     if (res.data.statusCode === 200) {
       // cookies.set("PartnerRefresh", res.data.data.PartnerRefresh, {
       //   secure: false,

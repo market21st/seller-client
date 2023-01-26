@@ -196,6 +196,8 @@ const StockList = () => {
     });
   }
 
+  // const [num, setNum] = useState(false);
+
   // 제품명 조회
   const getProductList = async () => {
     const { data, statusCode } = await getStock();
@@ -241,7 +243,6 @@ const StockList = () => {
             ? 2
             : "",
       });
-
       if (statusCode == 200) {
         setListData(data.results);
       }
@@ -249,16 +250,15 @@ const StockList = () => {
     }
 
     const { data, statusCode } = await getStockList(list);
-
     if (statusCode == 200) {
       setListData(data.results);
     }
   };
 
   useEffect(() => {
-    getGradeList();
-    getProductList();
-    getList();
+    getList(); // 전체리스트
+    getGradeList(); // 등급
+    getProductList(); // 제품명 조회
   }, []);
 
   return (
@@ -362,7 +362,7 @@ const StockList = () => {
         </InfoTitle>
         <ListContainer className="scroll">
           <ul>
-            {listData.length > 1 ? (
+            {listData.length > 0 ? (
               listData.map((el, idx) => (
                 <Item
                   key={el.id}

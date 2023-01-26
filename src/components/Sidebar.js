@@ -1,5 +1,5 @@
-import React, { useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useRef, useState } from "react";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
@@ -9,9 +9,12 @@ import { Grid } from "@mui/material";
 // Images
 import logoImg from "../assets/kracker.png";
 import stockIcon from "../assets/stock.png";
+import stockFocusIcon from "../assets/stockwhite.png";
 import orderIcon from "../assets/order.png";
+import orderFocusIcon from "../assets/orderwhite.png";
 import reviewIcon from "../assets/review.png";
 import myIcon from "../assets/my.png";
+import myFocusIcon from "../assets/mywhite.png";
 import paperIcon from "../assets/paper.png";
 import logoutIcon from "../assets/logout.png";
 import { cookies } from "../layout";
@@ -46,7 +49,7 @@ const Menu = styled.ul`
     color: #4552ce;
     font-size: 18px;
     font-weight: 700;
-    margin-bottom: 24px;
+    margin-bottom: 10px;
     img {
       padding-right: 16px;
     }
@@ -58,24 +61,41 @@ const Menu = styled.ul`
     display: flex;
     align-items: center;
     justify-content: center;
+    padding: 8px 13px;
+  }
+  .focus {
+    background: #4552ce;
+    border-radius: 10px;
+    color: #fff;
   }
 `;
 
-// 마이페이지
-const MyInfo = styled.button`
-  color: #4552ce;
-  font-size: 18px;
-  font-weight: 700;
-  margin-top: 39px;
-  background: none;
-  position: relative;
-  left: 46%;
-  transform: translateX(-50%);
+const MyInfo = styled.div`
   display: flex;
-  align-items: center;
-  cursor: pointer;
+  justify-content: center;
+  margin-top: 38px;
+
+  button {
+    font-size: 18px;
+    font-weight: 700;
+    background: none;
+    cursor: pointer;
+    width: 75%;
+    color: #4552ce;
+    padding: 8px 13px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+  }
   img {
     padding-right: 16px;
+  }
+  .focus {
+    background: #4552ce;
+    border-radius: 10px;
+    color: #fff;
   }
 `;
 
@@ -152,10 +172,12 @@ const Header = styled.h1`
 
 const Sidebar = ({ children }) => {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const getBiz = () => {
     window.open(bizfile, "_blank");
   };
+
   //로그아웃 api
   const logout = async () => {
     const { statusCode } = await logoutUser();
@@ -182,31 +204,53 @@ const Sidebar = ({ children }) => {
         </Logo>
         <Menu>
           <li>
-            <Link to="/stock">
-              <img src={stockIcon} alt="재고관리" />
-              재고관리
-            </Link>
+            {location.pathname.includes("stock") ? (
+              <Link to="/stock" className="focus">
+                <img src={stockFocusIcon} alt="재고관리" />
+                재고관리
+              </Link>
+            ) : (
+              <Link to="/stock">
+                <img src={stockIcon} alt="재고관리" />
+                재고관리
+              </Link>
+            )}
           </li>
           <li>
-            <Link to="/order">
-              <img src={orderIcon} alt="주문관리" />
-              주문관리
-            </Link>
+            {location.pathname.includes("order") ? (
+              <Link to="/order" className="focus">
+                <img src={orderFocusIcon} alt="주문관리" />
+                주문관리
+              </Link>
+            ) : (
+              <Link to="/order">
+                <img src={orderIcon} alt="주문관리" />
+                주문관리
+              </Link>
+            )}
           </li>
-          {/* <li>
-            <Link to="/login">
-              <img src={reviewIcon} alt="리뷰관리" />
-              리뷰관리
-            </Link>
-          </li> */}
         </Menu>
-        <MyInfo
-          onClick={() => {
-            navigate("/mypage");
-          }}
-        >
-          <img src={myIcon} alt="내정보" />
-          내정보
+        <MyInfo>
+          {location.pathname.includes("mypage") ? (
+            <button
+              onClick={() => {
+                navigate("/mypage");
+              }}
+              className="focus"
+            >
+              <img src={myFocusIcon} alt="내정보" />
+              내정보
+            </button>
+          ) : (
+            <button
+              onClick={() => {
+                navigate("/mypage");
+              }}
+            >
+              <img src={myIcon} alt="내정보" />
+              내정보
+            </button>
+          )}
         </MyInfo>
         <ButtonBox>
           <button onClick={getBiz}>
