@@ -94,7 +94,7 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
-    getStatistics();
+    if (date) getStatistics();
   }, [date]);
 
   return (

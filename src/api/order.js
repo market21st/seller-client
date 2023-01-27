@@ -62,8 +62,10 @@ export const getHistory = async (id, type) => {
 export const editStatus = async (id, params) => {
   try {
     const res = await instance.patch(`/order/status/${id}`, params);
+    console.log(res);
     return res.data;
   } catch (err) {
+    console.log(err);
     return err.response.data;
   }
 };

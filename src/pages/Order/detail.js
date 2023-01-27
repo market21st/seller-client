@@ -374,12 +374,18 @@ const OrderDetails = () => {
           </Row>
           <Row>
             <p>주문상품명</p>
-            {data.productOption?.name}
+            {`${data.productOption?.name} - ${data.productOption?.optionText}`}
           </Row>
-          <Row>
-            <p>판매가</p>
-            {Number(data.productOption?.price).toLocaleString()}
-          </Row>
+          <RowBox>
+            <div>
+              <p>판매가</p>
+              {Number(data.productOption?.price).toLocaleString()}
+            </div>
+            <div>
+              <p>수수료율</p>
+              {data.fee}
+            </div>
+          </RowBox>
           <RowBox>
             <div>
               <p>택배사</p>
