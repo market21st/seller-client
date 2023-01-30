@@ -26,7 +26,7 @@ const orderColumns = [
   {
     field: "productName",
     headerName: "상품명",
-    width: 200,
+    width: 400,
   },
   {
     field: "productGrade",
