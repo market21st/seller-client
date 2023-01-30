@@ -372,10 +372,20 @@ const OrderDetails = () => {
             <p>주문번호</p>
             {data.merchantUid?.split("-")[0]}
           </Row>
-          <Row>
-            <p>주문상품명</p>
-            {`${data.productOption?.name} - ${data.productOption?.optionText}`}
-          </Row>
+          <RowBox>
+            <div>
+              <p>주문상품명</p>
+              {`${data.productOption?.name} - ${data.productOption?.optionText}`}
+            </div>
+            <div>
+              <p>등급</p>
+              {data.product?.grade === "2"
+                ? "S"
+                : data.product?.grade === "1"
+                ? "A"
+                : "B"}
+            </div>
+          </RowBox>
           <RowBox>
             <div>
               <p>판매가</p>

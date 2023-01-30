@@ -28,11 +28,11 @@ const orderColumns = [
     headerName: "상품명",
     width: 200,
   },
-  // {
-  //   field: "productGrade",
-  //   headerName: "등급",
-  //   width: 80,
-  // },
+  {
+    field: "productGrade",
+    headerName: "등급",
+    width: 80,
+  },
   {
     field: "productPrice",
     headerName: "판매가",

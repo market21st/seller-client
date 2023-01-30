@@ -11,6 +11,7 @@ import { FormControl, Select, MenuItem } from "@mui/material";
 // Api
 import { getStock, getGrade, getStockList } from "../../api/stock";
 import defaultIcon from "../../assets/default.png";
+import GradeModal from "./GradeModal";
 
 const searchSelect = {
   background: "#fff",
@@ -114,6 +115,15 @@ const InfoTitle = styled.h2`
     padding: 12px 10px;
     font-size: 16px;
   }
+  button {
+    font-size: 16px;
+    font-weight: bold;
+    padding: 10px;
+    background: #fff;
+    color: #404040;
+    border: 1.5px solid #404040;
+    border-radius: 5px;
+  }
 `;
 
 const ListContainer = styled.div`
@@ -167,7 +177,7 @@ const StockList = () => {
   const [productId, setProductId] = useState("");
   const [productName, setProductName] = useState("");
 
-  // Modal
+  // Alert Modal
   const [alertModal, setAlertModal] = useState(false);
   const [text, setText] = useState("");
   const aleatHandleClose = () => {
@@ -176,11 +186,15 @@ const StockList = () => {
       window.location.reload();
     }
   };
-
-  // Modal
+  // Add Modal
   const [addModal, setAddModal] = useState(false);
   const AddModalClose = () => {
     setAddModal(false);
+  };
+  // Grade Modal
+  const [gradeModal, setGradeModal] = useState(false);
+  const gradeModalClose = () => {
+    setGradeModal(false);
   };
 
   // 변경하는 필터값
@@ -196,25 +210,6 @@ const StockList = () => {
       [name]: value,
     });
   }
-
-  // const [num, setNum] = useState(false);
-
-  // 제품명 조회
-  const getProductList = async () => {
-    const { data, statusCode } = await getStock();
-    if (statusCode == 200) {
-      setProductList(data);
-    }
-  };
-
-  // 등급 조회
-  const getGradeList = async () => {
-    const { data, statusCode } = await getGrade();
-    if (statusCode == 200) {
-      setGradeList(data.results);
-    }
-  };
-
   // 전체 리스트 조회
   const getList = async () => {
     const list = {
@@ -256,6 +251,22 @@ const StockList = () => {
     }
   };
 
+  // 제품명 조회
+  const getProductList = async () => {
+    const { data, statusCode } = await getStock();
+    if (statusCode == 200) {
+      setProductList(data);
+    }
+  };
+
+  // 등급 조회
+  const getGradeList = async () => {
+    const { data, statusCode } = await getGrade();
+    if (statusCode == 200) {
+      setGradeList(data.results);
+    }
+  };
+
   useEffect(() => {
     getList(); // 전체리스트
     getGradeList(); // 등급
@@ -266,6 +277,7 @@ const StockList = () => {
     <>
       <AlertModal isOpen={alertModal} onClose={aleatHandleClose} text={text} />
       <AddModal isOpen={addModal} onClose={AddModalClose} />
+      <GradeModal isOpen={gradeModal} onClose={gradeModalClose} />
       <Container>
         <TopBox>
           <h1>재고 관리</h1>
@@ -360,6 +372,7 @@ const StockList = () => {
             우선판매권을 얻으려면<span>현재 최저가</span>미만의 가격을
             입력해야합니다.
           </p>
+          <button onClick={() => setGradeModal(true)}>등급 기준 보기</button>
         </InfoTitle>
         <ListContainer className="scroll">
           <ul>
