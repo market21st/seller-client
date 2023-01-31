@@ -175,7 +175,7 @@ const Home = () => {
           </ContentBox>
           <ContentBox>
             <h2>예상 매출액</h2>
-            <span>{userData.expectTakeSum}</span>
+            <span>{Math.ceil(userData.expectTakeSum)}</span>
           </ContentBox>
         </Row>
       </Box>

@@ -26,7 +26,16 @@ const orderColumns = [
   {
     field: "productName",
     headerName: "상품명",
-    width: 400,
+    width: 300,
+    renderCell: ({ row }) => {
+      return (
+        <div>
+          {row?.productName}
+          <br />
+          {row?.productOption}
+        </div>
+      );
+    },
   },
   {
     field: "productGrade",

@@ -238,7 +238,8 @@ const OrderList = () => {
       )}`,
       uid: e.orderer.name,
       phone: e.orderer.phone,
-      productName: `${e.productOption.name} ${e.productOption.optionText}`,
+      productName: e.productOption.name,
+      productOption: e.productOption.optionText,
       productGrade:
         e.product.grade == "2" ? "S" : e.product.grade == "1" ? "A" : "B",
       productPrice: Number(e.productOption.price).toLocaleString(),
