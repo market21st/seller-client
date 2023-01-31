@@ -160,7 +160,7 @@ const MyPage = () => {
   const [text, setText] = useState("");
   const aleatHandleClose = () => {
     setAlertModal(false);
-    if (text.includes("저장")) {
+    if (text.includes("저장 완료")) {
       window.location.reload();
     }
   };
@@ -173,6 +173,7 @@ const MyPage = () => {
 
   function onChange(e) {
     const { name, value } = e.target;
+    console.log(name, value);
     setUserInfo({
       ...userInfo,
       [name]: value,
@@ -227,14 +228,6 @@ const MyPage = () => {
       salesNum: salesNum,
     };
 
-    for (let key in list) {
-      if (!list[key]) {
-        setAlertModal(true);
-        setText(`저장하시려면 비밀번호와 비밀번호확인란을 채워주셔야 합니다.`);
-        return;
-      }
-    }
-
     if (!list.password || !userInfo.passwordCheck) {
       setAlertModal(true);
       setText("비밀번호를 입력해주세요.");
@@ -250,9 +243,23 @@ const MyPage = () => {
       setText("비밀번호가 일치하지 않습니다.");
       return;
     }
+
+    for (let key in list) {
+      if (!list[key]) {
+        setAlertModal(true);
+        setText(`정보를 수정하시려면 필수값을 모두 입력해주세요.`);
+        return;
+      }
+    }
+
     if (!emailRegEx.test(list.corpEmail)) {
       setAlertModal(true);
       setText("이메일 형식에 맞지 않습니다.");
+      return;
+    }
+    if (list.phone.slice(0, 3) !== "010" || list.phone.length != 11) {
+      setAlertModal(true);
+      setText("휴대전화 형식에 맞지 않습니다.");
       return;
     }
     if (list.phone.slice(0, 3) !== "010" || list.phone.length != 11) {
@@ -378,7 +385,7 @@ const MyPage = () => {
                   type="text"
                   name="corpCeo"
                   onChange={onChange}
-                  defaultValue={userInfo.corpCeo}
+                  value={userInfo.corpCeo || ""}
                 />
               </div>
             </RowInner>
@@ -418,7 +425,7 @@ const MyPage = () => {
                   type="text"
                   name="corpAddr2"
                   onChange={onChange}
-                  defaultValue={userInfo.corpAddr2 || ""}
+                  value={userInfo.corpAddr2 || ""}
                 />
               </div>
             </RowInner>
@@ -431,7 +438,7 @@ const MyPage = () => {
                   type="text"
                   name="corpName"
                   onChange={onChange}
-                  defaultValue={userInfo.corpName || ""}
+                  value={userInfo.corpName || ""}
                 />
               </div>
             </RowInner>
@@ -444,7 +451,7 @@ const MyPage = () => {
                   type="text"
                   name="bankName"
                   onChange={onChange}
-                  defaultValue={userInfo.bankName || ""}
+                  value={userInfo.bankName || ""}
                 />
               </div>
             </RowInner>
@@ -455,7 +462,7 @@ const MyPage = () => {
                   type="text"
                   name="bankAccount"
                   onChange={onChange}
-                  defaultValue={userInfo.bankAccount || ""}
+                  value={userInfo.bankAccount || ""}
                 />
               </div>
             </RowInner>
@@ -542,7 +549,7 @@ const MyPage = () => {
                   type="text"
                   name="bizNum"
                   onChange={onChange}
-                  defaultValue={userInfo.bizNum || ""}
+                  value={userInfo.bizNum || ""}
                 />
               </div>
             </RowInner>
@@ -555,7 +562,7 @@ const MyPage = () => {
                   type="text"
                   name="salesNum"
                   onChange={onChange}
-                  defaultValue={userInfo.salesNum || ""}
+                  value={userInfo.salesNum || ""}
                 />
               </div>
             </RowInner>
