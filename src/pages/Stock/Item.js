@@ -162,9 +162,7 @@ const Item = ({
     }
   }
 
-  // 수정시 100원 미만 저장X
   const edit = async () => {
-    console.log(stockData?.price?.length);
     if (!stockData.price || stockData.price < 0) {
       setText(`가격은 0아래로 저장할 수 없습니다.`);
       setAlertModal(true);
@@ -175,7 +173,11 @@ const Item = ({
       setAlertModal(true);
       return;
     }
-    if (stockData.price?.slice(-2) != "00" || stockData?.price?.length > 1) {
+
+    console.log(stockData.price?.slice(-2) != "00");
+    console.log(stockData?.price?.length > 1);
+
+    if (stockData.price?.slice(-2) != "00" || stockData?.price?.length < 3) {
       setText("백원단위 가격입력만 가능합니다.");
       setAlertModal(true);
       return;
