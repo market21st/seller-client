@@ -15,7 +15,6 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import ContentModal from "../../components/ContentModal";
 
 // Api
 import { getDetail, OrderMemo, getHistory } from "../../api/order";
@@ -311,7 +310,9 @@ const OrderDetails = () => {
 
     if (text === "배송중") {
       setText(`배송정보를 기입해주세요.`);
-      setSubText("*이전 운송장이 있어도 중복 기입해야 합니다.");
+      setSubText(
+        "*택배사와 운송장을 올바르게 입력하지 않으면 저장되지 않습니다."
+      );
     }
     if (text === "배송준비중") {
       setText(`${text}으로 변경하시겠습니까?`);
