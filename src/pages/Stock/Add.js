@@ -182,7 +182,6 @@ const AddModal = ({ isOpen, onClose }) => {
     };
 
     const { data, statusCode } = await postProduct(list);
-    console.log(data);
     if (statusCode === 200) {
       setAlertText(
         "등록 성공! \n판매중으로 저장되었고 수정은 목록에서 진행바랍니다."
