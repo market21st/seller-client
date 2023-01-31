@@ -39,7 +39,14 @@ const Container = styled.div`
     padding: 10px 0 5px;
   }
   .scroll::-webkit-scrollbar {
-    display: none;
+    width: 10px;
+  }
+  .scroll::-webkit-scrollbar-thumb {
+    background-color: #cfd4f0;
+    border-radius: 5px;
+  }
+  .scroll::-webkit-scrollbar-track {
+    background-color: #f8f8f8;
   }
 `;
 
