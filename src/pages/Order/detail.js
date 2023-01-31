@@ -378,6 +378,8 @@ const OrderDetails = () => {
               <p>주문상품명</p>
               {`${data.productOption?.name} - ${data.productOption?.optionText}`}
             </div>
+          </RowBox>
+          <RowBox>
             <div>
               <p>등급</p>
               {data.product?.grade === "2"

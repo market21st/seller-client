@@ -101,7 +101,6 @@ const StatusAlertModal = ({
   isOpen,
   onClose,
   text,
-  //   closeBtn,
   postEvent,
   setState,
   statusText,
@@ -139,7 +138,6 @@ const StatusAlertModal = ({
   };
 
   const mykeydown = async (list) => {
-    console.log(list);
     const { statusCode, message } = await editStatus(id, list);
     if (statusCode == 200) {
       onClose();

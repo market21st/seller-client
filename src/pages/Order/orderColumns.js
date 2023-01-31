@@ -14,7 +14,7 @@ const orderColumns = [
   {
     field: "uid",
     headerName: "주문자",
-    width: 100,
+    width: 80,
     type: "uid",
   },
   {
@@ -26,7 +26,7 @@ const orderColumns = [
   {
     field: "productName",
     headerName: "상품명",
-    width: 300,
+    width: 280,
     renderCell: ({ row }) => {
       return (
         <div>
@@ -51,7 +51,7 @@ const orderColumns = [
   {
     field: "status",
     headerName: "주문상태",
-    width: 100,
+    width: 120,
   },
   {
     field: "new",
