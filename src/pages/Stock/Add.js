@@ -167,7 +167,7 @@ const AddModal = ({ isOpen, onClose }) => {
       return;
     }
 
-    if (productData.price.slice(-2) != "00" || productData.price?.length > 1) {
+    if (productData.price.slice(-2) != "00" || productData.price?.length < 2) {
       setAlertText("백원단위 가격입력만 가능합니다.");
       setAlertModal(true);
       return;
