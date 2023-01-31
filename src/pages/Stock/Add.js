@@ -180,18 +180,19 @@ const AddModal = ({ isOpen, onClose }) => {
       price: String(productData.price).replace(/,/g, ""),
       stock: String(productData.stock).replace(/,/g, ""),
     };
-    console.log("저장완료", list);
-    // const { data, statusCode } = await postProduct(list);
-    // if (statusCode === 200) {
-    //   setAlertText(
-    //     "등록 성공! \n판매중으로 저장되었고 수정은 목록에서 진행바랍니다."
-    //   );
-    //   setAlertModal(true);
-    // }
-    // if (data.statusCode === 400) {
-    //   setAlertText(data.message);
-    //   setAlertModal(true);
-    // }
+
+    const { data, statusCode } = await postProduct(list);
+    console.log(data);
+    if (statusCode === 200) {
+      setAlertText(
+        "등록 성공! \n판매중으로 저장되었고 수정은 목록에서 진행바랍니다."
+      );
+      setAlertModal(true);
+    }
+    if (data.statusCode === 400) {
+      setAlertText(data.message);
+      setAlertModal(true);
+    }
   };
 
   useEffect(() => {
