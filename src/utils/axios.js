@@ -19,30 +19,27 @@ instance.interceptors.response.use(
     return res;
   },
   async (err) => {
-    console.log(err);
     if (err.response.data.statusCode === 401) {
       // dev
-      console.log("test");
-      if (process.env.NODE_ENV === "development") {
-        try {
-          const { data } = await axios.get(
-            `${process.env.REACT_APP_API_URL}/auth/refresh`,
-            {
-              headers: {
-                "Content-Type": "application/json",
-              },
-            }
-          );
-          console.log(data);
-          // 토큰 재발급 성공시
-          if (data?.statusCode === 200) {
-            window.location.reload();
-            return;
+
+      try {
+        const { data } = await axios.get(
+          `${process.env.REACT_APP_API_URL}/auth/refresh`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
           }
-        } catch (err) {
-          window.localStorage.clear();
-          window.location.replace("/");
+        );
+        console.log(data);
+        // 토큰 재발급 성공시
+        if (data?.statusCode === 200) {
+          window.location.reload();
+          return;
         }
+      } catch (err) {
+        window.localStorage.clear();
+        window.location.replace("/");
       }
 
       // main
