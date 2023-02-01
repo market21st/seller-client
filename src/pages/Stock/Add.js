@@ -156,8 +156,8 @@ const AddModal = ({ isOpen, onClose }) => {
   };
 
   const postEvent = async () => {
-    if (!productData.price || !productData.stock) {
-      setAlertText("판매가와 재고 모두 입력해야 합니다.");
+    if (!productData.price) {
+      setAlertText("판매가는 필수값입니다.");
       setAlertModal(true);
       return;
     }

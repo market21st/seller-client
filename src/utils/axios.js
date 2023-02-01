@@ -19,6 +19,7 @@ instance.interceptors.response.use(
     return res;
   },
   async (err) => {
+    console.log(err);
     if (err.response.data.statusCode === 401) {
       // dev
       if (process.env.NODE_ENV === "development") {
@@ -31,7 +32,7 @@ instance.interceptors.response.use(
               },
             }
           );
-
+          console.log(data);
           // 토큰 재발급 성공시
           if (data?.statusCode === 200) {
             window.location.reload();
