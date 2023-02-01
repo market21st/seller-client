@@ -104,15 +104,15 @@ const Home = () => {
         <Row>
           <ContentBox>
             <h2>신규주문</h2>
-            <span>{userData.newOrdersCount}</span>
+            <span>{userData.newOrdersCount}건</span>
           </ContentBox>
           <ContentBox>
             <h2>운송 준비중</h2>
-            <span>{userData.readyToDeliveryCount}</span>
+            <span>{userData.readyToDeliveryCount}건</span>
           </ContentBox>
           <ContentBox>
             <h2>반품 요청</h2>
-            <span>{userData.requestToReturnCount}</span>
+            <span>{userData.requestToReturnCount}건</span>
           </ContentBox>
         </Row>
       </Box>
@@ -121,15 +121,15 @@ const Home = () => {
         <Row>
           <ContentBox>
             <h2>판매중 제품</h2>
-            <span>{userData.onSaleCount}</span>
+            <span>{userData.onSaleCount}건</span>
           </ContentBox>
           <ContentBox>
             <h2>숨김 제품</h2>
-            <span>{userData.hidedCount}</span>
+            <span>{userData.hidedCount}건</span>
           </ContentBox>
           <ContentBox>
             <h2>품절 제품</h2>
-            <span>{userData.soldOutCount}</span>
+            <span>{userData.soldOutCount}건</span>
           </ContentBox>
         </Row>
       </Box>
@@ -140,12 +140,6 @@ const Home = () => {
             <FormControl sx={{ width: "100%" }}>
               <Select
                 onChange={(e) => {
-                  //   setName(e.target.value);
-                  //   for (let i = 0; i < data.length; i++) {
-                  //     if (data[i].name == e.target.value) {
-                  //       setProductId(data[i].id);
-                  //     }
-                  //   }
                   setDate(e.target.value);
                 }}
                 displayEmpty
@@ -167,15 +161,15 @@ const Home = () => {
         <Row>
           <ContentBox>
             <h2>총 주문 건수</h2>
-            <span>{userData.totalOrdersCount}</span>
+            <span>{userData.totalOrdersCount}건</span>
           </ContentBox>
           <ContentBox>
             <h2>반품 건수</h2>
-            <span>{userData.requestToRefundCount}</span>
+            <span>{userData.requestToRefundCount}건</span>
           </ContentBox>
           <ContentBox>
             <h2>예상 매출액</h2>
-            <span>{Math.ceil(userData.expectTakeSum)}</span>
+            <span>{Math.ceil(userData.expectTakeSum)}원</span>
           </ContentBox>
         </Row>
       </Box>
