@@ -22,6 +22,7 @@ instance.interceptors.response.use(
     console.log(err);
     if (err.response.data.statusCode === 401) {
       // dev
+      console.log("test");
       if (process.env.NODE_ENV === "development") {
         try {
           const { data } = await axios.get(
