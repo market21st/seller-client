@@ -168,8 +168,8 @@ const Item = ({
       setAlertModal(true);
       return;
     }
-    if (stockData.price?.slice(-2) != "00" || stockData?.price?.length < 3) {
-      setText("백원단위 가격입력만 가능합니다.");
+    if (stockData.price?.slice(-3) != "000" || stockData?.price?.length < 4) {
+      setText("천원단위 가격입력만 가능합니다.");
       setAlertModal(true);
       return;
     }
