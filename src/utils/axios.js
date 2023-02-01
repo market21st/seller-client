@@ -20,8 +20,6 @@ instance.interceptors.response.use(
   },
   async (err) => {
     if (err.response.data.statusCode === 401) {
-      // dev
-
       try {
         const { data } = await axios.get(
           `${process.env.REACT_APP_API_URL}/auth/refresh`,
@@ -31,7 +29,6 @@ instance.interceptors.response.use(
             },
           }
         );
-        console.log(data);
         // 토큰 재발급 성공시
         if (data?.statusCode === 200) {
           window.location.reload();
@@ -40,11 +37,6 @@ instance.interceptors.response.use(
       } catch (err) {
         window.localStorage.clear();
         window.location.replace("/");
-      }
-
-      // main
-      if (process.env.NODE_ENV === "production") {
-        // getToken();
       }
     } else {
       return Promise.reject(err);
