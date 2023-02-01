@@ -156,13 +156,13 @@ const AddModal = ({ isOpen, onClose }) => {
   };
 
   const postEvent = async () => {
-    if (
-      !productData.price ||
-      productData.price < 1 ||
-      !productData.stock ||
-      productData.stock < 1
-    ) {
-      setAlertText("가격과 재고는 1이상만 입력 가능합니다.");
+    if (!productData.price || !productData.stock) {
+      setAlertText("판매가와 재고 모두 입력해야 합니다.");
+      setAlertModal(true);
+      return;
+    }
+    if (productData.price < 1) {
+      setAlertText("판매가가 0이하일 수 없습니다.");
       setAlertModal(true);
       return;
     }
