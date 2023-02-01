@@ -107,7 +107,7 @@ const Home = () => {
             <span>{userData.newOrdersCount}건</span>
           </ContentBox>
           <ContentBox>
-            <h2>운송 준비중</h2>
+            <h2>배송 준비중</h2>
             <span>{userData.readyToDeliveryCount}건</span>
           </ContentBox>
           <ContentBox>
@@ -164,7 +164,7 @@ const Home = () => {
             <span>{userData.totalOrdersCount}건</span>
           </ContentBox>
           <ContentBox>
-            <h2>반품 건수</h2>
+            <h2>환불 건수</h2>
             <span>{userData.requestToRefundCount}건</span>
           </ContentBox>
           <ContentBox>
