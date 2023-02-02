@@ -24,9 +24,7 @@ const gridBtm = {
   },
   "& .MuiDataGrid-cell": {
     paddingLeft: "20px",
-    justifyContent: "center",
   },
-
   "& .MuiDataGrid-iconSeparator": {
     display: "none",
   },
