@@ -220,7 +220,7 @@ const StockList = () => {
   // 전체 리스트 조회
   const getList = async () => {
     const list = {
-      take: 999,
+      take: 3000,
       page: 1,
       productInfoId: productId,
       isActive:

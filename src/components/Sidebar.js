@@ -120,13 +120,17 @@ const ButtonBox = styled.div`
     align-items: center;
     justify-content: center;
   }
-  button:first-child {
+  button:nth-child(1),
+  button:nth-child(2),
+  button:nth-child(3) {
     color: #fff;
     background: #505bca;
     text-align: left;
     line-height: 1.2;
     border-radius: 10px;
     padding: 7px;
+    width: 80%;
+    margin-top: 10px;
   }
   button:last-child {
     color: #ddd;
@@ -253,6 +257,22 @@ const Sidebar = ({ children }) => {
           )}
         </MyInfo>
         <ButtonBox>
+          <button onClick={getBiz}>
+            <img src={paperIcon} alt="사업자등록증" />
+            <div>
+              <span>21세기전파상</span>
+              <br />
+              회사소개서
+            </div>
+          </button>
+          <button onClick={getBiz}>
+            <img src={paperIcon} alt="사업자등록증" />
+            <div>
+              <span>셀러 어드민</span>
+              <br />
+              이용설명서
+            </div>
+          </button>
           <button onClick={getBiz}>
             <img src={paperIcon} alt="사업자등록증" />
             <div>
