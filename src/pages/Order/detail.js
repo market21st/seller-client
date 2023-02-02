@@ -96,10 +96,10 @@ const IdBox = styled.div`
 const Row = styled.div`
   margin-bottom: 20px;
   display: flex;
-  width: 50%;
+  width: 100%;
   align-items: center;
   p {
-    width: 30%;
+    width: 15%;
     display: inline-block;
     border-right: 2px solid #e1e7ef;
     padding: 0 40px;
@@ -373,12 +373,10 @@ const OrderDetails = () => {
             <p>주문번호</p>
             {data.merchantUid?.split("-")[0]}
           </Row>
-          <RowBox>
-            <div>
-              <p>주문상품명</p>
-              {`${data.productOption?.name} - ${data.productOption?.optionText}`}
-            </div>
-          </RowBox>
+          <Row>
+            <p>주문상품명</p>
+            {`${data.productOption?.name} - ${data.productOption?.optionText}`}
+          </Row>
           <RowBox>
             <div>
               <p>등급</p>
