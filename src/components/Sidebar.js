@@ -19,6 +19,7 @@ import paperIcon from "../assets/paper.png";
 import logoutIcon from "../assets/logout.png";
 import { cookies } from "../layout";
 import bizfile from "../assets/bizfile.jpg";
+import paperIcon2 from "../assets/bizfile2.png";
 
 import { logoutUser } from "../api/user";
 
@@ -132,6 +133,13 @@ const ButtonBox = styled.div`
     width: 80%;
     margin-top: 10px;
   }
+  button:nth-child(1) {
+    background: #26282b;
+  }
+  button:nth-child(2) {
+    background: #d3d3d3;
+    color: #26282b;
+  }
   button:last-child {
     color: #ddd;
     background: none;
@@ -178,8 +186,14 @@ const Sidebar = ({ children }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const getBiz = () => {
-    window.open(bizfile, "_blank");
+  const link1 = () => {
+    window.open("https://image.kracker.kr/info/us/corpIntro.pdf", "_blank");
+  };
+  const link2 = () => {
+    window.open("https://image.kracker.kr/info/us/useDisc.pdf", "_blank");
+  };
+  const link3 = () => {
+    window.open("https://image.kracker.kr/info/us/bizReg.pdf", "_blank");
   };
 
   //로그아웃 api
@@ -257,7 +271,7 @@ const Sidebar = ({ children }) => {
           )}
         </MyInfo>
         <ButtonBox>
-          <button onClick={getBiz}>
+          <button onClick={link1}>
             <img src={paperIcon} alt="사업자등록증" />
             <div>
               <span>21세기전파상</span>
@@ -265,15 +279,15 @@ const Sidebar = ({ children }) => {
               회사소개서
             </div>
           </button>
-          <button onClick={getBiz}>
-            <img src={paperIcon} alt="사업자등록증" />
+          <button onClick={link2}>
+            <img src={paperIcon2} alt="사업자등록증" />
             <div>
               <span>셀러 어드민</span>
               <br />
               이용설명서
             </div>
           </button>
-          <button onClick={getBiz}>
+          <button onClick={link3}>
             <img src={paperIcon} alt="사업자등록증" />
             <div>
               <span>21세기전파상</span>
