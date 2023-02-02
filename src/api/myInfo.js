@@ -19,3 +19,23 @@ export const editMyInfo = async (params) => {
     return;
   }
 };
+
+export const manageDate = async () => {
+  try {
+    const res = await instance.get(`/manage/my/statistics/dates`);
+    return res.data;
+  } catch (e) {
+    console.log(e);
+    return;
+  }
+};
+
+export const statistics = async (params) => {
+  try {
+    const res = await instance.get(`/manage/my/statistics`, { params: params });
+    return res.data;
+  } catch (e) {
+    console.log(e);
+    return;
+  }
+};

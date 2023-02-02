@@ -71,6 +71,11 @@ a:hover, a:active {text-decoration: none;}
     height:100%;
     width:100%;
 }
+& .MuiMenu-root {
+    height: 34vh !important;
+	right:auto !important;
+	width: 100%;
+  }
 
 `;
 

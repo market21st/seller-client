@@ -160,7 +160,7 @@ const MyPage = () => {
   const [text, setText] = useState("");
   const aleatHandleClose = () => {
     setAlertModal(false);
-    if (text.includes("저장")) {
+    if (text.includes("저장 완료")) {
       window.location.reload();
     }
   };
@@ -173,11 +173,13 @@ const MyPage = () => {
 
   function onChange(e) {
     const { name, value } = e.target;
+    console.log(name, value);
     setUserInfo({
       ...userInfo,
       [name]: value,
     });
   }
+
   // 내정보 조회
   const getInfo = async () => {
     const { data, statusCode } = await myInfo();
@@ -200,13 +202,12 @@ const MyPage = () => {
       corpContact,
       phone,
       corpEmail,
-      corpAddr1,
       corpAddr2,
-      corpPost,
       corpDesc,
       bizType,
       taxType,
       bizNum,
+      salesNum,
     } = userInfo;
     const list = {
       password: password,
@@ -217,22 +218,15 @@ const MyPage = () => {
       corpContact: corpContact,
       phone: phone,
       corpEmail: corpEmail,
-      corpAddr1: corpAddr1,
+      corpAddr1: enroll_company.address1,
       corpAddr2: corpAddr2,
-      corpPost: corpPost,
+      corpPost: enroll_company.address2,
       corpDesc: corpDesc,
       bizType: bizType,
       taxType: taxType,
       bizNum: bizNum,
+      salesNum: salesNum,
     };
-
-    for (let key in list) {
-      if (!list[key]) {
-        setAlertModal(true);
-        setText(`브랜드 로고를 제외한 모든 정보를 기입해주세요.`);
-        return;
-      }
-    }
 
     if (!list.password || !userInfo.passwordCheck) {
       setAlertModal(true);
@@ -249,9 +243,23 @@ const MyPage = () => {
       setText("비밀번호가 일치하지 않습니다.");
       return;
     }
+
+    for (let key in list) {
+      if (!list[key]) {
+        setAlertModal(true);
+        setText(`정보를 수정하시려면 필수값을 모두 입력해주세요.`);
+        return;
+      }
+    }
+
     if (!emailRegEx.test(list.corpEmail)) {
       setAlertModal(true);
       setText("이메일 형식에 맞지 않습니다.");
+      return;
+    }
+    if (list.phone.slice(0, 3) !== "010" || list.phone.length != 11) {
+      setAlertModal(true);
+      setText("휴대전화 형식에 맞지 않습니다.");
       return;
     }
     if (list.phone.slice(0, 3) !== "010" || list.phone.length != 11) {
@@ -272,7 +280,7 @@ const MyPage = () => {
       if (data.corpLogo) {
         localStorage.setItem("corpLogo", data.corpLogo);
       }
-      localStorage.setItem("corpCeo", data.corpCeo);
+      localStorage.setItem("corpName", data.corpName);
       setAlertModal(true);
       setText(`저장 완료`);
     } else {
@@ -285,6 +293,7 @@ const MyPage = () => {
   const [popup, setPopup] = useState(false);
   const handleComplete = (data) => {
     setPopup(!popup);
+
     if (popup === true) {
       setUserInfo({
         ...userInfo,
@@ -376,7 +385,7 @@ const MyPage = () => {
                   type="text"
                   name="corpCeo"
                   onChange={onChange}
-                  defaultValue={userInfo.corpCeo}
+                  value={userInfo.corpCeo || ""}
                 />
               </div>
             </RowInner>
@@ -388,7 +397,7 @@ const MyPage = () => {
                 <input
                   className="area"
                   type="text"
-                  name="address1"
+                  name="corpAddr1"
                   onChange={onChange}
                   value={enroll_company.address1 || ""}
                 />
@@ -416,7 +425,7 @@ const MyPage = () => {
                   type="text"
                   name="corpAddr2"
                   onChange={onChange}
-                  defaultValue={userInfo.corpAddr2 || ""}
+                  value={userInfo.corpAddr2 || ""}
                 />
               </div>
             </RowInner>
@@ -429,7 +438,7 @@ const MyPage = () => {
                   type="text"
                   name="corpName"
                   onChange={onChange}
-                  defaultValue={userInfo.corpName || ""}
+                  value={userInfo.corpName || ""}
                 />
               </div>
             </RowInner>
@@ -442,7 +451,7 @@ const MyPage = () => {
                   type="text"
                   name="bankName"
                   onChange={onChange}
-                  defaultValue={userInfo.bankName || ""}
+                  value={userInfo.bankName || ""}
                 />
               </div>
             </RowInner>
@@ -453,7 +462,7 @@ const MyPage = () => {
                   type="text"
                   name="bankAccount"
                   onChange={onChange}
-                  defaultValue={userInfo.bankAccount || ""}
+                  value={userInfo.bankAccount || ""}
                 />
               </div>
             </RowInner>
@@ -538,9 +547,22 @@ const MyPage = () => {
               <div>
                 <input
                   type="text"
-                  name="userId"
+                  name="bizNum"
                   onChange={onChange}
-                  defaultValue={userInfo.bizNum || ""}
+                  value={userInfo.bizNum || ""}
+                />
+              </div>
+            </RowInner>
+          </Row>
+          <Row>
+            <RowInner>
+              <label>통신판매업 신고번호*</label>
+              <div>
+                <input
+                  type="text"
+                  name="salesNum"
+                  onChange={onChange}
+                  value={userInfo.salesNum || ""}
                 />
               </div>
             </RowInner>

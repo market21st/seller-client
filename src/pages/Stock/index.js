@@ -10,6 +10,8 @@ import AddModal from "./Add";
 import { FormControl, Select, MenuItem } from "@mui/material";
 // Api
 import { getStock, getGrade, getStockList } from "../../api/stock";
+import defaultIcon from "../../assets/default.png";
+import GradeModal from "./GradeModal";
 
 const searchSelect = {
   background: "#fff",
@@ -37,7 +39,14 @@ const Container = styled.div`
     padding: 10px 0 5px;
   }
   .scroll::-webkit-scrollbar {
-    display: none;
+    width: 10px;
+  }
+  .scroll::-webkit-scrollbar-thumb {
+    background-color: #cfd4f0;
+    border-radius: 5px;
+  }
+  .scroll::-webkit-scrollbar-track {
+    background-color: #f8f8f8;
   }
 `;
 
@@ -113,6 +122,15 @@ const InfoTitle = styled.h2`
     padding: 12px 10px;
     font-size: 16px;
   }
+  button {
+    font-size: 16px;
+    font-weight: bold;
+    padding: 10px;
+    background: #fff;
+    color: #404040;
+    border: 1.5px solid #404040;
+    border-radius: 5px;
+  }
 `;
 
 const ListContainer = styled.div`
@@ -166,7 +184,7 @@ const StockList = () => {
   const [productId, setProductId] = useState("");
   const [productName, setProductName] = useState("");
 
-  // Modal
+  // Alert Modal
   const [alertModal, setAlertModal] = useState(false);
   const [text, setText] = useState("");
   const aleatHandleClose = () => {
@@ -175,11 +193,15 @@ const StockList = () => {
       window.location.reload();
     }
   };
-
-  // Modal
+  // Add Modal
   const [addModal, setAddModal] = useState(false);
   const AddModalClose = () => {
     setAddModal(false);
+  };
+  // Grade Modal
+  const [gradeModal, setGradeModal] = useState(false);
+  const gradeModalClose = () => {
+    setGradeModal(false);
   };
 
   // 변경하는 필터값
@@ -195,27 +217,10 @@ const StockList = () => {
       [name]: value,
     });
   }
-
-  // 제품명 조회
-  const getProductList = async () => {
-    const { data, statusCode } = await getStock();
-    if (statusCode == 200) {
-      setProductList(data);
-    }
-  };
-
-  // 등급 조회
-  const getGradeList = async () => {
-    const { data, statusCode } = await getGrade();
-    if (statusCode == 200) {
-      setGradeList(data.results);
-    }
-  };
-
   // 전체 리스트 조회
   const getList = async () => {
     const list = {
-      take: 10,
+      take: 3000,
       page: 1,
       productInfoId: productId,
       isActive:
@@ -241,7 +246,6 @@ const StockList = () => {
             ? 2
             : "",
       });
-
       if (statusCode == 200) {
         setListData(data.results);
       }
@@ -249,22 +253,38 @@ const StockList = () => {
     }
 
     const { data, statusCode } = await getStockList(list);
-
     if (statusCode == 200) {
       setListData(data.results);
     }
   };
 
+  // 제품명 조회
+  const getProductList = async () => {
+    const { data, statusCode } = await getStock();
+    if (statusCode == 200) {
+      setProductList(data);
+    }
+  };
+
+  // 등급 조회
+  const getGradeList = async () => {
+    const { data, statusCode } = await getGrade();
+    if (statusCode == 200) {
+      setGradeList(data.results);
+    }
+  };
+
   useEffect(() => {
-    getGradeList();
-    getProductList();
-    getList();
+    getList(); // 전체리스트
+    getGradeList(); // 등급
+    getProductList(); // 제품명 조회
   }, []);
 
   return (
     <>
       <AlertModal isOpen={alertModal} onClose={aleatHandleClose} text={text} />
       <AddModal isOpen={addModal} onClose={AddModalClose} />
+      <GradeModal isOpen={gradeModal} onClose={gradeModalClose} />
       <Container>
         <TopBox>
           <h1>재고 관리</h1>
@@ -359,15 +379,16 @@ const StockList = () => {
             우선판매권을 얻으려면<span>현재 최저가</span>미만의 가격을
             입력해야합니다.
           </p>
+          <button onClick={() => setGradeModal(true)}>등급 기준 보기</button>
         </InfoTitle>
         <ListContainer className="scroll">
           <ul>
-            {listData.length > 1 ? (
+            {listData.length > 0 ? (
               listData.map((el, idx) => (
                 <Item
                   key={el.id}
                   id={el.id}
-                  thumb={el.thumb}
+                  thumb={el.thumb ? el.thumb : defaultIcon}
                   optionText={el.optionText}
                   gradeText={el.gradeText}
                   lowestPrice={el.lowestPrice}

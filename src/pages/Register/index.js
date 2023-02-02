@@ -142,6 +142,7 @@ const Register = () => {
     bizType: "개인사업자",
     taxType: "단위과세",
     bizNum: "",
+    salesNum: "",
   });
 
   function onChange(e) {

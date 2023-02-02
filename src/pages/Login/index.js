@@ -132,6 +132,12 @@ const LogIn = () => {
   const [text, setText] = useState("");
   const alertHandleClose = () => setAlertOpen(false);
 
+  const mykeydown = async (e) => {
+    if (window.event.keyCode == 13) {
+      login();
+    }
+  };
+
   return (
     <Grid container height={"100vh"}>
       <AlertModal isOpen={alertOpen} onClose={alertHandleClose} text={text} />
@@ -152,37 +158,38 @@ const LogIn = () => {
       >
         <Grid item textAlign={"center"} width={"18rem"} minWidth={"12rem"}>
           <Title>Seller Admin</Title>
-          <TextField
-            fullWidth
-            size="small"
-            inputRef={idRef}
-            placeholder={"아이디"}
-            sx={{ marginBottom: 1 }}
-          />
-          <FormControl variant="filled" fullWidth>
-            <OutlinedInput
-              inputRef={pwRef}
+          <form onKeyDown={mykeydown}>
+            <TextField
+              fullWidth
               size="small"
-              placeholder={"비밀번호"}
-              id="outlined-adornment-password"
-              type={values.showPassword ? "text" : "password"}
-              value={values.password}
-              onChange={handleChange("password")}
-              endAdornment={
-                <InputAdornment position="end">
-                  <IconButton
-                    aria-label="toggle password visibility"
-                    onClick={handleClickShowPassword}
-                    onMouseDown={handleMouseDownPassword}
-                    edge="end"
-                  >
-                    {values.showPassword ? <VisibilityOff /> : <Visibility />}
-                  </IconButton>
-                </InputAdornment>
-              }
+              inputRef={idRef}
+              placeholder={"아이디"}
+              sx={{ marginBottom: 1 }}
             />
-          </FormControl>
-
+            <FormControl variant="filled" fullWidth>
+              <OutlinedInput
+                inputRef={pwRef}
+                size="small"
+                placeholder={"비밀번호"}
+                id="outlined-adornment-password"
+                type={values.showPassword ? "text" : "password"}
+                value={values.password}
+                onChange={handleChange("password")}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                      onMouseDown={handleMouseDownPassword}
+                      edge="end"
+                    >
+                      {values.showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                }
+              />
+            </FormControl>
+          </form>
           <Button
             variant="contained"
             fullWidth

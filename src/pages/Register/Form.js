@@ -25,6 +25,16 @@ const BlueBtn = styled.button`
   margin-left: 14px;
 `;
 
+const BlueBtnLebel = styled.label`
+  background: #505bca;
+  color: #fff;
+  padding: 16px 25px;
+  border-radius: 5px;
+  font-size: 14px;
+  margin-left: 14px;
+  cursor: pointer;
+`;
+
 const Row = styled.div`
   margin-bottom: 20px;
   display: flex;
@@ -211,6 +221,7 @@ const Form = ({
               <label>회사주소*</label>
               <div>
                 <input
+                  readOnly
                   className="area"
                   type="text"
                   name="corpAddr1"
@@ -335,9 +346,8 @@ const Form = ({
                   style={{ display: "none" }}
                 />
                 <input type="text" name="id" value={bizFile || ""} readOnly />
-                <BlueBtn>
-                  <label htmlFor="bizFile">파일첨부</label>
-                </BlueBtn>
+
+                <BlueBtnLebel htmlFor="bizFile">파일첨부</BlueBtnLebel>
               </div>
             </RowInner>
           </Row>
@@ -355,6 +365,17 @@ const Form = ({
             </RowInner>
           </Row>
           <Row>
+            <RowInner>
+              <label>통신판매업 신고번호*</label>
+              <div>
+                <input
+                  className="area"
+                  type="text"
+                  name="salesNum"
+                  onChange={changeEvent}
+                />
+              </div>
+            </RowInner>
             <RowInner>
               <label>대표번호*</label>
               <div>
@@ -385,9 +406,8 @@ const Form = ({
                   style={{ display: "none" }}
                 />
                 <input type="text" name="id" value={logoFile || ""} readOnly />
-                <BlueBtn>
-                  <label htmlFor="logoFile">파일첨부</label>
-                </BlueBtn>
+
+                <BlueBtnLebel htmlFor="logoFile">파일첨부</BlueBtnLebel>
               </div>
             </RowInner>
           </Row>

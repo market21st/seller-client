@@ -117,16 +117,6 @@ const AddModal = ({ isOpen, onClose }) => {
     }
   };
 
-  // 제품명
-  const getProduct = async () => {
-    const { data, statusCode } = await getProductInfo();
-    if (statusCode == 200) {
-      setData(data);
-      setName(data[0].name);
-      setProductId(data[0].id);
-    }
-  };
-
   // 등급
   const getGrades = async () => {
     const { data, statusCode } = await getGrade();
@@ -138,11 +128,11 @@ const AddModal = ({ isOpen, onClose }) => {
 
   // 옵션
   const getOptionList = async () => {
-    const { data, statusCode } = await getOptions(productId || 1);
-    if (statusCode == 200) {
-      setOption(data[0].optionText);
+    const { data, statusCode } = await getOptions(productId);
+    if (statusCode === 200) {
       setOptionList(data);
-      setOptionId(data[0].id);
+      setOption(data[0]?.optionText);
+      setOptionId(data[0]?.id);
     }
   };
 
@@ -166,13 +156,19 @@ const AddModal = ({ isOpen, onClose }) => {
   };
 
   const postEvent = async () => {
-    if (
-      !productData.price ||
-      productData.price < 1 ||
-      !productData.stock ||
-      productData.stock < 1
-    ) {
-      setAlertText("가격과 재고는 1이상만 입력 가능합니다.");
+    if (!productData.price) {
+      setAlertText("판매가는 필수값입니다.");
+      setAlertModal(true);
+      return;
+    }
+    if (productData.price < 1) {
+      setAlertText("판매가가 0이하일 수 없습니다.");
+      setAlertModal(true);
+      return;
+    }
+
+    if (productData.price.slice(-3) != "000" || productData.price?.length < 3) {
+      setAlertText("천원단위 가격입력만 가능합니다.");
       setAlertModal(true);
       return;
     }
@@ -199,12 +195,20 @@ const AddModal = ({ isOpen, onClose }) => {
   };
 
   useEffect(() => {
+    const getProduct = async () => {
+      const { data, statusCode } = await getProductInfo();
+      if (statusCode == 200) {
+        setData(data);
+        setName(data[0].name);
+        setProductId(data[0].id);
+      }
+    };
     getProduct();
-    getGrades();
   }, []);
 
   useEffect(() => {
-    getOptionList();
+    getGrades();
+    if (productId) getOptionList();
   }, [name]);
 
   useEffect(() => {

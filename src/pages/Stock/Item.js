@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
 import AlertModal from "../../components/AlertModal";
@@ -164,13 +164,12 @@ const Item = ({
 
   const edit = async () => {
     if (!stockData.price || stockData.price < 0) {
-      setText(`가격은 0아래로 저장할 수 없습니다.`);
+      setText(`판매가가 0 이하일 수 없습니다.`);
       setAlertModal(true);
       return;
     }
-
-    if ((!stockData.stock || stockData.stock < 1) && stockData.isActive == 1) {
-      setText(`재고가 0인 상품은 판매중으로 저장 할 수 없습니다.`);
+    if (stockData.price?.slice(-3) != "000" || stockData?.price?.length < 4) {
+      setText("천원단위 가격입력만 가능합니다.");
       setAlertModal(true);
       return;
     }
@@ -211,6 +210,15 @@ const Item = ({
   const alertClose = () => {
     setAlertModal(false);
   };
+  const [option, setOption] = useState();
+
+  useEffect(() => {
+    if (optionText) {
+      const option1 = optionText.split(",")[0];
+      const resulte = optionText.replace(`${option1},`, "").replace(/\s/g, "");
+      setOption(resulte);
+    }
+  }, [optionText]);
 
   return (
     <>
@@ -221,14 +229,12 @@ const Item = ({
         closeBtn={text.includes("정말 삭제") ? alertClose : false}
       />
       <ItemBox>
-        <img src={thumb} alt={optionText} />
-        <h3>{`${optionText.split("-")[0]}\n${optionText.split("-")[1]}-${
-          optionText.split("-")[2]
-        }`}</h3>
+        <img src={thumb} alt={optionText} style={{ width: "50px" }} />
+        <h3>{`${optionText.split(",")[0]}\n${option}`}</h3>
         <Grade>{gradeText}</Grade>
         <Price>
           <span>최저가</span>
-          {lowestPrice.toLocaleString()}
+          {lowestPrice ? lowestPrice.toLocaleString() : "없음"}
         </Price>
         <EditArea>
           <p>
