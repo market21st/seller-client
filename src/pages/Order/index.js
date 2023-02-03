@@ -9,7 +9,7 @@ import orderColumns from "./orderColumns";
 
 // Api
 import { getOrder, getState } from "../../api/order";
-import { Grid, TextField } from "@mui/material";
+import { TextField } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 
 // Mui

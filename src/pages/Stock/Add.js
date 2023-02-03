@@ -178,7 +178,9 @@ const AddModal = ({ isOpen, onClose }) => {
       optionId: optionId,
       grade: grade == "B" ? 0 : grade == "A" ? 1 : 2,
       price: String(productData.price).replace(/,/g, ""),
-      stock: String(productData.stock).replace(/,/g, ""),
+      stock: productData?.stock
+        ? String(productData.stock).replace(/,/g, "")
+        : "",
     };
 
     const { data, statusCode } = await postProduct(list);
