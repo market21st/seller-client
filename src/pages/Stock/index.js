@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 
@@ -7,7 +7,7 @@ import AlertModal from "../../components/AlertModal";
 import Item from "./Item";
 import AddModal from "./Add";
 // Mui
-import { FormControl, Select, MenuItem } from "@mui/material";
+import { FormControl, Select, MenuItem, CircularProgress } from "@mui/material";
 // Api
 import { getStock, getGrade, getStockList } from "../../api/stock";
 import defaultIcon from "../../assets/default.png";
@@ -174,6 +174,15 @@ const FilterBtn = styled.div`
   }
 `;
 
+const Progress = styled.li`
+  display: flex;
+  justify-content: center !important;
+  align-items: center;
+  height: 60px;
+  margin-bottom: 50px !important;
+  background: none !important;
+`;
+
 const StockList = () => {
   const navigator = useNavigate();
 
@@ -183,6 +192,112 @@ const StockList = () => {
   const [gradeList, setGradeList] = useState([]);
   const [productId, setProductId] = useState("");
   const [productName, setProductName] = useState("");
+
+  // 무한 스크롤
+  const [loading, setLoading] = useState(false);
+  const [fetching, setFetching] = useState(false);
+
+  const [num, setNum] = useState(1);
+  const scrollRef = useRef();
+
+  const scrollTop = () => {
+    setNum(1);
+    document.getElementById("scroll")?.scrollTo(0, 0);
+  };
+
+  // 전체 리스트 조회
+  const getList = async (listData, num) => {
+    const list = {
+      take: 10,
+      page: !num ? 1 : num,
+      productInfoId: productId,
+      isActive:
+        userInfo.isActive == "전체"
+          ? ""
+          : userInfo.isActive === "숨김"
+          ? 0
+          : userInfo.isActive === "판매중"
+          ? 1
+          : "",
+      optionText: userInfo.optionText,
+    };
+
+    if (userInfo.grade) {
+      const { data, statusCode } = await getStockList({
+        ...list,
+        grade:
+          userInfo.grade === "B"
+            ? 0
+            : userInfo.grade === "A"
+            ? 1
+            : userInfo.grade === "S"
+            ? 2
+            : "",
+      });
+      if (data.pageTotal === 0 && data.total > 1) {
+        setLoading(false);
+        return;
+      }
+      // 총 0개 리스트 조회시
+      if (data.pageTotal === 0) {
+        setListData([]);
+        setLoading(false);
+
+        return;
+      }
+      if (data.results) {
+        const fetchedData = data.results;
+        const mergedData = listData.concat(...fetchedData);
+        setListData(mergedData);
+        setNum((prev) => prev + 1);
+        setFetching(false);
+        setLoading(false);
+      }
+      return;
+    }
+
+    // 등급 없을 때
+    const { data, statusCode } = await getStockList(list);
+    if (statusCode === 200) {
+      // 총 14개 리스트
+      if (data.pageTotal === 0 && data.total > 1) {
+        setLoading(false);
+
+        return;
+      }
+      // 총 0개 리스트 조회시
+      if (data.pageTotal === 0) {
+        setListData([]);
+        setLoading(false);
+        return;
+      }
+      if (data.results) {
+        const fetchedData = data.results;
+        const mergedData = listData.concat(...fetchedData);
+        setListData(mergedData);
+        setNum((prev) => prev + 1);
+        setFetching(false);
+        setLoading(false);
+      }
+    }
+  };
+
+  // 스크롤 이벤트 핸들러
+  const handleScroll = async () => {
+    const scrollHeight = scrollRef.current.scrollHeight;
+    const scrollTop = scrollRef.current.scrollTop;
+    const clientHeight = scrollRef.current.clientHeight;
+    if (scrollTop + clientHeight >= scrollHeight - 3 && fetching === false) {
+      setFetching(true);
+    }
+  };
+
+  useEffect(() => {
+    scrollRef.current.addEventListener("scroll", handleScroll);
+    return () => {
+      scrollRef.current.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   // Alert Modal
   const [alertModal, setAlertModal] = useState(false);
@@ -217,46 +332,6 @@ const StockList = () => {
       [name]: value,
     });
   }
-  // 전체 리스트 조회
-  const getList = async () => {
-    const list = {
-      take: 3000,
-      page: 1,
-      productInfoId: productId,
-      isActive:
-        userInfo.isActive == "전체"
-          ? ""
-          : userInfo.isActive === "숨김"
-          ? 0
-          : userInfo.isActive === "판매중"
-          ? 1
-          : "",
-      optionText: userInfo.optionText,
-    };
-
-    if (userInfo.grade) {
-      const { data, statusCode } = await getStockList({
-        ...list,
-        grade:
-          userInfo.grade === "B"
-            ? 0
-            : userInfo.grade === "A"
-            ? 1
-            : userInfo.grade === "S"
-            ? 2
-            : "",
-      });
-      if (statusCode == 200) {
-        setListData(data.results);
-      }
-      return;
-    }
-
-    const { data, statusCode } = await getStockList(list);
-    if (statusCode == 200) {
-      setListData(data.results);
-    }
-  };
 
   // 제품명 조회
   const getProductList = async () => {
@@ -275,10 +350,17 @@ const StockList = () => {
   };
 
   useEffect(() => {
-    getList(); // 전체리스트
-    getGradeList(); // 등급
-    getProductList(); // 제품명 조회
+    getList(listData);
+    getGradeList();
+    getProductList();
   }, []);
+
+  useEffect(() => {
+    if (fetching) {
+      getList(listData, num);
+      setLoading(true);
+    }
+  }, [fetching]);
 
   return (
     <>
@@ -330,6 +412,7 @@ const StockList = () => {
                 <MenuItem disabled value="">
                   <em>등급</em>
                 </MenuItem>
+                <MenuItem value="전체">전체</MenuItem>
                 {gradeList &&
                   gradeList?.map((el, idx) => (
                     <MenuItem key={el.value} value={el.key}>
@@ -365,7 +448,14 @@ const StockList = () => {
             </RowInner>
           </FileterBox>
           <FilterBtn>
-            <button onClick={getList}>필터적용</button>
+            <button
+              onClick={() => {
+                scrollTop();
+                getList([], 1);
+              }}
+            >
+              필터적용
+            </button>
             <button onClick={() => window.location.reload()}>초기화</button>
           </FilterBtn>
         </SearchArea>
@@ -381,7 +471,7 @@ const StockList = () => {
           </p>
           <button onClick={() => setGradeModal(true)}>등급 기준 보기</button>
         </InfoTitle>
-        <ListContainer className="scroll">
+        <ListContainer className="scroll" id="scroll" ref={scrollRef}>
           <ul>
             {listData.length > 0 ? (
               listData.map((el, idx) => (
@@ -402,6 +492,8 @@ const StockList = () => {
                 <h2>등록된 상품이 없습니다.</h2>
               </ItemBox>
             )}
+
+            <Progress>{loading ? <CircularProgress /> : null}</Progress>
           </ul>
         </ListContainer>
       </Container>
