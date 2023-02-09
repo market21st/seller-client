@@ -350,9 +350,9 @@ const StockList = () => {
   };
 
   useEffect(() => {
-    getList(listData);
     getGradeList();
     getProductList();
+    getList(listData);
   }, []);
 
   useEffect(() => {

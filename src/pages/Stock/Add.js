@@ -205,16 +205,16 @@ const AddModal = ({ isOpen, onClose }) => {
         setProductId(data[0].id);
       }
     };
-    getProduct();
-  }, []);
+    if (isOpen) getProduct();
+  }, [isOpen]);
 
   useEffect(() => {
-    getGrades();
+    if (isOpen) getGrades();
     if (productId) getOptionList();
   }, [name]);
 
   useEffect(() => {
-    getPriceData();
+    if (isOpen) getPriceData();
   }, [option, grade]);
 
   // Content Modal

@@ -28,7 +28,6 @@ export const idCheck = async (params) => {
 export const logoutUser = async () => {
   try {
     const res = await instance.post(`/auth/logout`);
-    console.log(res);
     return res.data;
   } catch (err) {
     console.log(err);

@@ -201,6 +201,9 @@ const LogIn = () => {
           <Info>
             회원이 아니신가요?<a href="/register">회원가입하기</a>
           </Info>
+          <Grid container textAlign={"center"} width={"18rem"}>
+            {/* <h3>(주)21세기전파상</h3> */}
+          </Grid>
         </Grid>
       </Grid>
     </Grid>

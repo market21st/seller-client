@@ -43,7 +43,6 @@ const CheckBtn = styled.button`
 `;
 
 const Text = styled.h2`
-  /* font-size: 1.2rem; */
   font-size: 1.2rem;
   line-height: 1.5;
   margin: 45px 30px;

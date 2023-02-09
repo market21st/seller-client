@@ -380,9 +380,9 @@ const OrderDetails = () => {
           <RowBox>
             <div>
               <p>등급</p>
-              {data.product?.grade === "2"
+              {data.product?.grade === 2
                 ? "S"
-                : data.product?.grade === "1"
+                : data.product?.grade === 1
                 ? "A"
                 : "B"}
             </div>

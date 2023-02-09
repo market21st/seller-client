@@ -72,11 +72,12 @@ const Home = () => {
   const [dateList, setDateList] = useState([]);
   const [date, setDate] = useState("");
   const [userData, setUserData] = useState([]);
+  const resulte = (code) => code === 200;
 
   const getDate = async () => {
     const { data, statusCode } = await manageDate();
-    setDate(data[0]);
-    if (statusCode == 200) {
+    if (resulte(statusCode)) {
+      setDate(data[0]);
       setDateList(data);
     }
   };
@@ -85,7 +86,7 @@ const Home = () => {
       date: date,
     };
     const { data, statusCode } = await statistics(list);
-    if (statusCode == 200) {
+    if (resulte(statusCode)) {
       setUserData(data);
     }
   };
