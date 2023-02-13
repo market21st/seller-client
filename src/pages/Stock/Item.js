@@ -101,6 +101,9 @@ const Item = ({
   price,
   stock,
   isActive,
+  getList,
+  listData,
+  setListData,
 }) => {
   const [stockData, setStockData] = useState({
     price: price.toLocaleString(),
@@ -200,7 +203,7 @@ const Item = ({
   const aleatHandleClose = () => {
     setAlertModal(false);
     if (text.includes("저장 완료") || text.includes("삭제 완료")) {
-      window.location.reload();
+      getList([]);
     }
     if (text.includes("정말 삭제")) {
       deleteList();

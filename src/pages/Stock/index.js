@@ -211,6 +211,7 @@ const StockList = () => {
 
   // 전체 리스트 조회
   const getList = async (listData, num) => {
+    console.log("확인");
     const list = {
       take: 10,
       page: !num ? 1 : num,
@@ -246,7 +247,6 @@ const StockList = () => {
       if (data.pageTotal === 0) {
         setListData([]);
         setLoading(false);
-
         return;
       }
       if (data.results) {
@@ -263,13 +263,10 @@ const StockList = () => {
     // 등급 없을 때
     const { data, statusCode } = await getStockList(list);
     if (statusCode === 200) {
-      // 총 14개 리스트
       if (data.pageTotal === 0 && data.total > 1) {
         setLoading(false);
-
         return;
       }
-      // 총 0개 리스트 조회시
       if (data.pageTotal === 0) {
         setListData([]);
         setLoading(false);
@@ -488,6 +485,9 @@ const StockList = () => {
                   price={el.price}
                   stock={el.stock}
                   isActive={el.isActive}
+                  getList={getList}
+                  setListData={setListData}
+                  listData={listData}
                 />
               ))
             ) : (

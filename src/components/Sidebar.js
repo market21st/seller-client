@@ -339,17 +339,13 @@ const Sidebar = ({ children }) => {
             </div>
             <h1>{localStorage.getItem("corpName")}님 안녕하세요!</h1>
           </div>
-
           <ul>
             <li onClick={link1}>회사소개서</li>|
             <li onClick={link4}>운영정책</li>|
-            <li 이용설명서 onClick={link2}>
-              이용가이드
-            </li>
-            |<li onClick={link3}>사업자등록증</li>
+            <li onClick={link2}>이용가이드</li>|
+            <li onClick={link3}>사업자등록증</li>
           </ul>
         </Header>
-
         <Grid sx={{ width: "100%", height: "92.4vh" }}>{children}</Grid>
       </Grid>
     </Grid>
