@@ -65,7 +65,7 @@ const BtnBox = styled.div`
   border-top: 2px solid #d0d6f3;
   margin-top: 40px;
   transform: translate();
-  font-weight: bold;
+  font-weight: 500;
   a {
     display: block;
     padding: 14px 23px;
@@ -145,8 +145,26 @@ const Register = () => {
     salesNum: "",
   });
 
+  const [isChecked, setIsChecked] = useState({
+    service: false,
+    info: false,
+  });
+
   function onChange(e) {
     const { name, value } = e.target;
+    if (name === "service") {
+      setIsChecked({
+        ...isChecked,
+        service: !isChecked?.service,
+      });
+    }
+    if (name === "info") {
+      setIsChecked({
+        ...isChecked,
+        info: !isChecked?.info,
+      });
+    }
+
     if (name === "userId") {
       setIdCheckResult(false);
     }
@@ -177,6 +195,11 @@ const Register = () => {
   };
 
   const submit = async () => {
+    if (!isChecked.info || !isChecked.service) {
+      setAlertModal(true);
+      setText("이용약관에 동의하여 주십시오.");
+      return;
+    }
     if (!idCheckResult) {
       setAlertModal(true);
       setText("아이디 중복확인을 해주세요.");
@@ -282,6 +305,7 @@ const Register = () => {
             setCorpImages={setCorpImage}
             setUserInfo={setUserInfo}
             idCheck={onCheck}
+            isChecked={isChecked}
           />
           <BtnBox>
             <a href="/">홈으로 가기</a>

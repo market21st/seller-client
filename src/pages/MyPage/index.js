@@ -16,7 +16,7 @@ const Container = styled.div`
   height: 90%;
   h1 {
     font-size: 24px;
-    font-weight: bold;
+    font-weight: 500;
   }
   .area {
     width: 279px;
@@ -44,7 +44,7 @@ const Btmbar = styled.div`
     width: 134px;
     padding: 12px 49px;
     border-radius: 5px;
-    font-weight: bold;
+    font-weight: 600;
     font-size: 18px;
   }
 `;
@@ -89,7 +89,7 @@ const RowInner = styled.div`
     border-radius: 5px;
     padding: 14px;
     margin-top: 8px;
-    font-weight: 800;
+    font-weight: 500;
     box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
   }
 `;
@@ -141,7 +141,7 @@ const TextArea = styled.textarea`
   border-radius: 5px;
   padding: 14px;
   margin-top: 8px;
-  font-weight: 800;
+  font-weight: 500;
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
   line-height: 1.5;
 `;

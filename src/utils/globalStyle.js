@@ -18,19 +18,24 @@ time, mark, audio, video {
 	padding: 0;
 	border: 0;
 	font-size: 100%;
-	font: inherit;
 	vertical-align: baseline;
 	box-sizing: border-box;
-	font-family: 'SpoqaHanSansNeo-Regular';
 }
 /* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure, 
 footer, header, hgroup, menu, nav, section {
 	display: block;
 }
+*{ font-family: 'Spoqa Han Sans','Sans-serif'; }
 body {
 	line-height: 1;
-	font-family: 'SpoqaHanSansNeo-Regular';
+	
+}
+div{
+	font-weight: 500;
+}
+h3{
+	font-weight: 500;
 }
 ol, ul {
 	list-style: none;

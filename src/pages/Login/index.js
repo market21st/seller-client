@@ -16,6 +16,7 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 import AlertModal from "../../components/AlertModal";
+import InfoModal from "../../components/InfoModal";
 
 // Images
 import loginImg from "../../assets/login.png";
@@ -32,6 +33,7 @@ const Logo = styled.a`
   top: 4%;
   left: 3%;
 `;
+
 const LogoImg = styled.img`
   display: block;
   width: 110px;
@@ -57,6 +59,35 @@ const Info = styled.p`
     display: inline-block;
     padding-left: 5px;
     color: #1976d2;
+  }
+`;
+
+const Inner = styled.div`
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20rem;
+`;
+
+const CompanyInfo = styled.div`
+  position: absolute;
+  bottom: 5%;
+  width: 22rem;
+  font-size: 14px;
+  h3 {
+    font-weight: 600;
+    line-height: 1.2;
+  }
+  p {
+    color: #848484;
+    line-height: 1.2;
+  }
+  div {
+    margin-top: 20px;
+  }
+  button {
+    font-weight: 600;
+    cursor: pointer;
   }
 `;
 
@@ -132,6 +163,12 @@ const LogIn = () => {
   const [text, setText] = useState("");
   const alertHandleClose = () => setAlertOpen(false);
 
+  // info
+  const [infoOpen, setInfoOpen] = useState(false);
+  const [contentNum, setContentNum] = useState(0);
+  const [title, setTitle] = useState("");
+  const infoHandleClose = () => setInfoOpen(false);
+
   const mykeydown = async (e) => {
     if (window.event.keyCode == 13) {
       login();
@@ -140,6 +177,12 @@ const LogIn = () => {
 
   return (
     <Grid container height={"100vh"}>
+      <InfoModal
+        isOpen={infoOpen}
+        onClose={infoHandleClose}
+        contents={contentNum}
+        title={title}
+      />
       <AlertModal isOpen={alertOpen} onClose={alertHandleClose} text={text} />
       <Grid item xs={8} sx={{ position: "relative" }}>
         <Logo href="/">
@@ -155,8 +198,10 @@ const LogIn = () => {
         alignItems={"center"}
         justifyContent={"center"}
         sx={{ background: "#F0F5FD" }}
+        position={"relative"}
+        textAlign={"center"}
       >
-        <Grid item textAlign={"center"} width={"18rem"} minWidth={"12rem"}>
+        <Inner>
           <Title>Seller Admin</Title>
           <form onKeyDown={mykeydown}>
             <TextField
@@ -201,10 +246,36 @@ const LogIn = () => {
           <Info>
             회원이 아니신가요?<a href="/register">회원가입하기</a>
           </Info>
-          <Grid container textAlign={"center"} width={"18rem"}>
-            {/* <h3>(주)21세기전파상</h3> */}
-          </Grid>
-        </Grid>
+        </Inner>
+        <CompanyInfo>
+          <h3>(주)21세기전파상</h3>
+          <p>
+            서울시 서초구 강남대로 53길 8, 602 | 대표: 박영준
+            <br />
+            고객센터: 02-3453-7460 | 사업자등록번호: 85481-01496
+          </p>
+          <div>
+            <button
+              onClick={() => {
+                setInfoOpen(true);
+                setContentNum(0);
+                setTitle("개인정보 처리방침");
+              }}
+            >
+              개인정보 처리방침
+            </button>
+            |
+            <button
+              onClick={() => {
+                setInfoOpen(true);
+                setContentNum(1);
+                setTitle("서비스 이용약관");
+              }}
+            >
+              서비스 이용약관
+            </button>
+          </div>
+        </CompanyInfo>
       </Grid>
     </Grid>
   );
