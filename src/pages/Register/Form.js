@@ -6,6 +6,7 @@ import { FormControl, Select, MenuItem } from "@mui/material";
 
 // Components
 import PostModal from "./PostModal";
+import InfoModal from "../../components/InfoModal";
 
 const InfoBox = styled.div`
   width: 100%;
@@ -50,7 +51,7 @@ const RowInnerArea = styled.div`
 const TextArea = styled.textarea`
   width: 100%;
   box-sizing: border-box;
-  height: 400px;
+  height: 380px;
   border-radius: 5px;
   padding: 14px;
   margin-top: 8px;
@@ -103,6 +104,35 @@ const Container = styled.div`
   }
 `;
 
+const RowInnerAreaM = styled.div`
+  width: 100%;
+  div {
+    display: flex;
+    align-items: center;
+    margin: 8px 0;
+  }
+  label {
+    margin-bottom: 5px;
+    display: inline-block;
+  }
+  input {
+    margin: 0;
+  }
+  span {
+    font-size: 14px;
+    padding-left: 10px;
+    font-weight: 300;
+  }
+  button {
+    font-weight: 300;
+    color: #7e7e7e;
+    font-size: 14px;
+    border-bottom: 1px solid #7e7e7e;
+    padding: 0;
+    margin-left: 8px;
+  }
+`;
+
 const Form = ({
   active,
   infoData,
@@ -111,6 +141,7 @@ const Form = ({
   setCorpImages,
   setUserInfo,
   idCheck,
+  isChecked,
 }) => {
   const [logoFile, setLogoFile] = useState("");
   const [bizFile, setBizFile] = useState("");
@@ -125,6 +156,12 @@ const Form = ({
   const handleComplete = (data) => {
     setPopup(!popup);
   };
+
+  // info
+  const [infoOpen, setInfoOpen] = useState(false);
+  const [contentNum, setContentNum] = useState(0);
+  const [title, setTitle] = useState("");
+  const infoHandleClose = () => setInfoOpen(false);
 
   useEffect(() => {
     setUserInfo({
@@ -150,6 +187,12 @@ const Form = ({
           />
         </Container>
       )}
+      <InfoModal
+        isOpen={infoOpen}
+        onClose={infoHandleClose}
+        contents={contentNum}
+        title={title}
+      />
       <InfoBox>
         <InfoContainer className={0 == active ? " active" : ""}>
           <Row>
@@ -416,6 +459,47 @@ const Form = ({
               <label>셀러소개*</label>
               <TextArea type="text" name="corpDesc" onChange={changeEvent} />
             </RowInnerArea>
+          </Row>
+          <Row>
+            <RowInnerAreaM>
+              <label>약관동의*</label>
+              <div>
+                <input
+                  type="checkbox"
+                  name="service"
+                  checked={isChecked?.service}
+                  onChange={changeEvent}
+                />
+                <span>서비스이용약관에 동의합니다.</span>
+                <button
+                  onClick={() => {
+                    setContentNum(1);
+                    setInfoOpen(true);
+                    setTitle("서비스 이용약관");
+                  }}
+                >
+                  보기
+                </button>
+              </div>
+              <div>
+                <input
+                  type="checkbox"
+                  name="info"
+                  checked={isChecked?.info}
+                  onChange={changeEvent}
+                />
+                <span>셀러 개인정보 수집에 동의합니다.</span>
+                <button
+                  onClick={() => {
+                    setContentNum(2);
+                    setInfoOpen(true);
+                    setTitle("셀러 개인정보 수집 동의");
+                  }}
+                >
+                  보기
+                </button>
+              </div>
+            </RowInnerAreaM>
           </Row>
         </InfoContainer>
       </InfoBox>

@@ -23,15 +23,16 @@ const InnerBox = styled.div`
   outline: none;
   p {
     color: red;
-    font-weight: bold;
+    font-weight: 500;
     margin: 0 30px;
     font-size: 14px;
   }
 `;
 
 const Text = styled.h2`
-  font-size: 1.3rem;
+  font-size: 1.2rem;
   line-height: 1.5;
+  font-weight: 500;
   margin: 35px 30px 5px;
 `;
 
@@ -50,7 +51,7 @@ const CancelBtn = styled.button`
   font-size: 14px;
   margin-right: 40px;
   background: none;
-  font-weight: bold;
+  font-weight: 500;
 `;
 
 const CheckBtn = styled.button`
@@ -60,7 +61,7 @@ const CheckBtn = styled.button`
   color: #fff;
   font-size: 14px;
   border-radius: 1px;
-  font-weight: bold;
+  font-weight: 500;
 `;
 
 const Contents = styled.div`

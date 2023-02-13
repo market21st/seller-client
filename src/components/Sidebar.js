@@ -155,18 +155,25 @@ const ButtonBox = styled.div`
 `;
 
 // 헤더
-const Header = styled.h1`
-  font-family: "GmarketSansMedium";
+const Header = styled.div`
   display: flex;
   align-items: center;
+  justify-content: space-between;
   background: #cfd4f0;
   height: 7.6vh;
   width: 100%;
-  font-size: 20px;
-  font-weight: bold;
-  line-height: 7.6vh;
-  padding-left: 59px;
+  padding: 0 59px;
+  h1 {
+    font-family: "GmarketSansMedium";
+    line-height: 7.6vh;
+    font-size: 20px;
+    font-weight: 500;
+  }
   div {
+    display: flex;
+    align-items: center;
+  }
+  .imgBox {
     overflow: hidden;
     display: flex;
     justify-content: center;
@@ -179,6 +186,16 @@ const Header = styled.h1`
   }
   img {
     width: 80%;
+  }
+  ul {
+    display: flex;
+  }
+  li {
+    margin: 0 14px;
+    cursor: pointer;
+  }
+  li:last-child {
+    margin-right: 0;
   }
 `;
 
@@ -194,6 +211,12 @@ const Sidebar = ({ children }) => {
   };
   const link3 = () => {
     window.open("https://image.kracker.kr/info/us/bizReg.pdf", "_blank");
+  };
+  const link4 = () => {
+    window.open(
+      "https://image.kracker.kr/info/us/operationPolicy.pdf",
+      "_blank"
+    );
   };
 
   //로그아웃 api
@@ -271,7 +294,7 @@ const Sidebar = ({ children }) => {
           )}
         </MyInfo>
         <ButtonBox>
-          <button onClick={link1}>
+          {/* <button onClick={link1}>
             <img src={paperIcon} alt="사업자등록증" />
             <div>
               <span>21세기전파상</span>
@@ -294,7 +317,7 @@ const Sidebar = ({ children }) => {
               <br />
               사업자등록증
             </div>
-          </button>
+          </button> */}
           <button onClick={logout}>
             로그아웃
             <img src={logoutIcon} alt="사업자등록증" />
@@ -311,10 +334,22 @@ const Sidebar = ({ children }) => {
       >
         <Header>
           <div>
-            <img src={localStorage.getItem("corpLogo")} alt="브랜드로고" />
+            <div className="imgBox">
+              <img src={localStorage.getItem("corpLogo")} alt="브랜드로고" />
+            </div>
+            <h1>{localStorage.getItem("corpName")}님 안녕하세요!</h1>
           </div>
-          {localStorage.getItem("corpName")}님 안녕하세요!
+
+          <ul>
+            <li onClick={link1}>회사소개서</li>|
+            <li onClick={link4}>운영정책</li>|
+            <li 이용설명서 onClick={link2}>
+              이용가이드
+            </li>
+            |<li onClick={link3}>사업자등록증</li>
+          </ul>
         </Header>
+
         <Grid sx={{ width: "100%", height: "92.4vh" }}>{children}</Grid>
       </Grid>
     </Grid>

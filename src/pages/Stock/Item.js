@@ -64,12 +64,12 @@ const Price = styled.p`
   display: flex;
   justify-content: center;
   align-items: center;
+  font-weight: 500;
   span {
     background: #fcbaba;
     border-radius: 5px;
     color: #404040;
     font-size: 10px;
-    font-weight: bold;
     padding: 4px 5px;
     margin-right: 6px;
   }
@@ -215,7 +215,7 @@ const Item = ({
   useEffect(() => {
     if (optionText) {
       const option1 = optionText.split(",")[0];
-      const resulte = optionText.replace(`${option1},`, "").replace(/\s/g, "");
+      const resulte = optionText.replace(`${option1},`, "");
       setOption(resulte);
     }
   }, [optionText]);

@@ -26,7 +26,10 @@ const Container = styled.div`
   padding: 50px 59px 0;
   h1 {
     font-size: 24px;
-    font-weight: bold;
+    font-weight: 500;
+  }
+  em {
+    font-style: normal;
   }
   .area {
     width: 279px;
@@ -76,8 +79,10 @@ const RowInner = styled.div`
   input {
     border-radius: 10px;
     padding: 10px 14px;
-    font-weight: 800;
     width: 100%;
+  }
+  input::placeholder {
+    color: #404040;
   }
 `;
 
@@ -100,13 +105,13 @@ const Area = styled.div`
     color: #fff;
     padding: 12px 35px;
     background: #4552ce;
-    font-weight: bold;
+    font-weight: 500;
   }
 `;
 
 const InfoTitle = styled.h2`
   font-size: 18px;
-  font-weight: bold;
+  font-weight: 500;
   margin-bottom: 20px;
   display: flex;
   justify-content: space-between;
@@ -115,21 +120,20 @@ const InfoTitle = styled.h2`
     color: #d74b4b;
     padding: 0 4px;
   }
-  div {
-    border: 1.5px solid #404040;
-    border-radius: 5px;
-    background: #fff;
-    padding: 12px 10px;
-    font-size: 16px;
+  button:first-child {
+    background: #a65895;
+    border: none;
+    color: #fff;
   }
   button {
     font-size: 16px;
-    font-weight: bold;
-    padding: 10px;
+    font-weight: 500;
+    padding: 10px 20px;
     background: #fff;
-    color: #404040;
+    color: #000;
     border: 1.5px solid #404040;
     border-radius: 5px;
+    margin-left: 20px;
   }
 `;
 
@@ -164,7 +168,7 @@ const FilterBtn = styled.div`
     padding: 10px 15px;
     background: #fff;
     color: #000;
-    font-weight: bold;
+    font-weight: 500;
     border-radius: 5px;
   }
   button:first-child {
@@ -459,17 +463,16 @@ const StockList = () => {
             <button onClick={() => window.location.reload()}>초기화</button>
           </FilterBtn>
         </SearchArea>
-        <Area>
-          <div>
-            <button onClick={() => setAddModal(true)}>상품등록</button>
-          </div>
-        </Area>
+        <Area></Area>
         <InfoTitle>
           <p>
             우선판매권을 얻으려면<span>현재 최저가</span>미만의 가격을
             입력해야합니다.
           </p>
-          <button onClick={() => setGradeModal(true)}>등급 기준 보기</button>
+          <div>
+            <button onClick={() => setAddModal(true)}>상품등록</button>
+            <button onClick={() => setGradeModal(true)}>등급 기준 보기</button>
+          </div>
         </InfoTitle>
         <ListContainer className="scroll" id="scroll" ref={scrollRef}>
           <ul>

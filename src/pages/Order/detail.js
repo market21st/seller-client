@@ -27,7 +27,7 @@ const Container = styled.div`
   padding: 50px 59px;
   h1 {
     font-size: 24px;
-    font-weight: bold;
+    font-weight: 500;
   }
   & .MuiOutlinedInput-notchedOutline {
     border: none !important;
@@ -142,7 +142,7 @@ const FilterBtn = styled.div`
     font-size: 14px;
     background: #fff;
     color: #404040;
-    font-weight: bold;
+    font-weight: 500;
     border-radius: 5px;
     box-shadow: 0px 2px 5px rgb(0 0 0 / 10%);
   }
@@ -162,10 +162,10 @@ const BtnBox = styled.div`
     /* border: 1px solid #404040; */
     background: #fff;
     color: #000;
-    /* font-weight: bold; */
+    /* font-weight: 500; */
     border-radius: 5px;
     box-shadow: 0px 2px 5px rgb(0 0 0 / 10%);
-    font-weight: bold;
+    font-weight: 500;
   }
 `;
 
@@ -333,15 +333,12 @@ const OrderDetails = () => {
 
   return (
     <>
-      {/* <AlertModal isOpen={alertModal} onClose={aleatHandleClose} text={text} /> */}
       <StatusAlertModal
         isOpen={alertModal}
         onClose={aleatHandleClose}
         subText={subText}
         text={text}
         stateCode={stateCode}
-        // contents={contents}
-        // postEvent={}
         setSubText={setSubText}
         setState={setPersonName}
         id={id}
