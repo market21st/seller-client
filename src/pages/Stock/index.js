@@ -485,9 +485,9 @@ const StockList = () => {
                   price={el.price}
                   stock={el.stock}
                   isActive={el.isActive}
-                  getList={getList}
-                  setListData={setListData}
-                  listData={listData}
+                  // getList={getList}
+                  // setListData={setListData}
+                  // listData={listData}
                 />
               ))
             ) : (

@@ -203,7 +203,9 @@ const Item = ({
   const aleatHandleClose = () => {
     setAlertModal(false);
     if (text.includes("저장 완료") || text.includes("삭제 완료")) {
-      getList([]);
+      window.location.reload();
+      // setListData([])
+      // getList(listData);
     }
     if (text.includes("정말 삭제")) {
       deleteList();
