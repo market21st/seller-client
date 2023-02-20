@@ -227,13 +227,11 @@ const Register = () => {
       setText("이메일 형식에 맞지 않습니다.");
       return;
     }
-
     if (userInfo.phone.slice(0, 3) !== "010" || userInfo.phone.length != 11) {
       setAlertModal(true);
       setText("휴대전화 형식에 맞지 않습니다.");
       return;
     }
-
     const formData = new FormData();
     for (let key in userInfo) {
       if (key != "passwordCheck") {

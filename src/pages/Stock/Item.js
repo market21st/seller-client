@@ -91,7 +91,6 @@ const ListBtnBox = styled.div`
   }
 `;
 
-// 리스트1
 const Item = ({
   id,
   thumb,
@@ -104,12 +103,29 @@ const Item = ({
   getList,
   listData,
   setListData,
+  setNum,
 }) => {
   const [stockData, setStockData] = useState({
     price: price.toLocaleString(),
     stock: stock.toLocaleString(),
-    isActive: isActive,
+    isActive: "",
   });
+
+  function onChange(e) {
+    const { name, value } = e.target;
+
+    if (name == "isActive") {
+      setStockData({
+        ...stockData,
+        [name]: value,
+      });
+    } else {
+      setStockData({
+        ...stockData,
+        [name]: value,
+      });
+    }
+  }
 
   //가격,재고 컴마
   const handlePrice = (e) => {
@@ -150,21 +166,8 @@ const Item = ({
     }
   };
 
-  function onChange(e) {
-    const { name, value } = e.target;
-    if (name == "isActive") {
-      setStockData({
-        ...stockData,
-        [name]: value === "숨김" ? 0 : 1,
-      });
-    } else {
-      setStockData({
-        ...stockData,
-        [name]: value,
-      });
-    }
-  }
-
+  const [alertModal, setAlertModal] = useState(false);
+  // 저장
   const edit = async () => {
     if (!stockData.price || stockData.price < 0) {
       setText(`판매가가 0 이하일 수 없습니다.`);
@@ -176,14 +179,12 @@ const Item = ({
       setAlertModal(true);
       return;
     }
-
     const list = {
       price: String(stockData.price).replace(/,/g, ""),
       stock: String(stockData.stock).replace(/,/g, ""),
-      isActive: stockData.isActive === 0 ? false : true,
+      isActive: stockData.isActive === "숨김" ? false : true,
     };
-
-    const { statusCode } = await editStock(id, list);
+    const { data, statusCode } = await editStock(id, list);
     if (statusCode == 200) {
       setText(`저장 완료`);
       setAlertModal(true);
@@ -198,14 +199,12 @@ const Item = ({
     }
   };
 
-  const [alertModal, setAlertModal] = useState(false);
   const [text, setText] = useState("");
   const aleatHandleClose = () => {
     setAlertModal(false);
     if (text.includes("저장 완료") || text.includes("삭제 완료")) {
-      window.location.reload();
-      // setListData([])
-      // getList(listData);
+      setNum(1);
+      getList([]);
     }
     if (text.includes("정말 삭제")) {
       deleteList();
@@ -268,7 +267,13 @@ const Item = ({
               onChange={onChange}
               displayEmpty
               inputProps={{ "aria-label": "Without label" }}
-              defaultValue={isActive == 0 ? "숨김" : "판매중" || ""}
+              value={
+                stockData.isActive == ""
+                  ? isActive == 0
+                    ? "숨김"
+                    : "판매중"
+                  : stockData.isActive
+              }
               name="isActive"
               sx={{
                 background: "#fff",
