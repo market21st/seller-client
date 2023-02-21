@@ -224,6 +224,14 @@ const Item = ({
     }
   }, [optionText]);
 
+  useEffect(() => {
+    setStockData({
+      price: price.toLocaleString(),
+      stock: stock.toLocaleString(),
+      isActive: isActive == 0 ? "숨김" : "판매중",
+    });
+  }, [price, stock, isActive]);
+
   return (
     <>
       <AlertModal
