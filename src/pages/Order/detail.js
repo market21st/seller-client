@@ -199,13 +199,6 @@ const OrderDetails = () => {
   const [payList, setPayList] = useState([]);
   const [statusLists, setStatusLists] = useState([]);
   const [statusList, setStatusList] = useState([]);
-  // 결제내역
-  const payHistory = async () => {
-    const { data, statusCode } = await getHistory(id, "pay");
-    if (statusCode === 200) {
-      setPayList(data);
-    }
-  };
 
   // 상태변경내역
   const statusHistory = async () => {
@@ -237,10 +230,7 @@ const OrderDetails = () => {
   const memoRows = data?.memos?.map((e) =>
     memoData(e.contents, e.createdAt, e.workUser)
   );
-  // 결제정보확인
-  const buyRows = payList?.map((e) =>
-    buyData(e.createdAt, e.payMethod, e.amount, e.id)
-  );
+
   // 상태변경내역
   const stateRows = statusLists?.map((e) =>
     stateData(
@@ -251,12 +241,6 @@ const OrderDetails = () => {
       e.id
     )
   );
-
-  // 결제모달
-  const [payModal, setPayModal] = useState(false);
-  const payModalClose = () => {
-    setPayModal(false);
-  };
 
   // 상태모달
   const [stateModal, setStateModal] = useState(false);
@@ -283,7 +267,6 @@ const OrderDetails = () => {
 
   useEffect(() => {
     statusHistory();
-    payHistory();
   }, []);
 
   // 상태변경
@@ -323,6 +306,9 @@ const OrderDetails = () => {
     if (text === "반품회수거부") {
       setText(`반품회수거부정보를 기입해주세요`);
     }
+    if (text === "반품요청") {
+      setText(`반품요청정보를 기입해주세요`);
+    }
 
     if (text === "환불완료") {
       setText(`환불완료정보를 기입해주세요.`);
@@ -343,11 +329,7 @@ const OrderDetails = () => {
         setState={setPersonName}
         id={id}
       />
-      <PayModal
-        payOpen={payModal}
-        payHandleClose={payModalClose}
-        rows={buyRows}
-      />
+
       <StateModal
         stateOpen={stateModal}
         stateHandleClose={stateModalClose}
@@ -357,7 +339,6 @@ const OrderDetails = () => {
         <TopBox>
           <h1>주문 상세</h1>
           <FilterBtn>
-            <button onClick={() => setPayModal(true)}>결제정보확인</button>
             <button onClick={() => setStateModal(true)}>상태변경내역</button>
           </FilterBtn>
         </TopBox>

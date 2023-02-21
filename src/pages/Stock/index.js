@@ -211,31 +211,23 @@ const StockList = () => {
 
   // 전체 리스트 조회
   const getList = async (listData, num) => {
-    console.log("확인");
     const list = {
       take: 10,
       page: !num ? 1 : num,
       productInfoId: productId,
-      isActive:
-        userInfo.isActive == "전체"
-          ? ""
-          : userInfo.isActive === "숨김"
-          ? 0
-          : userInfo.isActive === "판매중"
-          ? 1
-          : "",
+      isActive: isActive == "숨김" ? 0 : isActive == "판매중" ? 1 : "",
       optionText: userInfo.optionText,
     };
 
-    if (userInfo.grade) {
+    if (gradeText) {
       const { data, statusCode } = await getStockList({
         ...list,
         grade:
-          userInfo.grade === "B"
+          gradeText === "B"
             ? 0
-            : userInfo.grade === "A"
+            : gradeText === "A"
             ? 1
-            : userInfo.grade === "S"
+            : gradeText === "S"
             ? 2
             : "",
       });
@@ -350,6 +342,12 @@ const StockList = () => {
     }
   };
 
+  // 등급
+  const [gradeText, setGradeText] = useState("");
+
+  // 판매중,숨김
+  const [isActive, setIsActive] = useState("");
+
   useEffect(() => {
     getGradeList();
     getProductList();
@@ -386,7 +384,7 @@ const StockList = () => {
                 }}
                 displayEmpty
                 inputProps={{ "aria-label": "Without label" }}
-                value={productName || ""}
+                value={productName ? productName : ""}
                 name="productInfoId"
                 sx={searchSelect}
               >
@@ -403,10 +401,12 @@ const StockList = () => {
             </FormControl>
             <FormControl sx={{ width: "25%" }}>
               <Select
-                onChange={onChange}
+                onChange={(e) => {
+                  setGradeText(e.target.value);
+                }}
                 displayEmpty
                 inputProps={{ "aria-label": "Without label" }}
-                value={userInfo.grade || ""}
+                value={gradeText || ""}
                 name="grade"
                 sx={searchSelect}
               >
@@ -424,15 +424,17 @@ const StockList = () => {
             </FormControl>
             <FormControl sx={{ width: "25%" }}>
               <Select
-                onChange={onChange}
+                onChange={(e) => {
+                  setIsActive(e.target.value);
+                }}
                 displayEmpty
                 inputProps={{ "aria-label": "Without label" }}
-                value={userInfo.isActive || ""}
+                value={isActive || ""}
                 name="isActive"
                 sx={searchSelect}
               >
                 <MenuItem disabled value="">
-                  판매상태
+                  <em>판매상태</em>
                 </MenuItem>
                 <MenuItem value="전체">전체</MenuItem>
                 <MenuItem value="판매중">판매중</MenuItem>
@@ -443,6 +445,7 @@ const StockList = () => {
               <input
                 type="text"
                 placeholder="옵션명"
+                value={userInfo?.optionText || ""}
                 onChange={onChange}
                 name="optionText"
               />
@@ -468,7 +471,13 @@ const StockList = () => {
           </p>
           <div>
             <button onClick={() => setAddModal(true)}>상품등록</button>
-            <button onClick={() => setGradeModal(true)}>등급 기준 보기</button>
+            <button
+              onClick={() => {
+                setGradeModal(true);
+              }}
+            >
+              등급 기준 보기
+            </button>
           </div>
         </InfoTitle>
         <ListContainer className="scroll" id="scroll" ref={scrollRef}>
@@ -476,7 +485,7 @@ const StockList = () => {
             {listData.length > 0 ? (
               listData.map((el, idx) => (
                 <Item
-                  key={el.id}
+                  key={idx}
                   id={el.id}
                   thumb={el.thumb ? el.thumb : defaultIcon}
                   optionText={el.optionText}
@@ -485,9 +494,10 @@ const StockList = () => {
                   price={el.price}
                   stock={el.stock}
                   isActive={el.isActive}
-                  // getList={getList}
-                  // setListData={setListData}
-                  // listData={listData}
+                  getList={getList}
+                  setListData={setListData}
+                  listData={listData}
+                  setNum={setNum}
                 />
               ))
             ) : (
