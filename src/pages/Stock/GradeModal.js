@@ -156,7 +156,7 @@ const ContentModal = ({ isOpen, onClose }) => {
     setSlideNum(slideNum - 1);
   };
 
-  const imgUrl = `https://image.kracker.kr/standard/grade/${
+  const imgUrl = `https://image.21market.kr/standard/grade/${
     cetagoryNum === 0 ? "phone" : "book"
   }`;
   const cetagory = ["스마트폰", "노트북", "워치", "태블릿"];
