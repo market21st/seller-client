@@ -20,7 +20,7 @@ import InfoModal from "../../components/InfoModal";
 
 // Images
 import loginImg from "../../assets/login.png";
-import logoImg from "../../assets/kracker.png";
+import logoImg from "../../assets/header.png";
 
 // Api
 import { LoginUser } from "../../api/user";
@@ -36,7 +36,7 @@ const Logo = styled.a`
 
 const LogoImg = styled.img`
   display: block;
-  width: 110px;
+  width: 130px;
 `;
 
 const BackImg = styled.img`

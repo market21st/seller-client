@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 import { Grid } from "@mui/material";
 
 // Images
-import logoImg from "../assets/kracker.png";
+import logoImg from "../assets/header.png";
 import stockIcon from "../assets/stock.png";
 import stockFocusIcon from "../assets/stockwhite.png";
 import orderIcon from "../assets/order.png";
@@ -25,7 +25,7 @@ import { logoutUser } from "../api/user";
 
 // Styled-components
 const LogoImg = styled.img`
-  width: 80%;
+  width: 130px;
   position: absolute;
   top: 50%;
   left: 50%;
