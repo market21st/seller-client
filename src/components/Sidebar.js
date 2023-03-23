@@ -204,17 +204,17 @@ const Sidebar = ({ children }) => {
   const location = useLocation();
 
   const link1 = () => {
-    window.open("https://image.kracker.kr/info/us/corpIntro.pdf", "_blank");
+    window.open("https://image.21market.kr/info/us/corpIntro.pdf", "_blank");
   };
   const link2 = () => {
-    window.open("https://image.kracker.kr/info/us/useDisc.pdf", "_blank");
+    window.open("https://image.21market.kr/info/us/useDisc.pdf", "_blank");
   };
   const link3 = () => {
-    window.open("https://image.kracker.kr/info/us/bizReg.pdf", "_blank");
+    window.open("https://image.21market.kr/info/us/bizReg.pdf", "_blank");
   };
   const link4 = () => {
     window.open(
-      "https://image.kracker.kr/info/us/operationPolicy.pdf",
+      "https://image.21market.kr/info/us/operationPolicy.pdf",
       "_blank"
     );
   };
