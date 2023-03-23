@@ -7,7 +7,7 @@ import { Grid, FormControl, Select, MenuItem } from "@mui/material";
 
 // Images
 import loginImg from "../../assets/login.png";
-import logoImg from "../../assets/kracker.png";
+import logoImg from "../../assets/header.png";
 
 // Components
 import AlertModal from "../../components/AlertModal";
@@ -26,7 +26,7 @@ const Logo = styled.a`
 `;
 const LogoImg = styled.img`
   display: block;
-  width: 110px;
+  width: 130px;
 `;
 
 const BackImg = styled.img`
