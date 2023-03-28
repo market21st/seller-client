@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState } from "react";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import React from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
@@ -12,14 +12,9 @@ import stockIcon from "../assets/stock.png";
 import stockFocusIcon from "../assets/stockwhite.png";
 import orderIcon from "../assets/order.png";
 import orderFocusIcon from "../assets/orderwhite.png";
-import reviewIcon from "../assets/review.png";
 import myIcon from "../assets/my.png";
 import myFocusIcon from "../assets/mywhite.png";
-import paperIcon from "../assets/paper.png";
 import logoutIcon from "../assets/logout.png";
-import { cookies } from "../layout";
-import bizfile from "../assets/bizfile.jpg";
-import paperIcon2 from "../assets/bizfile2.png";
 
 import { logoutUser } from "../api/user";
 
@@ -294,30 +289,6 @@ const Sidebar = ({ children }) => {
           )}
         </MyInfo>
         <ButtonBox>
-          {/* <button onClick={link1}>
-            <img src={paperIcon} alt="사업자등록증" />
-            <div>
-              <span>21세기전파상</span>
-              <br />
-              회사소개서
-            </div>
-          </button>
-          <button onClick={link2}>
-            <img src={paperIcon2} alt="사업자등록증" />
-            <div>
-              <span>셀러 어드민</span>
-              <br />
-              이용설명서
-            </div>
-          </button>
-          <button onClick={link3}>
-            <img src={paperIcon} alt="사업자등록증" />
-            <div>
-              <span>21세기전파상</span>
-              <br />
-              사업자등록증
-            </div>
-          </button> */}
           <button onClick={logout}>
             로그아웃
             <img src={logoutIcon} alt="사업자등록증" />

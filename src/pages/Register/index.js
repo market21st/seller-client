@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 // Mui
-import { Grid, FormControl, Select, MenuItem } from "@mui/material";
+import { Grid } from "@mui/material";
 
 // Images
 import loginImg from "../../assets/login.png";

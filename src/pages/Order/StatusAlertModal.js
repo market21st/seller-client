@@ -102,17 +102,13 @@ const StatusAlertModal = ({
   isOpen,
   onClose,
   text,
-  postEvent,
   setState,
-  statusText,
   stateCode,
   subText,
-  setSubText,
   id,
 }) => {
   const [postName, setPostName] = useState("");
   const invoiceNoRef = useRef();
-  const cancelAmountRef = useRef();
   const [deliveryList, setDeliveryList] = useState([]); // 택배사 리스트
   const [corp, setCorp] = useState(); // 택배사 코드
   const stateDelete = () => {
@@ -283,10 +279,10 @@ const StatusAlertModal = ({
               {stateCode === 200 || stateCode === 570
                 ? "네"
                 : stateCode === 300
-                ? "배송 처리하기"
-                : stateCode === 999
-                ? "환불완료하기"
-                : "반품완료하기"}
+                  ? "배송 처리하기"
+                  : stateCode === 999
+                    ? "환불완료하기"
+                    : "반품완료하기"}
             </CheckBtn>
           </InnerBtm>
         </InnerBox>

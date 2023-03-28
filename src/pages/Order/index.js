@@ -150,26 +150,6 @@ const Area = styled.div`
   }
 `;
 
-const InfoTitle = styled.h2`
-  font-size: 18px;
-  font-weight: 500;
-  margin-bottom: 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  span {
-    color: #d74b4b;
-    padding: 0 4px;
-  }
-  div {
-    border: 1.5px solid #404040;
-    border-radius: 5px;
-    background: #fff;
-    padding: 12px 10px;
-    font-size: 16px;
-  }
-`;
-
 const FilterBtn = styled.div`
   display: flex;
   button {
@@ -196,7 +176,6 @@ const PagingBox = styled.div`
 const OrderList = () => {
   const navigator = useNavigate();
 
-  const [data, setData] = useState([]);
   const [total, setTotal] = useState(0);
   const [statusList, setStatusList] = useState([]);
 
@@ -319,9 +298,6 @@ const OrderList = () => {
     } else {
       setCheckItems(checkItems.filter((el) => el !== id));
     }
-  };
-  const onReset = () => {
-    sessionStorage.clear(); // 전체 삭제
   };
 
   useEffect(() => {

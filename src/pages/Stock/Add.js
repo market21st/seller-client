@@ -70,14 +70,6 @@ const AddModal = ({ isOpen, onClose }) => {
 
   const [price, setPrice] = useState("");
 
-  function onChange(e) {
-    const { name, value } = e.target;
-    setProductData({
-      ...productData,
-      [name]: value,
-    });
-  }
-
   // 가격, 재고 컴마
   const handlePrice = (e) => {
     if (!e.target.value || e.target.value < 1) {
@@ -136,7 +128,7 @@ const AddModal = ({ isOpen, onClose }) => {
     }
   };
 
-  //   최저가
+  // 최저가
   const getPriceData = async () => {
     const list = {
       logic: 1,

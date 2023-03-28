@@ -101,8 +101,6 @@ const Item = ({
   stock,
   isActive,
   getList,
-  listData,
-  setListData,
   setNum,
 }) => {
   const [stockData, setStockData] = useState({

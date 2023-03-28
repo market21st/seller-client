@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import styled from "styled-components";
 // 테이블
 import Table from "@mui/material/Table";

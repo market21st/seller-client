@@ -1,16 +1,8 @@
-/* 100,300,400,500,700 */
-/* @font-face {
-  font-family: "SpoqaHanSansNeo";
-  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2108@1.1/SpoqaHanSansNeo-Regular.woff")
-    format("woff");
-  font-weight: 100;
-} */
 @import url(//spoqa.github.io/spoqa-han-sans/css/SpoqaHanSans-kr.css);
 
 @font-face {
   font-family: "GmarketSansMedium";
-  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff")
-    format("woff");
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff") format("woff");
   font-weight: normal;
   font-style: normal;
 }

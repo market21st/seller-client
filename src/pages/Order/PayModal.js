@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 // 테이블
 import Table from "@mui/material/Table";
@@ -17,11 +17,6 @@ const data = [];
 function buyData(createdAt, payMethod, amount, id) {
   return { createdAt, payMethod, amount, id };
 }
-
-// 결제정보확인
-const buyRows = data?.payments?.map((e) =>
-  buyData(e.createdAt, e.payMethod, e.amount, e.id)
-);
 
 const Container = styled.div`
   width: 50vw;

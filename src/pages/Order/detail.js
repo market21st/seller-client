@@ -3,7 +3,6 @@ import styled from "styled-components";
 import { useNavigate, useParams } from "react-router-dom";
 
 // Components
-import PayModal from "./PayModal";
 import StateModal from "./StateModal";
 import StatusAlertModal from "./StatusAlertModal";
 // Mui
@@ -172,9 +171,6 @@ const BtnBox = styled.div`
 function memoData(contents, createdAt, workUser) {
   return { contents, createdAt, workUser };
 }
-function buyData(createdAt, payMethod, amount, id) {
-  return { createdAt, payMethod, amount, id };
-}
 function stateData(createdAt, statusText, reason, name, id) {
   return { createdAt, statusText, reason, name, id };
 }
@@ -184,19 +180,9 @@ const OrderDetails = () => {
   const { id } = useParams();
   const textRef = useRef("");
 
-  const [userInfo, setUserInfo] = useState({});
-  function onChange(e) {
-    const { name, value } = e.target;
-    setUserInfo({
-      ...userInfo,
-      [name]: value,
-    });
-  }
-
   const [data, setData] = useState([]);
   const [addressText, setAddressText] = useState([]);
 
-  const [payList, setPayList] = useState([]);
   const [statusLists, setStatusLists] = useState([]);
   const [statusList, setStatusList] = useState([]);
 
@@ -361,8 +347,8 @@ const OrderDetails = () => {
               {data.product?.grade === 2
                 ? "S"
                 : data.product?.grade === 1
-                ? "A"
-                : "B"}
+                  ? "A"
+                  : "B"}
             </div>
           </RowBox>
           <RowBox>

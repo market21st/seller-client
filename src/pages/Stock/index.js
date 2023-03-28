@@ -188,8 +188,6 @@ const Progress = styled.li`
 `;
 
 const StockList = () => {
-  const navigator = useNavigate();
-
   // state
   const [listData, setListData] = useState([]);
   const [productList, setProductList] = useState([]);
@@ -220,16 +218,16 @@ const StockList = () => {
     };
 
     if (gradeText) {
-      const { data, statusCode } = await getStockList({
+      const { data } = await getStockList({
         ...list,
         grade:
           gradeText === "B"
             ? 0
             : gradeText === "A"
-            ? 1
-            : gradeText === "S"
-            ? 2
-            : "",
+              ? 1
+              : gradeText === "S"
+                ? 2
+                : "",
       });
       if (data.pageTotal === 0 && data.total > 1) {
         setLoading(false);

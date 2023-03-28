@@ -1,6 +1,5 @@
 import React from "react";
 import DaumPostcode from "react-daum-postcode";
-import styled from "styled-components";
 
 const postCodeStyle = {
   display: "block",
@@ -41,7 +40,6 @@ const PostModal = (props) => {
     <DaumPostcode
       style={postCodeStyle}
       className="postmodal"
-      // autoClose
       onClose={onClose}
       onComplete={complete}
     />
