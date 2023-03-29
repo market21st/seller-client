@@ -240,7 +240,7 @@ const OrderList = () => {
       productName: e.productOption.name,
       productOption: e.productOption.optionText,
       productGrade:
-        e.product.grade == "2" ? "S" : e.product.grade == "1" ? "A" : "B",
+        e.productOption.grade == "2" ? "S" : e.productOption.grade == "1" ? "A" : "B",
       productPrice: Number(e.productOption.price).toLocaleString(),
       status: e.statusText,
       new: e.isNew ? "신규주문" : "-",
