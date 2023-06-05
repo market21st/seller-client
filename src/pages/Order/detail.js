@@ -185,6 +185,7 @@ const OrderDetails = () => {
   const textRef = useRef("");
 
   const [userInfo, setUserInfo] = useState({});
+  const [reason, setReason] = useState("");
   function onChange(e) {
     const { name, value } = e.target;
     setUserInfo({
@@ -214,7 +215,6 @@ const OrderDetails = () => {
     if (statusCode == 200) {
       setData(data);
       setStatusList(data?.statusToBeGroup?.results);
-
       // 요청사항
       data?.orderer?.userDeliveries.map((e) => {
         if (
@@ -223,6 +223,9 @@ const OrderDetails = () => {
         )
           setAddressText(e.memo);
       });
+      const reason =
+        data?.statusHistories?.filter(({ status }) => status === 550) || "";
+      if (reason.length) setReason(reason[0].reason);
     }
   };
 
@@ -316,7 +319,16 @@ const OrderDetails = () => {
     }
     setAlertModal(true);
   };
-
+  const reasonchk = () => {
+    console.log(data.statusHistory);
+    if (data?.statusHistory?.length) {
+      const reason =
+        data.statusHistory.filter((v) => v.status === 550)?.reason.contents ||
+        "";
+      console.log(reason);
+      return reason;
+    }
+  };
   return (
     <>
       <StatusAlertModal
@@ -405,14 +417,22 @@ const OrderDetails = () => {
               {data.postCode}
             </div>
           </RowBox>
-          <Row>
-            <p>배송요청사항</p>
-            {addressText}
-          </Row>
-          <Row>
-            <p>주문상태</p>
-            {data?.statusText}
-          </Row>
+          <RowBox>
+            <div>
+              <p>주문상태</p>
+              {data?.statusText}
+            </div>
+            <div>
+              <p>배송요청사항</p>
+              {addressText}
+            </div>
+          </RowBox>
+          {reason?.contents ? (
+            <Row>
+              <p>환불사유</p>
+              {reason?.contents}
+            </Row>
+          ) : null}
         </IdBox>
         <EditBox>
           <RowInner>
