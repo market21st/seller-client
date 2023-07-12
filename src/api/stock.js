@@ -1,8 +1,8 @@
 import { instance } from "../utils/axios";
 
-export const getStock = async () => {
+export const getStock = async (params) => {
   try {
-    const res = await instance.get(`/product/info`);
+    const res = await instance.get(`/product/info`, { params });
     return res.data;
   } catch (e) {
     console.log(e);
@@ -80,6 +80,16 @@ export const getPrice = async (params) => {
 export const postProduct = async (params) => {
   try {
     const res = await instance.post(`/product`, params);
+    return res.data;
+  } catch (err) {
+    console.log(err.response);
+    return err.response;
+  }
+};
+
+export const getMyProduct = async (id) => {
+  try {
+    const res = await instance.get(`/product/info/my/${id}`);
     return res.data;
   } catch (err) {
     console.log(err.response);
