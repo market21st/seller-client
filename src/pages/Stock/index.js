@@ -1,29 +1,168 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useCallback, useState, useRef } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-
-// Components
-import AlertModal from "../../components/AlertModal";
 import Item from "./Item";
-import AddModal from "./Add";
-// Mui
-import { FormControl, Select, MenuItem, CircularProgress } from "@mui/material";
-// Api
-import { getStock, getGrade, getStockList } from "../../api/stock";
+import { Grid, TextField, Pagination, Tabs, Tab } from "@mui/material";
+import { getStockList } from "../../api/stock";
 import defaultIcon from "../../assets/default.png";
 import GradeModal from "./GradeModal";
+import { debounce } from "../../utils/debounce";
+import SearchIcon from "@mui/icons-material/Search";
 
-const searchSelect = {
-  background: "#fff",
-  height: "46px",
-  borderRadius: "10px",
-  border: "1px solid #eee",
+const StockList = () => {
+  const [listData, setListData] = useState([]);
+  const [optionText, setOptionText] = useState(null);
+  const [total, setTotal] = useState(0);
+  const [curpage, setCurPage] = useState(1);
+  const [gradeModal, setGradeModal] = useState(false);
+  const [type, setType] = useState("ALL");
+  const getList = async (txt, t, v = 1) => {
+    const { data, statusCode } = await getStockList({
+      take: 10,
+      page: v ? v : curpage,
+      productInfoId: "",
+      isActive: "",
+      optionText: txt ? txt : optionText,
+      type: t ? t : type,
+    });
+    if (statusCode === 200) {
+      setTotal(data.total);
+      setListData(data.results);
+    }
+  };
+  const gradeModalClose = () => {
+    setGradeModal(false);
+  };
+  const onChangePage = (v) => {
+    setCurPage(v);
+    getList("", "", v);
+  };
+  const debounceInfo = debounce(getList, 100);
+  const handleChange = (event, newValue) => {
+    setType(newValue);
+    setCurPage(1);
+    setOptionText(null);
+  };
+  const getdebounceInfo = useCallback((txt, t) => {
+    debounceInfo(txt, t);
+  }, []);
+  useEffect(() => {
+    if (optionText !== null) getdebounceInfo(optionText, type);
+  }, [optionText]);
+
+  useEffect(() => {
+    getList();
+  }, [type]);
+  return (
+    <>
+      <GradeModal isOpen={gradeModal} onClose={gradeModalClose} />
+      <Container>
+        <TopBox>
+          <h1>재고 관리</h1>
+        </TopBox>
+        <SearchArea>
+          <Grid item xs={6}>
+            <Grid container position={"relative"} alignItems="center">
+              <TextField
+                fullWidth
+                size="small"
+                placeholder={"모델명을 입력하세요."}
+                variant="outlined"
+                value={optionText || ""}
+                autoComplete={"off"}
+                inputProps={{
+                  style: {
+                    paddingLeft: "36px",
+                    height: "30px",
+                    border: "2px solid #4552ce",
+                    borderRadius: "20px",
+                    "&.Mui-focused fieldset": {
+                      borderColor: "green",
+                    },
+                  },
+                }}
+                onChange={(e) => setOptionText(e.target.value)}
+              />
+              <Grid sx={{ position: "absolute", left: "10px" }}>
+                <SearchIcon />
+              </Grid>
+            </Grid>
+          </Grid>
+        </SearchArea>
+        <InfoTitle>
+          <p>
+            우선판매권을 얻으려면<span>현재 최저가</span>미만의 가격을
+            입력해야합니다.
+          </p>
+          <div>
+            <button
+              onClick={() => {
+                setGradeModal(true);
+              }}
+            >
+              등급 기준 보기
+            </button>
+          </div>
+        </InfoTitle>
+
+        <ListContainer>
+          <Tabs
+            value={type}
+            onChange={handleChange}
+            aria-label="basic tabs example"
+          >
+            <Tab label="전체" value={"ALL"} />
+            <Tab label="최저가" value={"1"} />
+            <Tab label="최저가 아닌 상품" value={"2"} />
+            <Tab label="오늘 등록한 상품" value={"3"} />
+          </Tabs>
+          <ul>
+            {listData.length > 0 ? (
+              listData.map((el, idx) => (
+                <Item
+                  key={idx}
+                  id={el.id}
+                  thumb={el.thumb ? el.thumb : defaultIcon}
+                  optionText={el.optionText}
+                  gradeText={el.gradeText}
+                  lowestPrice={el.lowestPrice}
+                  price={el.price}
+                  stock={el.stock}
+                  isActive={el.isActive}
+                  getList={getList}
+                  setListData={setListData}
+                  listData={listData}
+                  setNum={setCurPage}
+                />
+              ))
+            ) : (
+              <ItemBox>
+                <h2>등록된 상품이 없습니다.</h2>
+              </ItemBox>
+            )}
+          </ul>
+        </ListContainer>
+        <Grid
+          container
+          justifyContent={"center"}
+          padding={"20px 0"}
+          backgroundColor="#f1f4f8"
+        >
+          <Pagination
+            count={Math.ceil(total / 10)}
+            page={curpage}
+            onChange={(e, page) => onChangePage(page)}
+          />
+        </Grid>
+      </Container>
+    </>
+  );
 };
+export default StockList;
 
 const Container = styled.div`
   width: 100%;
   height: 100%;
-  padding: 50px 59px 0;
   h1 {
     font-size: 24px;
     font-weight: 500;
@@ -57,6 +196,7 @@ const TopBox = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 50px 59px 0;
   margin-bottom: 30px;
 `;
 
@@ -65,47 +205,16 @@ const SearchArea = styled.div`
   justify-content: space-between;
   align-items: center;
   width: 100%;
-`;
-const FileterBox = styled.div`
-  width: 80%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  justify-items: center;
-  padding-right: 65px;
-`;
-
-const RowInner = styled.div`
-  input {
-    border-radius: 10px;
-    padding: 10px 14px;
-    width: 100%;
-  }
-  input::placeholder {
-    color: #404040;
-  }
+  padding: 0 59px 0;
 `;
 
 const ItemBox = styled.li`
   box-shadow: 4px 4px 4px 0px rgba(0, 0, 0, 0.1);
+  padding: 0 59px 0;
   h2 {
     width: 100%;
     padding: 30px;
     text-align: center;
-  }
-`;
-// 임시 박스
-const Area = styled.div`
-  height: 90px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  button {
-    border-radius: 5px;
-    color: #fff;
-    padding: 12px 35px;
-    background: #4552ce;
-    font-weight: 500;
   }
 `;
 
@@ -115,6 +224,7 @@ const InfoTitle = styled.h2`
   margin-bottom: 20px;
   display: flex;
   justify-content: space-between;
+  padding: 0 59px 0;
   align-items: flex-end;
   span {
     color: #d74b4b;
@@ -140,7 +250,8 @@ const InfoTitle = styled.h2`
 const ListContainer = styled.div`
   overflow-y: scroll;
   width: 100%;
-  height: 52vh;
+  padding: 0 59px 0;
+  background-color: #f1f4f8;
   -ms-overflow-style: none;
   li {
     display: flex;
@@ -160,357 +271,3 @@ const ListContainer = styled.div`
     box-sizing: border-box;
   }
 `;
-
-const FilterBtn = styled.div`
-  display: flex;
-  button {
-    width: 118px;
-    padding: 10px 15px;
-    background: #fff;
-    color: #000;
-    font-weight: 500;
-    border-radius: 5px;
-  }
-  button:first-child {
-    color: #fff;
-    background: #4552ce;
-    margin-right: 15px;
-  }
-`;
-
-const Progress = styled.li`
-  display: flex;
-  justify-content: center !important;
-  align-items: center;
-  height: 60px;
-  margin-bottom: 50px !important;
-  background: none !important;
-`;
-
-const StockList = () => {
-  const navigator = useNavigate();
-
-  // state
-  const [listData, setListData] = useState([]);
-  const [productList, setProductList] = useState([]);
-  const [gradeList, setGradeList] = useState([]);
-  const [productId, setProductId] = useState("");
-  const [productName, setProductName] = useState("");
-
-  // 무한 스크롤
-  const [loading, setLoading] = useState(false);
-  const [fetching, setFetching] = useState(false);
-
-  const [num, setNum] = useState(1);
-  const scrollRef = useRef();
-
-  const scrollTop = () => {
-    setNum(1);
-    document.getElementById("scroll")?.scrollTo(0, 0);
-  };
-
-  // 전체 리스트 조회
-  const getList = async (listData, num) => {
-    const list = {
-      take: 10,
-      page: !num ? 1 : num,
-      productInfoId: productId,
-      isActive: isActive == "숨김" ? 0 : isActive == "판매중" ? 1 : "",
-      optionText: userInfo.optionText,
-    };
-
-    if (gradeText) {
-      const { data, statusCode } = await getStockList({
-        ...list,
-        grade:
-          gradeText === "B"
-            ? 0
-            : gradeText === "A"
-            ? 1
-            : gradeText === "S"
-            ? 2
-            : "",
-      });
-      if (data.pageTotal === 0 && data.total > 1) {
-        setLoading(false);
-        return;
-      }
-      // 총 0개 리스트 조회시
-      if (data.pageTotal === 0) {
-        setListData([]);
-        setLoading(false);
-        return;
-      }
-      if (data.results) {
-        const fetchedData = data.results;
-        const mergedData = listData.concat(...fetchedData);
-        setListData(mergedData);
-        setNum((prev) => prev + 1);
-        setFetching(false);
-        setLoading(false);
-      }
-      return;
-    }
-
-    // 등급 없을 때
-    const { data, statusCode } = await getStockList(list);
-    if (statusCode === 200) {
-      if (data.pageTotal === 0 && data.total > 1) {
-        setLoading(false);
-        return;
-      }
-      if (data.pageTotal === 0) {
-        setListData([]);
-        setLoading(false);
-        return;
-      }
-      if (data.results) {
-        const fetchedData = data.results;
-        const mergedData = listData.concat(...fetchedData);
-        setListData(mergedData);
-        setNum((prev) => prev + 1);
-        setFetching(false);
-        setLoading(false);
-      }
-    }
-  };
-
-  // 스크롤 이벤트 핸들러
-  const handleScroll = async () => {
-    const scrollHeight = scrollRef.current.scrollHeight;
-    const scrollTop = scrollRef.current.scrollTop;
-    const clientHeight = scrollRef.current.clientHeight;
-    if (scrollTop + clientHeight >= scrollHeight - 3 && fetching === false) {
-      setFetching(true);
-    }
-  };
-
-  useEffect(() => {
-    scrollRef.current.addEventListener("scroll", handleScroll);
-    return () => {
-      scrollRef?.current?.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
-
-  // Alert Modal
-  const [alertModal, setAlertModal] = useState(false);
-  const [text, setText] = useState("");
-  const aleatHandleClose = () => {
-    setAlertModal(false);
-    if (text.includes("저장")) {
-      window.location.reload();
-    }
-  };
-  // Add Modal
-  const [addModal, setAddModal] = useState(false);
-  const AddModalClose = () => {
-    setAddModal(false);
-  };
-  // Grade Modal
-  const [gradeModal, setGradeModal] = useState(false);
-  const gradeModalClose = () => {
-    setGradeModal(false);
-  };
-
-  // 변경하는 필터값
-  const [userInfo, setUserInfo] = useState({
-    productInfoId: "",
-    optionText: "",
-  });
-
-  function onChange(e) {
-    const { name, value } = e.target;
-    setUserInfo({
-      ...userInfo,
-      [name]: value,
-    });
-  }
-
-  // 제품명 조회
-  const getProductList = async () => {
-    const { data, statusCode } = await getStock();
-    if (statusCode == 200) {
-      setProductList(data);
-    }
-  };
-
-  // 등급 조회
-  const getGradeList = async () => {
-    const { data, statusCode } = await getGrade();
-    if (statusCode == 200) {
-      setGradeList(data.results);
-    }
-  };
-
-  // 등급
-  const [gradeText, setGradeText] = useState("");
-
-  // 판매중,숨김
-  const [isActive, setIsActive] = useState("");
-
-  useEffect(() => {
-    getGradeList();
-    getProductList();
-    getList(listData);
-  }, []);
-
-  useEffect(() => {
-    if (fetching) {
-      getList(listData, num);
-      setLoading(true);
-    }
-  }, [fetching]);
-
-  return (
-    <>
-      <AlertModal isOpen={alertModal} onClose={aleatHandleClose} text={text} />
-      <AddModal isOpen={addModal} onClose={AddModalClose} />
-      <GradeModal isOpen={gradeModal} onClose={gradeModalClose} />
-      <Container>
-        <TopBox>
-          <h1>재고 관리</h1>
-        </TopBox>
-        <SearchArea>
-          <FileterBox>
-            <FormControl sx={{ width: "25%" }}>
-              <Select
-                onChange={(e) => {
-                  for (let i = 0; i < productList.length; i++) {
-                    if (productList[i].name == e.target.value) {
-                      setProductId(productList[i].id);
-                      setProductName(e.target.value);
-                    }
-                  }
-                }}
-                displayEmpty
-                inputProps={{ "aria-label": "Without label" }}
-                value={productName ? productName : ""}
-                name="productInfoId"
-                sx={searchSelect}
-              >
-                <MenuItem disabled value="">
-                  <em>제품명</em>
-                </MenuItem>
-                {productList &&
-                  productList?.map((el, idx) => (
-                    <MenuItem key={el.id} value={el.name}>
-                      {el.name}
-                    </MenuItem>
-                  ))}
-              </Select>
-            </FormControl>
-            <FormControl sx={{ width: "25%" }}>
-              <Select
-                onChange={(e) => {
-                  setGradeText(e.target.value);
-                }}
-                displayEmpty
-                inputProps={{ "aria-label": "Without label" }}
-                value={gradeText || ""}
-                name="grade"
-                sx={searchSelect}
-              >
-                <MenuItem disabled value="">
-                  <em>등급</em>
-                </MenuItem>
-                <MenuItem value="전체">전체</MenuItem>
-                {gradeList &&
-                  gradeList?.map((el, idx) => (
-                    <MenuItem key={el.value} value={el.key}>
-                      {el.key}
-                    </MenuItem>
-                  ))}
-              </Select>
-            </FormControl>
-            <FormControl sx={{ width: "25%" }}>
-              <Select
-                onChange={(e) => {
-                  setIsActive(e.target.value);
-                }}
-                displayEmpty
-                inputProps={{ "aria-label": "Without label" }}
-                value={isActive || ""}
-                name="isActive"
-                sx={searchSelect}
-              >
-                <MenuItem disabled value="">
-                  <em>판매상태</em>
-                </MenuItem>
-                <MenuItem value="전체">전체</MenuItem>
-                <MenuItem value="판매중">판매중</MenuItem>
-                <MenuItem value="숨김">숨김</MenuItem>
-              </Select>
-            </FormControl>
-            <RowInner>
-              <input
-                type="text"
-                placeholder="옵션명"
-                value={userInfo?.optionText || ""}
-                onChange={onChange}
-                name="optionText"
-              />
-            </RowInner>
-          </FileterBox>
-          <FilterBtn>
-            <button
-              onClick={() => {
-                scrollTop();
-                getList([], 1);
-              }}
-            >
-              필터적용
-            </button>
-            <button onClick={() => window.location.reload()}>초기화</button>
-          </FilterBtn>
-        </SearchArea>
-        <Area></Area>
-        <InfoTitle>
-          <p>
-            우선판매권을 얻으려면<span>현재 최저가</span>미만의 가격을
-            입력해야합니다.
-          </p>
-          <div>
-            <button onClick={() => setAddModal(true)}>상품등록</button>
-            <button
-              onClick={() => {
-                setGradeModal(true);
-              }}
-            >
-              등급 기준 보기
-            </button>
-          </div>
-        </InfoTitle>
-        <ListContainer className="scroll" id="scroll" ref={scrollRef}>
-          <ul>
-            {listData.length > 0 ? (
-              listData.map((el, idx) => (
-                <Item
-                  key={idx}
-                  id={el.id}
-                  thumb={el.thumb ? el.thumb : defaultIcon}
-                  optionText={el.optionText}
-                  gradeText={el.gradeText}
-                  lowestPrice={el.lowestPrice}
-                  price={el.price}
-                  stock={el.stock}
-                  isActive={el.isActive}
-                  getList={getList}
-                  setListData={setListData}
-                  listData={listData}
-                  setNum={setNum}
-                />
-              ))
-            ) : (
-              <ItemBox>
-                <h2>등록된 상품이 없습니다.</h2>
-              </ItemBox>
-            )}
-
-            <Progress>{loading ? <CircularProgress /> : null}</Progress>
-          </ul>
-        </ListContainer>
-      </Container>
-    </>
-  );
-};
-export default StockList;
