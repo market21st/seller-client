@@ -216,14 +216,7 @@ const Item = ({
           </FormControl>
         </EditArea>
         <ListBtnBox>
-          <button
-            onClick={() => {
-              setText(`정말 삭제하시겠습니까?`);
-              setAlertModal(true);
-            }}
-          >
-            삭제
-          </button>
+          <button onClick={deleteList}>삭제</button>
           <button onClick={edit}>저장</button>
         </ListBtnBox>
       </ItemBox>
