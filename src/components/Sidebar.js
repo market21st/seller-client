@@ -245,19 +245,6 @@ const Sidebar = ({ children }) => {
         </Logo>
         <Menu>
           <li>
-            {location.pathname.includes("product") ? (
-              <Link to="/product" className="focus">
-                <img src={stockFocusIcon} alt="상품등록" />
-                상품등록
-              </Link>
-            ) : (
-              <Link to="/product">
-                <img src={stockIcon} alt="상품등록" />
-                상품등록
-              </Link>
-            )}
-          </li>
-          <li>
             {location.pathname.includes("stock") ? (
               <Link to="/stock" className="focus">
                 <img src={stockFocusIcon} alt="재고관리" />
@@ -359,7 +346,7 @@ const Sidebar = ({ children }) => {
             <li onClick={link3}>사업자등록증</li>
           </ul>
         </Header>
-        <Grid sx={{ width: "100%" }}>{children}</Grid>
+        <Grid sx={{ width: "100%", height: "92.4vh" }}>{children}</Grid>
       </Grid>
     </Grid>
   );

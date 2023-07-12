@@ -10,7 +10,7 @@ import MyPage from "../pages/MyPage";
 import StockList from "../pages/Stock";
 import OrderList from "../pages/Order";
 import OrderDetail from "../pages/Order/detail";
-import ProductList from "../pages/product";
+
 // components
 import Sidebar from "../components/Sidebar";
 
@@ -29,7 +29,6 @@ const App = () => {
             <Route path="/mypage" element={<MyPage />} />
             <Route path="/stock" element={<StockList />} />
             <Route path="/order" element={<OrderList />} />
-            <Route path="/product" element={<ProductList />} />
             <Route path="/order/item/:id" element={<OrderDetail />} />
           </Routes>
         </Sidebar>
