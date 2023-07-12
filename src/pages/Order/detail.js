@@ -435,7 +435,7 @@ const OrderDetails = () => {
           ) : null}
         </IdBox>
         <EditBox>
-          <RowInner>
+          {/* <RowInner>
             <label>상태변경</label>
             <InputBox>
               <FormControl>
@@ -463,7 +463,7 @@ const OrderDetails = () => {
                 </Select>
               </FormControl>
             </InputBox>
-          </RowInner>
+          </RowInner> */}
           <RowInner>
             <label>관리자메모</label>
             <InputBox>
