@@ -81,9 +81,12 @@ const StockList = () => {
                     },
                   },
                 }}
+                sx={{
+                  "input:focus": { boxShadow: 2 },
+                }}
                 onChange={(e) => setOptionText(e.target.value)}
               />
-              <Grid sx={{ position: "absolute", left: "10px" }}>
+              <Grid height="24px" sx={{ position: "absolute", left: "10px" }}>
                 <SearchIcon />
               </Grid>
             </Grid>

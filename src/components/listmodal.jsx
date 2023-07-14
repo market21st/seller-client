@@ -10,16 +10,14 @@ const InnerBox = styled.div`
   left: 50%;
   transform: translate(-50%, -50%);
   background: #fff;
-  width: 1000px;
-  height: 800px;
   box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.25);
-  border-radius: 2px;
+  border-radius: 10px;
   outline: none;
 `;
 const Text = styled.h2`
   font-size: 1.2rem;
   line-height: 1.5;
-  margin: 45px 30px;
+  margin: 40px 50px 20px;
 `;
 const Img = styled.img`
   width: 36px;
@@ -87,20 +85,35 @@ const ListModal = ({ isOpen, onClose, id }) => {
           container
           overflow={"auto"}
           flexWrap="nowrap"
-          maxHeight="600px"
+          maxHeight="700px"
           flexDirection={"column"}
-          padding={"0 30px"}
-          gap={"15px"}
+          padding={"0 50px 40px"}
         >
-          {data.map((v) => (
-            <Grid container key={v.id} columnGap={"15px"} alignItems="center">
-              <Grid item marginRight={"10px"}>
-                <img src={v.thumb} alt="" style={{ width: "60px" }} />
+          {data.map((v, idx) => (
+            <Grid
+              container
+              key={v.id}
+              flexWrap="nowrap"
+              justifyContent="space-between"
+              alignItems="center"
+              borderTop={idx ? "1px solid #eee" : "none"}
+              py="15px"
+              gap="25px"
+            >
+              <Grid display={"inline-flex"} alignItems="center">
+                <Grid item marginRight={"25px"}>
+                  <img src={v.thumb} alt="" style={{ width: "55px" }} />
+                </Grid>
+                <Grid
+                  item
+                  fontWeight="700"
+                  letterSpacing="0.4px"
+                  whiteSpace={"nowrap"}
+                >
+                  {v.optionText}
+                </Grid>
               </Grid>
-              <Grid item marginRight={"10px"}>
-                {v.optionText}
-              </Grid>
-              <Grid display={"flex"} columnGap={"10px"}>
+              <Grid display={"inline-flex"} columnGap={"10px"}>
                 {[
                   { value: "2", txt: "S급" },
                   { value: "1", txt: "A급" },
@@ -115,7 +128,7 @@ const ListModal = ({ isOpen, onClose, id }) => {
                             : "outlined"
                           : "outlined"
                       }
-                      color="secondary"
+                      color={"secondary"}
                       onClick={() => onResult(value, v.id)}
                     >
                       {txt}

@@ -91,11 +91,7 @@ const StockList = () => {
               {name}
             </TableCell>
             <TableCell component="td" align="center">
-              <Button
-                onClick={() => onClickOpen(id)}
-                variant="contained"
-                color="secondary"
-              >
+              <Button onClick={() => onClickOpen(id)} variant="contained">
                 관리
               </Button>
             </TableCell>
@@ -128,7 +124,7 @@ const StockList = () => {
         <TopBox>
           <h1>상품 등록</h1>
         </TopBox>
-        <Grid container marginBottom={"10px"}>
+        <Grid container marginBottom={"20px"}>
           <Grid item xs={6}>
             <Grid container position={"relative"} alignItems="center">
               <TextField
@@ -144,14 +140,14 @@ const StockList = () => {
                     height: "30px",
                     border: "2px solid #4552ce",
                     borderRadius: "20px",
-                    "&.Mui-focused fieldset": {
-                      borderColor: "green",
-                    },
                   },
+                }}
+                sx={{
+                  "input:focus": { boxShadow: 2 },
                 }}
                 onChange={(e) => setOptionText(e.target.value)}
               />
-              <Grid sx={{ position: "absolute", left: "10px" }}>
+              <Grid height="24px" sx={{ position: "absolute", left: "10px" }}>
                 <SearchIcon />
               </Grid>
             </Grid>
@@ -170,13 +166,25 @@ const StockList = () => {
             <Table>
               <TableHead>
                 <tr>
-                  <TableCell component={"th"} align={"center"}>
+                  <TableCell
+                    component={"th"}
+                    align={"center"}
+                    sx={{ fontWeight: 700, padding: "15px 10px" }}
+                  >
                     번호
                   </TableCell>
-                  <TableCell component={"th"} align={"center"}>
+                  <TableCell
+                    component={"th"}
+                    align={"center"}
+                    sx={{ fontWeight: 700, padding: "15px 10px" }}
+                  >
                     모델명
                   </TableCell>
-                  <TableCell component={"th"} align={"center"}>
+                  <TableCell
+                    component={"th"}
+                    align={"center"}
+                    sx={{ fontWeight: 700, padding: "15px 10px" }}
+                  >
                     관리
                   </TableCell>
                 </tr>

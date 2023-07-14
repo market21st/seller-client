@@ -235,7 +235,7 @@ const Sidebar = ({ children }) => {
         item
         sx={{
           background: "#fff",
-          width: "187px",
+          width: "230px",
           height: "100vh",
           position: "relative",
         }}
@@ -341,7 +341,7 @@ const Sidebar = ({ children }) => {
         item
         sx={{
           background: "#F1F4F8",
-          width: "calc(100% - 187px)",
+          width: "calc(100% - 230px)",
           position: "relative",
         }}
       >
