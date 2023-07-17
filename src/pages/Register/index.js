@@ -109,8 +109,83 @@ const Register = () => {
   // 다음버튼
   const nextActive = (e) => {
     if (active < 2) {
+      if (active === 0) {
+        if (
+          !(
+            userInfo.userId &&
+            userInfo.password &&
+            userInfo.passwordCheck &&
+            userInfo.corpEmail &&
+            userInfo.phone &&
+            userInfo.corpCeo &&
+            userInfo.corpAddr1 &&
+            userInfo.corpPost &&
+            userInfo.corpAddr2
+          )
+        ) {
+          setAlertModal(true);
+          setText("필수값을 입력해주세요.");
+          return;
+        }
+        if (!idCheckResult) {
+          setAlertModal(true);
+          setText("아이디 중복확인을 해주세요.");
+          return;
+        }
+        if (userInfo.password.length < 8) {
+          setAlertModal(true);
+          setText("비밀번호는 최소 8글자 이상 입력해주세요.");
+          return;
+        }
+        if (userInfo.password != userInfo.passwordCheck) {
+          setAlertModal(true);
+          setText("비밀번호가 일치하지 않습니다.");
+          return;
+        }
+        if (!emailRegEx.test(userInfo.corpEmail)) {
+          setAlertModal(true);
+          setText("이메일 형식에 맞지 않습니다.");
+          return;
+        }
+        if (
+          userInfo.phone.slice(0, 3) !== "010" ||
+          userInfo.phone.length != 11
+        ) {
+          setAlertModal(true);
+          setText("휴대전화 형식에 맞지 않습니다.");
+          return;
+        }
+      } else if (active === 1) {
+        if (
+          !(
+            userInfo.corpName &&
+            userInfo.bankName &&
+            userInfo.bankAccount &&
+            userInfo.bizType &&
+            userInfo.taxType &&
+            userInfo.bizNum &&
+            userInfo.salesNum &&
+            userInfo.corpContact &&
+            bizFile
+          )
+        ) {
+          setAlertModal(true);
+          setText("필수값을 입력해주세요.");
+          return;
+        }
+      }
       setActive(active + 1);
     } else {
+      if (!userInfo.corpDesc) {
+        setAlertModal(true);
+        setText("필수값을 입력해주세요.");
+        return;
+      }
+      if (!isChecked.info || !isChecked.service) {
+        setAlertModal(true);
+        setText("이용약관에 동의하여 주십시오.");
+        return;
+      }
       submit();
     }
   };
@@ -195,43 +270,6 @@ const Register = () => {
   };
 
   const submit = async () => {
-    if (!isChecked.info || !isChecked.service) {
-      setAlertModal(true);
-      setText("이용약관에 동의하여 주십시오.");
-      return;
-    }
-    if (!idCheckResult) {
-      setAlertModal(true);
-      setText("아이디 중복확인을 해주세요.");
-      return;
-    }
-    for (let key in userInfo) {
-      if (!userInfo[key] || !bizFile) {
-        setAlertModal(true);
-        setText(`브랜드 로고를 제외한 모든 정보를 기입해주세요.`);
-        return;
-      }
-    }
-    if (userInfo.password.length < 8) {
-      setAlertModal(true);
-      setText("비밀번호는 최소 8글자 이상 입력해주세요.");
-      return;
-    }
-    if (userInfo.password != userInfo.passwordCheck) {
-      setAlertModal(true);
-      setText("비밀번호가 일치하지 않습니다.");
-      return;
-    }
-    if (!emailRegEx.test(userInfo.corpEmail)) {
-      setAlertModal(true);
-      setText("이메일 형식에 맞지 않습니다.");
-      return;
-    }
-    if (userInfo.phone.slice(0, 3) !== "010" || userInfo.phone.length != 11) {
-      setAlertModal(true);
-      setText("휴대전화 형식에 맞지 않습니다.");
-      return;
-    }
     const formData = new FormData();
     for (let key in userInfo) {
       if (key != "passwordCheck") {

@@ -35,7 +35,7 @@ const Logo = styled.a`
   display: block;
   position: relative;
   height: 7.6vh;
-  width: 75%;
+  width: 80%;
   margin: 0 auto;
   border-bottom: 1.5px solid #c7cbf0;
 `;
@@ -43,7 +43,7 @@ const Logo = styled.a`
 // 메뉴
 const Menu = styled.ul`
   margin: 0 auto;
-  width: 75%;
+  width: 80%;
   padding: 54px 0px 37px;
   border-bottom: 1.5px solid #c7cbf0;
   li {
@@ -204,7 +204,10 @@ const Sidebar = ({ children }) => {
   const location = useLocation();
 
   const link1 = () => {
-    window.open("https://image.21market.kr/info/us/corpIntro.pdf", "_blank");
+    window.open(
+      "https://drive.google.com/file/d/1T_v1e-ltW4g7U1mNareuLq_caC2K8_HS/view?usp=sharing",
+      "_blank"
+    );
   };
   const link2 = () => {
     window.open("https://image.21market.kr/info/us/useDisc.pdf", "_blank");
@@ -214,7 +217,7 @@ const Sidebar = ({ children }) => {
   };
   const link4 = () => {
     window.open(
-      "https://image.21market.kr/info/us/operationPolicy.pdf",
+      "https://drive.google.com/file/d/1eR8eMgtUlwIRklKFJUJNz5kqI9wDccxg/view?usp=sharing",
       "_blank"
     );
   };
@@ -247,26 +250,26 @@ const Sidebar = ({ children }) => {
           <li>
             {location.pathname.includes("product") ? (
               <Link to="/product" className="focus">
-                <img src={stockFocusIcon} alt="상품등록" />
-                상품등록
+                <img src={stockFocusIcon} alt="전체 상품 목록" />
+                전체 상품 목록
               </Link>
             ) : (
               <Link to="/product">
-                <img src={stockIcon} alt="상품등록" />
-                상품등록
+                <img src={stockIcon} alt="전체 상품 목록" />
+                전체 상품 목록
               </Link>
             )}
           </li>
           <li>
             {location.pathname.includes("stock") ? (
               <Link to="/stock" className="focus">
-                <img src={stockFocusIcon} alt="재고관리" />
-                재고관리
+                <img src={stockFocusIcon} alt="판매중인 상품" />
+                판매중인 상품
               </Link>
             ) : (
               <Link to="/stock">
-                <img src={stockIcon} alt="재고관리" />
-                재고관리
+                <img src={stockIcon} alt="판매중인 상품" />
+                판매중인 상품
               </Link>
             )}
           </li>

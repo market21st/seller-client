@@ -92,7 +92,7 @@ const StockList = () => {
             </TableCell>
             <TableCell component="td" align="center">
               <Button onClick={() => onClickOpen(id)} variant="contained">
-                관리
+                추가
               </Button>
             </TableCell>
           </tr>

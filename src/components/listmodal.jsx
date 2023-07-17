@@ -58,7 +58,7 @@ const ListModal = ({ isOpen, onClose, id }) => {
     };
     const { statusCode } = await postProduct(list);
     if (statusCode === 200) {
-      toast.success("제품 등록 완료");
+      toast.success("상품 등록 완료");
       getMyList();
     }
   };
