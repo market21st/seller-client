@@ -94,7 +94,7 @@ const StockList = () => {
         </SearchArea>
         <InfoTitle>
           <p>
-            우선판매권을 얻으려면<span>현재 최저가</span>미만의 가격을
+            우선판매권을 얻으려면<span>현재 최저가미만의 가격</span>을
             입력해야합니다.
           </p>
           <div>

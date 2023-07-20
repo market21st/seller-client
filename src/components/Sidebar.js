@@ -205,7 +205,7 @@ const Sidebar = ({ children }) => {
 
   const link1 = () => {
     window.open(
-      "https://drive.google.com/file/d/1T_v1e-ltW4g7U1mNareuLq_caC2K8_HS/view?usp=sharing",
+      "https://drive.google.com/file/d/18j3iwoK_RUkZII96cqn0Gd19S7xVduYs/view?usp=sharing",
       "_blank"
     );
   };
