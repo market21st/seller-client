@@ -420,7 +420,9 @@ const OrderDetails = () => {
           <RowBox>
             <div>
               <p>주문상태</p>
-              {data?.statusText}
+              {data?.statusText === "구매완료" && data?.invoiceNo
+                ? "배송완료"
+                : data?.statusText}
             </div>
             <div>
               <p>배송요청사항</p>

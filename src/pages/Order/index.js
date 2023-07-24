@@ -240,9 +240,14 @@ const OrderList = () => {
       productName: e.productOption.name,
       productOption: e.productOption.optionText,
       productGrade:
-       2 === e.productOption.grade ? "S" : 1 === e.productOption.grade ? "A" : "B",
+        2 === e.productOption.grade
+          ? "S"
+          : 1 === e.productOption.grade
+          ? "A"
+          : "B",
       productPrice: Number(e.productOption.price).toLocaleString(),
-      status: e.statusText,
+      status:
+        e.statusText === "구매완료" && e.invoiceNo ? "배송완료" : e.statusText,
       new: e.isNew ? "신규주문" : "-",
     };
   });
