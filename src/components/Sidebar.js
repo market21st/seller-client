@@ -210,7 +210,10 @@ const Sidebar = ({ children }) => {
     );
   };
   const link2 = () => {
-    window.open("https://image.21market.kr/info/us/useDisc.pdf", "_blank");
+    window.open(
+      "https://drive.google.com/file/d/18j3iwoK_RUkZII96cqn0Gd19S7xVduYs/view?usp=sharing",
+      "_blank"
+    );
   };
   const link3 = () => {
     window.open("https://image.21market.kr/info/us/bizReg.pdf", "_blank");
