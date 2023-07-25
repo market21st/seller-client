@@ -240,7 +240,11 @@ const OrderList = () => {
       productName: e.productOption.name,
       productOption: e.productOption.optionText,
       productGrade:
-       2 === e.productOption.grade ? "S" : 1 === e.productOption.grade ? "A" : "B",
+        2 === e.productOption.grade
+          ? "S"
+          : 1 === e.productOption.grade
+          ? "A"
+          : "B",
       productPrice: Number(e.productOption.price).toLocaleString(),
       status: e.statusText,
       new: e.isNew ? "신규주문" : "-",
@@ -395,7 +399,7 @@ const OrderList = () => {
               <input
                 className="name"
                 type="text"
-                placeholder="휴대번호"
+                placeholder="전화번호"
                 onChange={onChange}
                 name="phone"
               />
