@@ -400,7 +400,7 @@ const OrderList = () => {
               <input
                 className="name"
                 type="text"
-                placeholder="휴대번호"
+                placeholder="전화번호"
                 onChange={onChange}
                 name="phone"
               />
