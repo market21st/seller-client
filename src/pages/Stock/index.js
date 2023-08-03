@@ -135,6 +135,7 @@ const StockList = () => {
                   getList={getList}
                   setListData={setListData}
                   listData={listData}
+                  curpage={curpage}
                   setNum={setCurPage}
                 />
               ))
