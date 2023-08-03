@@ -19,6 +19,7 @@ const Item = ({
   stock,
   isActive,
   getList,
+  curpage,
   setNum,
 }) => {
   const [stockData, setStockData] = useState({
@@ -103,7 +104,7 @@ const Item = ({
     const { data, statusCode } = await editStock(id, list);
     if (statusCode == 200) {
       toast.success(`저장 완료`);
-      getList();
+      getList("", "", curpage);
     } else {
       toast.success(`저장 실패`);
     }
@@ -112,8 +113,8 @@ const Item = ({
   const deleteList = async () => {
     const { statusCode } = await DeleteItem(id);
     if (statusCode == 200) {
-      getList();
       toast.error(`삭제 완료`);
+      getList("", "", curpage);
     } else {
       toast.error(`삭제 실패`);
     }
