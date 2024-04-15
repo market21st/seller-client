@@ -235,9 +235,9 @@ const InfoTitle = styled.h2`
     padding: 0 4px;
   }
   button:first-child {
-    background: #a65895;
-    border: none;
-    color: #fff;
+    border: 2px solid #0082ff;
+    color: #0082ff;
+    background: none;
   }
   button {
     font-size: 16px;

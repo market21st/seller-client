@@ -263,7 +263,7 @@ const Sidebar = ({ children }) => {
         <Header>
           <ul>
             <li>
-              <b>{localStorage.getItem("corpName")}</b>님 안녕하세요!
+              <b>{localStorage.getItem("corpName")}</b>님 안녕하세요😀
             </li>
             <li onClick={logout}>
               <button>

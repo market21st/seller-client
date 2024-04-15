@@ -128,7 +128,6 @@ const ListModal = ({ isOpen, onClose, id }) => {
                             : "outlined"
                           : "outlined"
                       }
-                      color={"secondary"}
                       onClick={() => onResult(value, v.id)}
                     >
                       {txt}

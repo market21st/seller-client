@@ -33,8 +33,7 @@ const gridBtm = {
     display: "none",
   },
   "& .MuiDataGrid-columnHeaders": {
-    // borderTop: "5px solid #9BA3E3",
-    // borderBottom: "5px solid #9BA3E3",
+    background: "#f5f7fc",
   },
   "& .MuiDataGrid-virtualScroller": {
     height: "30vh !important",
@@ -42,6 +41,9 @@ const gridBtm = {
   },
   "& .MuiDataGrid-row:hover": {
     background: "#E6F3FF",
+  },
+  "& .MuiDataGrid-virtualScrollerContent": {
+    background: "#fff",
   },
 };
 
