@@ -47,7 +47,7 @@ const Menu = styled.ul`
   padding: 54px 0px 37px;
   border-bottom: 1.5px solid #c7cbf0;
   li {
-    color: #4552ce;
+    color: #0082ff;
     font-size: 18px;
     font-weight: 700;
     margin-bottom: 10px;
@@ -65,7 +65,7 @@ const Menu = styled.ul`
     padding: 8px 13px;
   }
   .focus {
-    background: #4552ce;
+    background: #0082ff;
     border-radius: 10px;
     color: #fff;
   }
@@ -82,7 +82,7 @@ const MyInfo = styled.div`
     background: none;
     cursor: pointer;
     width: 75%;
-    color: #4552ce;
+    color: #0082ff;
     padding: 8px 13px;
     border-radius: 10px;
     display: flex;
@@ -94,7 +94,7 @@ const MyInfo = styled.div`
     padding-right: 16px;
   }
   .focus {
-    background: #4552ce;
+    background: #0082ff;
     border-radius: 10px;
     color: #fff;
   }
@@ -125,7 +125,7 @@ const ButtonBox = styled.div`
   button:nth-child(2),
   button:nth-child(3) {
     color: #fff;
-    background: #505bca;
+    background: #0082ff;
     text-align: left;
     line-height: 1.2;
     border-radius: 10px;
@@ -143,7 +143,7 @@ const ButtonBox = styled.div`
   button:last-child {
     color: #ddd;
     background: none;
-    color: #505bca;
+    color: #0082ff;
     padding: 20px 0;
     img {
       padding-left: 10px;
@@ -159,7 +159,7 @@ const Header = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: #cfd4f0;
+  background: #0082ff;
   height: 7.6vh;
   width: 100%;
   padding: 0 59px;
@@ -346,7 +346,7 @@ const Sidebar = ({ children }) => {
       <Grid
         item
         sx={{
-          background: "#F1F4F8",
+          background: "#FAFBFE",
           width: "calc(100% - 230px)",
           position: "relative",
         }}

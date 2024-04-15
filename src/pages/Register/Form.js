@@ -18,7 +18,7 @@ const InfoBox = styled.div`
 `;
 
 const BlueBtn = styled.button`
-  background: #505bca;
+  background: #0082ff;
   color: #fff;
   padding: 16px 25px;
   border-radius: 5px;
@@ -27,7 +27,7 @@ const BlueBtn = styled.button`
 `;
 
 const BlueBtnLebel = styled.label`
-  background: #505bca;
+  background: #0082ff;
   color: #fff;
   padding: 16px 25px;
   border-radius: 5px;

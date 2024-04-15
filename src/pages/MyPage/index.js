@@ -50,7 +50,7 @@ const Btmbar = styled.div`
 `;
 
 const SendBtn = styled.button`
-  background: #505bca;
+  background: #0082ff;
   color: #fff;
 `;
 
@@ -69,7 +69,7 @@ const IdBox = styled.div`
   }
 `;
 const BlueBtn = styled.button`
-  background: #505bca;
+  background: #0082ff;
   color: #fff;
   padding: 16px 25px;
   border-radius: 5px;

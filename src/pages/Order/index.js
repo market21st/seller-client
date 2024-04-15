@@ -33,12 +33,15 @@ const gridBtm = {
     display: "none",
   },
   "& .MuiDataGrid-columnHeaders": {
-    borderTop: "5px solid #9BA3E3",
-    borderBottom: "5px solid #9BA3E3",
+    // borderTop: "5px solid #9BA3E3",
+    // borderBottom: "5px solid #9BA3E3",
   },
   "& .MuiDataGrid-virtualScroller": {
     height: "30vh !important",
     overflowY: "scroll !important",
+  },
+  "& .MuiDataGrid-row:hover": {
+    background: "#E6F3FF",
   },
 };
 
@@ -145,7 +148,7 @@ const Area = styled.div`
     border-radius: 5px;
     color: #fff;
     padding: 12px 35px;
-    background: #4552ce;
+    background: #0082ff;
     font-weight: 500;
   }
 `;
@@ -182,7 +185,7 @@ const FilterBtn = styled.div`
   }
   button:last-child {
     color: #fff;
-    background: #4552ce;
+    background: #0082ff;
     margin-left: 15px;
   }
 `;

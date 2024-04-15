@@ -74,7 +74,7 @@ const StockList = () => {
                   style: {
                     paddingLeft: "36px",
                     height: "30px",
-                    border: "2px solid #4552ce",
+                    border: "2px solid #0082FF",
                     borderRadius: "20px",
                     "&.Mui-focused fieldset": {
                       borderColor: "green",
@@ -150,7 +150,7 @@ const StockList = () => {
           container
           justifyContent={"center"}
           padding={"20px 0"}
-          backgroundColor="#f1f4f8"
+          backgroundColor="#FAFBFE"
         >
           <Pagination
             count={Math.ceil(total / 10)}
@@ -188,7 +188,7 @@ const Container = styled.div`
     width: 10px;
   }
   .scroll::-webkit-scrollbar-thumb {
-    background-color: #cfd4f0;
+    background-color: #0082ff;
     border-radius: 5px;
   }
   .scroll::-webkit-scrollbar-track {
@@ -255,7 +255,7 @@ const ListContainer = styled.div`
   overflow-y: scroll;
   width: 100%;
   padding: 0 59px 0;
-  background-color: #f1f4f8;
+  background-color: #fafbfe;
   -ms-overflow-style: none;
   li {
     display: flex;

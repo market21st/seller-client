@@ -51,7 +51,7 @@ const StateBar = styled.div`
     background: #dddfee;
     border-radius: 10px;
     &.active {
-      background-color: #505bca;
+      background-color: #0082ff;
     }
   }
 `;
@@ -84,7 +84,7 @@ const Prev = styled.button`
   margin-right: 17px;
 `;
 const Next = styled.button`
-  background: #505bca;
+  background: #0082ff;
   color: #fff;
 `;
 

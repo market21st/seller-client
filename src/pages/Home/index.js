@@ -10,7 +10,7 @@ const Container = styled.div`
   height: 100%;
   padding: 50px 59px 0;
   .MuiOutlinedInput-notchedOutline {
-    border: 2px solid #505bca;
+    border: 2px solid #0082ff;
   }
 `;
 
@@ -63,7 +63,7 @@ const searchSelect = {
   background: "#fff",
   height: "40px",
   width: "120px",
-  color: "#505BCA",
+  color: "#0082FF",
   fontSize: "17px",
   fontWeight: "500",
 };
