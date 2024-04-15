@@ -101,44 +101,21 @@ const ButtonBox = styled.div`
 const Header = styled.div`
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: end;
   background: #0082ff;
   height: 7.6vh;
   width: 100%;
   padding: 0 59px;
-  h1 {
-    font-family: "GmarketSansMedium";
-    line-height: 7.6vh;
-    font-size: 20px;
-    font-weight: 500;
-  }
-  div {
-    display: flex;
-    align-items: center;
-  }
-  .imgBox {
-    overflow: hidden;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    background: #fff;
-    margin-right: 17px;
-  }
-  img {
-    width: 80%;
-  }
   ul {
     display: flex;
-  }
-  li {
-    margin: 0 14px;
-    cursor: pointer;
-  }
-  li:last-child {
-    margin-right: 0;
+    align-items: center;
+    color: #fff;
+    li {
+      padding: 0 20px;
+    }
+    li:first-of-type {
+      border-right: 1px solid rgba(255, 255, 255, 0.3);
+    }
   }
 `;
 
@@ -261,17 +238,15 @@ const Sidebar = ({ children }) => {
         }}
       >
         <Header>
-          <div>
-            <div className="imgBox">
-              <img src={localStorage.getItem("corpLogo")} alt="브랜드로고" />
-            </div>
-            <h1>{localStorage.getItem("corpName")}님 안녕하세요!</h1>
-          </div>
           <ul>
-            <li onClick={link1}>회사소개서</li>|
-            <li onClick={link4}>운영정책</li>|
-            <li onClick={link2}>이용가이드</li>|
-            <li onClick={link3}>사업자등록증</li>
+            <li>
+              <b>{localStorage.getItem("corpName")}</b>님 안녕하세요!
+            </li>
+            <li onClick={logout}>
+              <button>
+                <b>로그아웃</b>
+              </button>
+            </li>
           </ul>
         </Header>
         <Grid sx={{ width: "100%" }}>{children}</Grid>
