@@ -46,7 +46,6 @@ const Menu = styled.ul`
   padding: 54px 0px 37px;
   border-bottom: 1.5px solid #c7cbf0;
   li {
-    color: #0082ff;
     font-size: 18px;
     font-weight: 700;
     margin-bottom: 10px;
@@ -57,16 +56,19 @@ const Menu = styled.ul`
   li:last-child {
     margin-bottom: 0;
   }
+  li:hover {
+    color: #0082ff;
+  }
   a {
     display: flex;
     align-items: center;
-    justify-content: center;
-    padding: 8px 13px;
+    padding: 0 20px;
+    height: 44px;
   }
   .focus {
-    background: #0082ff;
+    background: #e6f3ff;
     border-radius: 10px;
-    color: #fff;
+    color: #0082ff;
   }
 `;
 
@@ -74,28 +76,30 @@ const MyInfo = styled.div`
   display: flex;
   justify-content: center;
   margin-top: 38px;
-
   button {
     font-size: 18px;
     font-weight: 700;
     background: none;
     cursor: pointer;
-    width: 75%;
     color: #0082ff;
-    padding: 8px 13px;
     border-radius: 10px;
     display: flex;
     justify-content: center;
     align-items: center;
     cursor: pointer;
+    padding: 0 20px;
+    height: 44px;
+  }
+  button:hover {
+    color: #0082ff;
   }
   img {
     padding-right: 16px;
   }
   .focus {
-    background: #0082ff;
+    background: #e6f3ff;
     border-radius: 10px;
-    color: #fff;
+    color: #0082ff;
   }
 `;
 
@@ -252,40 +256,28 @@ const Sidebar = ({ children }) => {
           <li>
             {location.pathname.includes("product") ? (
               <Link to="/product" className="focus">
-                <img src={stockFocusIcon} alt="전체 상품 목록" />
                 전체 상품 목록
               </Link>
             ) : (
-              <Link to="/product">
-                <img src={stockIcon} alt="전체 상품 목록" />
-                전체 상품 목록
-              </Link>
+              <Link to="/product">전체 상품 목록</Link>
             )}
           </li>
           <li>
             {location.pathname.includes("stock") ? (
               <Link to="/stock" className="focus">
-                <img src={stockFocusIcon} alt="판매중인 상품" />
                 판매중인 상품
               </Link>
             ) : (
-              <Link to="/stock">
-                <img src={stockIcon} alt="판매중인 상품" />
-                판매중인 상품
-              </Link>
+              <Link to="/stock">판매중인 상품</Link>
             )}
           </li>
           <li>
             {location.pathname.includes("order") ? (
               <Link to="/order" className="focus">
-                <img src={orderFocusIcon} alt="주문관리" />
-                주문관리
+                주문 배송 관리
               </Link>
             ) : (
-              <Link to="/order">
-                <img src={orderIcon} alt="주문관리" />
-                주문관리
-              </Link>
+              <Link to="/order">주문 배송 관리</Link>
             )}
           </li>
         </Menu>
@@ -297,8 +289,7 @@ const Sidebar = ({ children }) => {
               }}
               className="focus"
             >
-              <img src={myFocusIcon} alt="내정보" />
-              내정보
+              내 스토어 정보 관리
             </button>
           ) : (
             <button
@@ -306,8 +297,7 @@ const Sidebar = ({ children }) => {
                 navigate("/mypage");
               }}
             >
-              <img src={myIcon} alt="내정보" />
-              내정보
+              내 스토어 정보 관리
             </button>
           )}
         </MyInfo>
