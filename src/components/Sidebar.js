@@ -25,7 +25,6 @@ import { logoutUser } from "../api/user";
 
 // Styled-components
 const LogoImg = styled.img`
-  width: 130px;
   position: absolute;
   top: 50%;
   left: 50%;
