@@ -36,124 +36,64 @@ const Logo = styled.a`
   height: 7.6vh;
   width: 80%;
   margin: 0 auto;
-  border-bottom: 1.5px solid #c7cbf0;
 `;
 
 // 메뉴
 const Menu = styled.ul`
-  margin: 0 auto;
-  width: 80%;
-  padding: 54px 0px 37px;
-  border-bottom: 1.5px solid #c7cbf0;
-  li {
-    font-size: 18px;
-    font-weight: 700;
-    margin-bottom: 10px;
-    img {
-      padding-right: 16px;
-    }
-  }
-  li:last-child {
-    margin-bottom: 0;
-  }
-  li:hover {
-    color: #0082ff;
-  }
-  a {
+  padding: 10px;
+  border-top: 1px solid #cfd4f0;
+  li a {
+    padding: 0 20px;
     display: flex;
     align-items: center;
-    padding: 0 20px;
     height: 44px;
+    font-weight: 600;
+    border-radius: 10px;
+  }
+  li a:hover {
+    color: #0082ff;
   }
   .focus {
-    background: #e6f3ff;
-    border-radius: 10px;
+    background-color: #e6f3ff;
     color: #0082ff;
   }
 `;
 
 const MyInfo = styled.div`
-  display: flex;
-  justify-content: center;
-  margin-top: 38px;
+  padding: 10px;
+  border-top: 1px solid #cfd4f0;
   button {
-    font-size: 18px;
-    font-weight: 700;
-    background: none;
-    cursor: pointer;
-    color: #0082ff;
-    border-radius: 10px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
+    width: 100%;
     padding: 0 20px;
+    display: flex;
+    align-items: center;
     height: 44px;
+    font-weight: 600;
+    border-radius: 10px;
   }
   button:hover {
     color: #0082ff;
   }
-  img {
-    padding-right: 16px;
-  }
   .focus {
-    background: #e6f3ff;
-    border-radius: 10px;
+    background-color: #e6f3ff;
     color: #0082ff;
   }
 `;
 
 // 하단 버튼(사업자등록증, 로그아웃)
 const ButtonBox = styled.div`
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  bottom: 0;
-  margin-bottom: 17px;
   width: 100%;
-  div {
-    display: inline-block;
-    margin-left: 5px;
-  }
+  padding: 10px;
+  position: absolute;
+  bottom: 0;
+  border-top: 1px solid #cfd4f0;
   button {
-    display: block;
-    margin: 0 auto;
-    font-size: 18px;
-    font-weight: 700;
+    padding: 0 20px;
     display: flex;
     align-items: center;
-    justify-content: center;
-  }
-  button:nth-child(1),
-  button:nth-child(2),
-  button:nth-child(3) {
-    color: #fff;
-    background: #0082ff;
-    text-align: left;
-    line-height: 1.2;
-    border-radius: 10px;
-    padding: 7px;
-    width: 80%;
-    margin-top: 10px;
-  }
-  button:nth-child(1) {
-    background: #26282b;
-  }
-  button:nth-child(2) {
-    background: #d3d3d3;
-    color: #26282b;
-  }
-  button:last-child {
-    color: #ddd;
-    background: none;
-    color: #0082ff;
-    padding: 20px 0;
-    img {
-      padding-left: 10px;
-    }
-  }
-  span {
-    font-size: 12px;
+    height: 40px;
+    font-size: 14px;
+    font-weight: 500;
   }
 `;
 
@@ -302,34 +242,14 @@ const Sidebar = ({ children }) => {
           )}
         </MyInfo>
         <ButtonBox>
-          {/* <button onClick={link1}>
-            <img src={paperIcon} alt="사업자등록증" />
-            <div>
-              <span>21세기전파상</span>
-              <br />
-              회사소개서
-            </div>
-          </button>
-          <button onClick={link2}>
-            <img src={paperIcon2} alt="사업자등록증" />
-            <div>
-              <span>셀러 어드민</span>
-              <br />
-              이용설명서
-            </div>
-          </button>
-          <button onClick={link3}>
-            <img src={paperIcon} alt="사업자등록증" />
-            <div>
-              <span>21세기전파상</span>
-              <br />
-              사업자등록증
-            </div>
-          </button> */}
-          <button onClick={logout}>
+          <button onClick={link1}>회사소개서</button>
+          <button onClick={link4}>운영정책</button>
+          <button onClick={link2}>이용가이드</button>
+          <button onClick={link3}>사업자등록증</button>
+          {/* <button onClick={logout}>
             로그아웃
             <img src={logoutIcon} alt="사업자등록증" />
-          </button>
+          </button> */}
         </ButtonBox>
       </Grid>
       <Grid
