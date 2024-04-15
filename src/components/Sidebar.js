@@ -188,7 +188,9 @@ const Sidebar = ({ children }) => {
             <img src={localStorage.getItem("corpLogo")} alt="브랜드로고" />
           </div>
           <span>{localStorage.getItem("corpName")}</span>
-          <a href="https://www.21market.kr/">내 스토어 바로가기</a>
+          <a href="https://www.21market.kr/" target="_blank">
+            내 스토어 바로가기
+          </a>
         </Profile>
         <Menu>
           <li>
