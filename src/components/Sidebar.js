@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState } from "react";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import React from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
@@ -8,18 +8,6 @@ import { Grid } from "@mui/material";
 
 // Images
 import logoImg from "../assets/header.png";
-import stockIcon from "../assets/stock.png";
-import stockFocusIcon from "../assets/stockwhite.png";
-import orderIcon from "../assets/order.png";
-import orderFocusIcon from "../assets/orderwhite.png";
-import reviewIcon from "../assets/review.png";
-import myIcon from "../assets/my.png";
-import myFocusIcon from "../assets/mywhite.png";
-import paperIcon from "../assets/paper.png";
-import logoutIcon from "../assets/logout.png";
-import { cookies } from "../layout";
-import bizfile from "../assets/bizfile.jpg";
-import paperIcon2 from "../assets/bizfile2.png";
 
 import { logoutUser } from "../api/user";
 
@@ -36,6 +24,32 @@ const Logo = styled.a`
   height: 7.6vh;
   width: 80%;
   margin: 0 auto;
+`;
+
+const Profile = styled.div`
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  border-top: 1px solid #cfd4f0;
+  img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+  }
+  span {
+    font-weight: 600;
+  }
+  a {
+    width: 100%;
+    text-align: center;
+    padding: 6px 0;
+    background-color: #f1f4f8;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 500;
+  }
 `;
 
 // 메뉴
@@ -161,7 +175,7 @@ const Sidebar = ({ children }) => {
         item
         sx={{
           background: "#fff",
-          width: "230px",
+          width: "210px",
           height: "100vh",
           position: "relative",
         }}
@@ -169,6 +183,13 @@ const Sidebar = ({ children }) => {
         <Logo href="/">
           <LogoImg src={logoImg} alt="크래커 로고" />
         </Logo>
+        <Profile>
+          <div>
+            <img src={localStorage.getItem("corpLogo")} alt="브랜드로고" />
+          </div>
+          <span>{localStorage.getItem("corpName")}</span>
+          <a href="https://www.21market.kr/">내 스토어 바로가기</a>
+        </Profile>
         <Menu>
           <li>
             {location.pathname.includes("product") ? (
@@ -233,7 +254,7 @@ const Sidebar = ({ children }) => {
         item
         sx={{
           background: "#FAFBFE",
-          width: "calc(100% - 230px)",
+          width: "calc(100% - 210px)",
           position: "relative",
         }}
       >
