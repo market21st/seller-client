@@ -8,6 +8,7 @@ import { Grid } from "@mui/material";
 
 // Images
 import logoImg from "../assets/header.png";
+import EmojiImg from "../assets/grinning_emoji.png";
 
 import { logoutUser } from "../api/user";
 
@@ -125,6 +126,8 @@ const Header = styled.div`
     align-items: center;
     color: #fff;
     li {
+      display: flex;
+      align-items: center;
       padding: 0 20px;
     }
     li:first-of-type {
@@ -246,10 +249,6 @@ const Sidebar = ({ children }) => {
           <button onClick={link4}>운영정책</button>
           <button onClick={link2}>이용가이드</button>
           <button onClick={link3}>사업자등록증</button>
-          {/* <button onClick={logout}>
-            로그아웃
-            <img src={logoutIcon} alt="사업자등록증" />
-          </button> */}
         </ButtonBox>
       </Grid>
       <Grid
@@ -263,7 +262,8 @@ const Sidebar = ({ children }) => {
         <Header>
           <ul>
             <li>
-              <b>{localStorage.getItem("corpName")}</b>님 안녕하세요😀
+              <b>{localStorage.getItem("corpName")}</b>님 안녕하세요
+              <img src={EmojiImg} alt="emoji" width={16} height={16} />
             </li>
             <li onClick={logout}>
               <button>
