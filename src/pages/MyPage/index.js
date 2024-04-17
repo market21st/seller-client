@@ -15,11 +15,15 @@ const Container = styled.div`
   position: relative;
   height: 90%;
   h1 {
-    font-size: 24px;
-    font-weight: 500;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1.5;
   }
-  .area {
-    width: 279px;
+  h2 {
+    font-size: 14px;
+    color: #5a6080;
+    font-weight: 400;
+    line-height: 1.5;
   }
   & .MuiOutlinedInput-notchedOutline {
     border: none !important;
@@ -30,68 +34,22 @@ const Container = styled.div`
   }
 `;
 
-const Btmbar = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  width: 100%;
-  background: #fff;
-  padding: 15px 35px;
-  height: 10%;
-  position: relative;
-  z-index: 99;
-  box-shadow: 1px 0px 10px rgba(0, 0, 0, 0.1);
-  button {
-    width: 134px;
-    padding: 12px 49px;
-    border-radius: 5px;
-    font-weight: 600;
-    font-size: 18px;
-  }
-`;
-
 const SendBtn = styled.button`
-  background: #505bca;
+  display: inline;
+  padding: 16px 20px;
+  width: 100px;
+  border-radius: 8px;
+  background: #0082ff;
   color: #fff;
 `;
 
-//아이디
-const IdBox = styled.div`
-  width: 100%;
-  padding: 40px 7px;
-  margin: 20px 0 50px;
-  background: #fff;
-  border-radius: 15px;
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-  span {
-    border-right: 2px solid #e1e7ef;
-    padding: 0 40px;
-    margin-right: 40px;
-  }
-`;
 const BlueBtn = styled.button`
-  background: #505bca;
+  background: #0082ff;
   color: #fff;
   padding: 16px 25px;
   border-radius: 5px;
   font-size: 14px;
   margin-left: 14px;
-`;
-
-// 인풋
-const Row = styled.div`
-  margin-bottom: 20px;
-  display: flex;
-`;
-
-const RowInner = styled.div`
-  margin-right: 14px;
-  input {
-    border-radius: 5px;
-    padding: 14px;
-    margin-top: 8px;
-    font-weight: 500;
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-  }
 `;
 
 // 검색 모달
@@ -124,26 +82,63 @@ const ModalBack = styled.div`
   background: rgba(0, 0, 0, 0.5);
 `;
 
-const RowInnerArea = styled.div`
-  width: 100%;
-`;
 const Box = styled.div`
   width: 100%;
   height: 100%;
   overflow-y: scroll;
-  padding: 50px 59px 0;
+  padding: 40px 60px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 `;
+
+const FormBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 20px;
+  border: 1px solid #cfd4f0;
+  background: #fff;
+  border-radius: 10px;
+  h3 {
+    font-size: 14px;
+    color: #8e9ebf;
+  }
+  ul {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      span {
+        width: 200px;
+        font-size: 14px;
+        font-weight: 500;
+      }
+    }
+  }
+  input {
+    width: 400px;
+    box-sizing: border-box;
+    height: 56px;
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: 1px solid #8e9ebf;
+    &.postcode {
+      width: 120px;
+    }
+  }
+`;
+
 const TextArea = styled.textarea`
-  display: block;
-  width: 80%;
+  width: 600px;
   box-sizing: border-box;
-  height: 400px;
-  border-radius: 5px;
-  padding: 14px;
-  margin-top: 8px;
-  font-weight: 500;
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-  line-height: 1.5;
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: 1px solid #8e9ebf;
+  resize: none;
 `;
 
 const MyPage = () => {
@@ -328,58 +323,36 @@ const MyPage = () => {
           </ModalBack>
         )}
         <Box>
-          <h1>내 정보 수정</h1>
-          <IdBox>
-            <span>아이디</span>
-            {userInfo.userId}
-          </IdBox>
-          <Row>
-            <RowInner>
-              <label>비밀번호*</label>
-              <div>
+          <div>
+            <h1>내 스토어 정보 관리</h1>
+            <h2>
+              <b>내 스토어 정보 관리</b>목적 및 상세내용입니다
+            </h2>
+          </div>
+          <FormBox>
+            <h3>계정 정보</h3>
+            <ul>
+              <li>
+                <span>아이디</span>
+                <p>{userInfo.userId}</p>
+              </li>
+              <li>
+                <span>비밀번호</span>
                 <input type="password" name="password" onChange={onChange} />
-              </div>
-            </RowInner>
-            <RowInner>
-              <label>비밀번호확인*</label>
-              <div>
                 <input
                   type="password"
                   name="passwordCheck"
                   onChange={onChange}
+                  placeholder="비밀번호 확인"
                 />
-              </div>
-            </RowInner>
-          </Row>
-          <Row>
-            <RowInner>
-              <label>이메일*</label>
-              <div>
-                <input
-                  className="area"
-                  type="text"
-                  name="corpEmail"
-                  onChange={onChange}
-                  defaultValue={userInfo.corpEmail || ""}
-                />
-              </div>
-            </RowInner>
-            <RowInner>
-              <label>휴대폰번호*</label>
-              <div>
-                <input
-                  type="text"
-                  name="phone"
-                  onChange={onChange}
-                  defaultValue={userInfo.phone || ""}
-                />
-              </div>
-            </RowInner>
-          </Row>
-          <Row>
-            <RowInner>
-              <label>관리자명*</label>
-              <div>
+              </li>
+            </ul>
+          </FormBox>
+          <FormBox>
+            <h3>담당자 정보</h3>
+            <ul>
+              <li>
+                <span>담당자 이름</span>
                 <input
                   className="area"
                   type="text"
@@ -387,13 +360,50 @@ const MyPage = () => {
                   onChange={onChange}
                   value={userInfo.corpCeo || ""}
                 />
-              </div>
-            </RowInner>
-          </Row>
-          <Row>
-            <RowInner>
-              <label>회사주소*</label>
-              <div>
+              </li>
+              <li>
+                <span>담당자 이메일</span>
+                <input
+                  className="area"
+                  type="text"
+                  name="corpEmail"
+                  onChange={onChange}
+                  defaultValue={userInfo.corpEmail || ""}
+                />
+              </li>
+              <li>
+                <span>담당자 휴대폰 번호</span>
+                <input
+                  type="text"
+                  name="phone"
+                  onChange={onChange}
+                  defaultValue={userInfo.phone || ""}
+                />
+              </li>
+            </ul>
+          </FormBox>
+          <FormBox>
+            <h3>회사 정보</h3>
+            <ul>
+              <li>
+                <span>상호명</span>
+                <input
+                  type="text"
+                  name="corpName"
+                  onChange={onChange}
+                  value={userInfo.corpName || ""}
+                />
+              </li>
+              <li>
+                <span>회사 주소 (우편번호)</span>
+                <input
+                  className="postcode"
+                  type="text"
+                  name="corpPost"
+                  onChange={onChange}
+                  value={enroll_company.address2 || ""}
+                  placeholder="우편번호"
+                />
                 <input
                   className="area"
                   type="text"
@@ -402,75 +412,26 @@ const MyPage = () => {
                   value={enroll_company.address1 || ""}
                 />
                 <BlueBtn onClick={handleComplete}>검색하기</BlueBtn>
-              </div>
-            </RowInner>
-            <RowInner>
-              <label>우편주소*</label>
-              <div>
-                <input
-                  type="text"
-                  name="corpPost"
-                  onChange={onChange}
-                  value={enroll_company.address2 || ""}
-                />
-              </div>
-            </RowInner>
-          </Row>
-          <Row>
-            <RowInner>
-              <label>상세주소*</label>
-              <div>
                 <input
                   className="area"
                   type="text"
                   name="corpAddr2"
                   onChange={onChange}
                   value={userInfo.corpAddr2 || ""}
+                  placeholder="상세 주소"
                 />
-              </div>
-            </RowInner>
-          </Row>
-          <Row>
-            <RowInner>
-              <label>상호명*</label>
-              <div>
+              </li>
+              <li>
+                <span>회사 대표번호</span>
                 <input
                   type="text"
-                  name="corpName"
+                  name="corpContact"
                   onChange={onChange}
-                  value={userInfo.corpName || ""}
+                  defaultValue={userInfo.corpContact || ""}
                 />
-              </div>
-            </RowInner>
-          </Row>
-          <Row>
-            <RowInner>
-              <label>은행명*</label>
-              <div>
-                <input
-                  type="text"
-                  name="bankName"
-                  onChange={onChange}
-                  value={userInfo.bankName || ""}
-                />
-              </div>
-            </RowInner>
-            <RowInner>
-              <label>계좌번호*</label>
-              <div>
-                <input
-                  type="text"
-                  name="bankAccount"
-                  onChange={onChange}
-                  value={userInfo.bankAccount || ""}
-                />
-              </div>
-            </RowInner>
-          </Row>
-          <Row>
-            <RowInner>
-              <label>사업자분류*</label>
-              <div>
+              </li>
+              <li>
+                <span>사업자 분류</span>
                 <FormControl>
                   <Select
                     onChange={onChange}
@@ -479,21 +440,20 @@ const MyPage = () => {
                     value={userInfo.bizType || ""}
                     name="bizType"
                     sx={{
-                      mt: "8px",
-                      width: "195px",
-                      background: "#fff",
-                      boxShadow: "0px 2px 5px rgba(0, 0, 0, 0.1)",
+                      width: "400px",
+                      height: "56px",
+                      padding: "10px 5px",
+                      borderRadius: "8px",
+                      border: "1px solid #8e9edf",
                     }}
                   >
                     <MenuItem value="개인사업자">개인사업자</MenuItem>
                     <MenuItem value="법인사업자">법인사업자</MenuItem>
                   </Select>
                 </FormControl>
-              </div>
-            </RowInner>
-            <RowInner>
-              <label>과세유형*</label>
-              <div>
+              </li>
+              <li>
+                <span>과세유형</span>
                 <FormControl>
                   <Select
                     onChange={onChange}
@@ -502,124 +462,116 @@ const MyPage = () => {
                     value={userInfo.taxType || ""}
                     name="taxType"
                     sx={{
-                      mt: "8px",
-                      width: "195px",
-                      background: "#fff",
-                      boxShadow: "0px 2px 5px rgba(0, 0, 0, 0.1)",
+                      width: "400px",
+                      height: "56px",
+                      padding: "10px 5px",
+                      borderRadius: "8px",
+                      border: "1px solid #8e9edf",
                     }}
                   >
                     <MenuItem value="단위과세">단위과세</MenuItem>
                     <MenuItem value="간이과세">간이과세</MenuItem>
                   </Select>
                 </FormControl>
-              </div>
-            </RowInner>
-          </Row>
-          <Row>
-            <RowInner>
-              <label>사업자등록증*</label>
-              <div>
-                <a href={userInfo.bizFile} target="_blank">
-                  {userInfo.bizFile}
-                </a>
-                <input
-                  id="bizFile"
-                  type="file"
-                  name="bizFile"
-                  accept=".pdf"
-                  onChange={(e) => {
-                    if (e.target.files[0]) {
-                      setBizFile(e.target.files[0]);
-                    }
-                  }}
-                  style={{ display: "none" }}
-                />
-                <input type="text" value={bizFile.name || ""} readOnly />
-                <BlueBtn>
-                  <label htmlFor="bizFile">파일첨부</label>
-                </BlueBtn>
-              </div>
-            </RowInner>
-          </Row>
-          <Row>
-            <RowInner>
-              <label>사업자번호*</label>
-              <div>
+              </li>
+              <li>
+                <span>사업자등록증</span>
+                <div>
+                  <a href={userInfo.bizFile} target="_blank">
+                    {userInfo.bizFile}
+                  </a>
+                  <input
+                    id="bizFile"
+                    type="file"
+                    name="bizFile"
+                    accept=".pdf"
+                    onChange={(e) => {
+                      if (e.target.files[0]) {
+                        setBizFile(e.target.files[0]);
+                      }
+                    }}
+                    style={{ display: "none" }}
+                  />
+                  <input type="text" value={bizFile.name || ""} readOnly />
+                  <BlueBtn>
+                    <label htmlFor="bizFile">파일첨부</label>
+                  </BlueBtn>
+                </div>
+              </li>
+              <li>
+                <span>사업자번호</span>
                 <input
                   type="text"
                   name="bizNum"
                   onChange={onChange}
                   value={userInfo.bizNum || ""}
                 />
-              </div>
-            </RowInner>
-          </Row>
-          <Row>
-            <RowInner>
-              <label>통신판매업 신고번호*</label>
-              <div>
+              </li>
+              <li>
+                <span>통신판매업 신고번호</span>
                 <input
                   type="text"
                   name="salesNum"
                   onChange={onChange}
                   value={userInfo.salesNum || ""}
                 />
-              </div>
-            </RowInner>
-          </Row>
-          <Row>
-            <RowInner>
-              <label>대표번호*</label>
-              <div>
+              </li>
+            </ul>
+          </FormBox>
+          <FormBox>
+            <h3>정산 정보</h3>
+            <ul>
+              <li>
+                <span>정산 계좌번호</span>
                 <input
                   type="text"
-                  name="corpContact"
+                  name="bankAccount"
                   onChange={onChange}
-                  defaultValue={userInfo.corpContact || ""}
+                  value={userInfo.bankAccount || ""}
                 />
-              </div>
-            </RowInner>
-          </Row>
-          <Row>
-            <RowInner>
-              <label>브랜드로고</label>
-              <div>
-                <a href={userInfo.corpImage} target="_blank">
-                  {userInfo.corpImage}
-                </a>
-                <input
-                  id="logoFile"
-                  type="file"
-                  name="corpImage"
-                  onChange={(e) => {
-                    setLogoFile(e.target.files[0]);
-                  }}
-                  accept="jpeg, .jpg, .png"
-                  style={{ display: "none" }}
+              </li>
+            </ul>
+          </FormBox>
+          <FormBox>
+            <h3>파트너스토어 정보</h3>
+            <ul>
+              <li>
+                <span>대표 이미지 (브랜드 로고)</span>
+                <div>
+                  <a href={userInfo.corpImage} target="_blank">
+                    {userInfo.corpImage}
+                  </a>
+                  <input
+                    id="logoFile"
+                    type="file"
+                    name="corpImage"
+                    onChange={(e) => {
+                      setLogoFile(e.target.files[0]);
+                    }}
+                    accept="jpeg, .jpg, .png"
+                    style={{ display: "none" }}
+                  />
+                  <input type="text" value={logoFile.name || ""} readOnly />
+                  <BlueBtn>
+                    <label htmlFor="logoFile">파일첨부</label>
+                  </BlueBtn>
+                </div>
+              </li>
+              <li>
+                <span>파트너 소개글</span>
+                <TextArea
+                  type="text"
+                  name="corpDesc"
+                  onChange={onChange}
+                  defaultValue={userInfo.corpDesc || ""}
+                  rows={10}
                 />
-                <input type="text" value={logoFile.name || ""} readOnly />
-                <BlueBtn>
-                  <label htmlFor="logoFile">파일첨부</label>
-                </BlueBtn>
-              </div>
-            </RowInner>
-          </Row>
-          <Row>
-            <RowInnerArea>
-              <label>셀러소개*</label>
-              <TextArea
-                type="text"
-                name="corpDesc"
-                onChange={onChange}
-                defaultValue={userInfo.corpDesc || ""}
-              />
-            </RowInnerArea>
-          </Row>
+              </li>
+            </ul>
+          </FormBox>
+          <SendBtn onClick={onSubmit}>저장</SendBtn>
         </Box>
       </Container>
-      <Btmbar>
-        <SendBtn onClick={onSubmit}>저장</SendBtn>
-      </Btmbar>
     </>
   );
 };
