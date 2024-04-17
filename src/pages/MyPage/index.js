@@ -440,10 +440,11 @@ const MyPage = () => {
                     value={userInfo.bizType || ""}
                     name="bizType"
                     sx={{
-                      mt: "8px",
-                      width: "195px",
-                      background: "#fff",
-                      boxShadow: "0px 2px 5px rgba(0, 0, 0, 0.1)",
+                      width: "400px",
+                      height: "56px",
+                      padding: "10px 5px",
+                      borderRadius: "8px",
+                      border: "1px solid #8e9edf",
                     }}
                   >
                     <MenuItem value="개인사업자">개인사업자</MenuItem>
@@ -461,10 +462,11 @@ const MyPage = () => {
                     value={userInfo.taxType || ""}
                     name="taxType"
                     sx={{
-                      mt: "8px",
-                      width: "195px",
-                      background: "#fff",
-                      boxShadow: "0px 2px 5px rgba(0, 0, 0, 0.1)",
+                      width: "400px",
+                      height: "56px",
+                      padding: "10px 5px",
+                      borderRadius: "8px",
+                      border: "1px solid #8e9edf",
                     }}
                   >
                     <MenuItem value="단위과세">단위과세</MenuItem>
