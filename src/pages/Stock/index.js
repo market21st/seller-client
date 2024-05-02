@@ -150,7 +150,7 @@ const StockList = () => {
           container
           justifyContent={"center"}
           padding={"20px 0"}
-          backgroundColor="#FAFBFE"
+          backgroundColor="#f1f4f8"
         >
           <Pagination
             count={Math.ceil(total / 10)}

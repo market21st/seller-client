@@ -33,7 +33,7 @@ const Profile = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 20px;
-  border-top: 1px solid #cfd4f0;
+  border-top: 1px solid #e6f3ff;
   img {
     width: 80px;
     height: 80px;
@@ -53,10 +53,31 @@ const Profile = styled.div`
   }
 `;
 
+const SubProfile = styled.ul`
+  padding: 10px 0;
+  background: #26324d;
+  display: flex;
+  justify-content: center;
+  li {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    color: #f5f7fc;
+    p {
+      font-size: 10px;
+    }
+    span {
+      font-size: 15px;
+      font-weight: 700;
+    }
+  }
+`;
+
 // 메뉴
 const Menu = styled.ul`
   padding: 10px;
-  border-top: 1px solid #cfd4f0;
+  border-top: 1px solid #e6f3ff;
   li a {
     padding: 0 20px;
     display: flex;
@@ -76,7 +97,7 @@ const Menu = styled.ul`
 
 const MyInfo = styled.div`
   padding: 10px;
-  border-top: 1px solid #cfd4f0;
+  border-top: 1px solid #e6f3ff;
   button {
     width: 100%;
     padding: 0 20px;
@@ -99,9 +120,7 @@ const MyInfo = styled.div`
 const ButtonBox = styled.div`
   width: 100%;
   padding: 10px;
-  position: absolute;
-  bottom: 0;
-  border-top: 1px solid #cfd4f0;
+  border-top: 1px solid #e6f3ff;
   button {
     padding: 0 20px;
     display: flex;
@@ -175,6 +194,9 @@ const Sidebar = ({ children }) => {
   return (
     <Grid container>
       <Grid
+        container
+        direction={"column"}
+        justifyContent={"space-between"}
         item
         sx={{
           background: "#fff",
@@ -183,78 +205,92 @@ const Sidebar = ({ children }) => {
           position: "relative",
         }}
       >
-        <Logo href="/">
-          <LogoImg src={logoImg} alt="크래커 로고" />
-        </Logo>
-        <Profile>
-          <div>
-            <img src={localStorage.getItem("corpLogo")} alt="브랜드로고" />
-          </div>
-          <span>{localStorage.getItem("corpName")}</span>
-          <a href="https://www.21market.kr/" target="_blank">
-            내 스토어 바로가기
-          </a>
-        </Profile>
-        <Menu>
-          <li>
-            {location.pathname.includes("product") ? (
-              <Link to="/product" className="focus">
-                전체 상품 목록
-              </Link>
+        <div>
+          <Logo href="/">
+            <LogoImg src={logoImg} alt="크래커 로고" />
+          </Logo>
+          <Profile>
+            <div>
+              <img src={localStorage.getItem("corpLogo")} alt="브랜드로고" />
+            </div>
+            <span>{localStorage.getItem("corpName")}</span>
+            <a href="https://www.21market.kr/" target="_blank">
+              내 스토어 바로가기
+            </a>
+          </Profile>
+          <Menu>
+            <li>
+              {location.pathname.includes("product") ? (
+                <Link to="/product" className="focus">
+                  전체 상품 목록
+                </Link>
+              ) : (
+                <Link to="/product">전체 상품 목록</Link>
+              )}
+            </li>
+            <li>
+              {location.pathname.includes("stock") ? (
+                <Link to="/stock" className="focus">
+                  판매중인 상품
+                </Link>
+              ) : (
+                <Link to="/stock">판매중인 상품</Link>
+              )}
+            </li>
+            <li>
+              {location.pathname.includes("order") ? (
+                <Link to="/order" className="focus">
+                  주문 배송 관리
+                </Link>
+              ) : (
+                <Link to="/order">주문 배송 관리</Link>
+              )}
+            </li>
+          </Menu>
+          <MyInfo>
+            {location.pathname.includes("mypage") ? (
+              <button
+                onClick={() => {
+                  navigate("/mypage");
+                }}
+                className="focus"
+              >
+                내 스토어 정보 관리
+              </button>
             ) : (
-              <Link to="/product">전체 상품 목록</Link>
+              <button
+                onClick={() => {
+                  navigate("/mypage");
+                }}
+              >
+                내 스토어 정보 관리
+              </button>
             )}
-          </li>
-          <li>
-            {location.pathname.includes("stock") ? (
-              <Link to="/stock" className="focus">
-                판매중인 상품
-              </Link>
-            ) : (
-              <Link to="/stock">판매중인 상품</Link>
-            )}
-          </li>
-          <li>
-            {location.pathname.includes("order") ? (
-              <Link to="/order" className="focus">
-                주문 배송 관리
-              </Link>
-            ) : (
-              <Link to="/order">주문 배송 관리</Link>
-            )}
-          </li>
-        </Menu>
-        <MyInfo>
-          {location.pathname.includes("mypage") ? (
-            <button
-              onClick={() => {
-                navigate("/mypage");
-              }}
-              className="focus"
-            >
-              내 스토어 정보 관리
-            </button>
-          ) : (
-            <button
-              onClick={() => {
-                navigate("/mypage");
-              }}
-            >
-              내 스토어 정보 관리
-            </button>
-          )}
-        </MyInfo>
-        <ButtonBox>
-          <button onClick={link1}>회사소개서</button>
-          <button onClick={link4}>운영정책</button>
-          <button onClick={link2}>이용가이드</button>
-          <button onClick={link3}>사업자등록증</button>
-        </ButtonBox>
+          </MyInfo>
+        </div>
+        <div>
+          <SubProfile>
+            <li>
+              <p>평균 배송기간</p>
+              <span>
+                {localStorage.getItem("deliveryPeriod")
+                  ? `${localStorage.getItem("deliveryPeriod")}일`
+                  : "확인중"}
+              </span>
+            </li>
+          </SubProfile>
+          <ButtonBox>
+            <button onClick={link1}>회사소개서</button>
+            <button onClick={link4}>운영정책</button>
+            <button onClick={link2}>이용가이드</button>
+            <button onClick={link3}>사업자등록증</button>
+          </ButtonBox>
+        </div>
       </Grid>
       <Grid
         item
         sx={{
-          background: "#FAFBFE",
+          background: "#f1f4f8",
           width: "calc(100% - 210px)",
           position: "relative",
         }}
