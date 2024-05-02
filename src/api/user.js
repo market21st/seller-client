@@ -44,7 +44,7 @@ export const LoginUser = async (params) => {
       window.localStorage.setItem("corpName", res.data.data.corpName);
       window.localStorage.setItem(
         "deliveryPeriod",
-        res.data.data.deliveryPeriod
+        res.data.data.deliveryPeriod || ""
       );
     }
     return res.data;
