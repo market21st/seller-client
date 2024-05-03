@@ -126,7 +126,7 @@ const FormBox = styled.div`
     padding: 10px 20px;
     border-radius: 8px;
     border: 1px solid #8e9ebf;
-    &.postcode {
+    &.small {
       width: 120px;
     }
   }
@@ -397,7 +397,7 @@ const MyPage = () => {
               <li>
                 <span>회사 주소 (우편번호)</span>
                 <input
-                  className="postcode"
+                  className="small"
                   type="text"
                   name="corpPost"
                   onChange={onChange}
@@ -523,6 +523,13 @@ const MyPage = () => {
             <ul>
               <li>
                 <span>정산 계좌번호</span>
+                <input
+                  className="small"
+                  type="text"
+                  name="bankName"
+                  onChange={onChange}
+                  value={userInfo.bankName || ""}
+                />
                 <input
                   type="text"
                   name="bankAccount"
