@@ -201,7 +201,7 @@ const Sidebar = ({ children }) => {
         sx={{
           background: "#fff",
           width: "210px",
-          height: "100vh",
+          height: "100%",
           position: "fixed",
         }}
       >
@@ -290,7 +290,7 @@ const Sidebar = ({ children }) => {
         sx={{
           background: "#f1f4f8",
           width: "calc(100% - 210px)",
-          height: "100%",
+          minHeight: "100%",
           position: "absolute",
           left: "210px",
         }}

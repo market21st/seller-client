@@ -255,7 +255,6 @@ const ListContainer = styled.div`
   overflow-y: scroll;
   width: 100%;
   padding: 0 59px 0;
-  background-color: #fafbfe;
   -ms-overflow-style: none;
   li {
     display: flex;
