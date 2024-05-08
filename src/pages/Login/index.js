@@ -36,7 +36,6 @@ const Logo = styled.a`
 
 const LogoImg = styled.img`
   display: block;
-  width: 130px;
 `;
 
 const BackImg = styled.img`
@@ -188,7 +187,6 @@ const LogIn = () => {
         <Logo href="/">
           <LogoImg src={logoImg} alt="dd" />
         </Logo>
-
         <BackImg src={loginImg} alt="dd" />
       </Grid>
       <Grid
