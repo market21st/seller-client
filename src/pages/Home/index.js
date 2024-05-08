@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { FormControl, Select, MenuItem } from "@mui/material";
 
 import { manageDate, statistics } from "../../api/myInfo";
+import Popup from "../../components/Popup";
 
 const Container = styled.div`
   width: 100%;
@@ -100,6 +101,7 @@ const Home = () => {
 
   return (
     <Container>
+      <Popup />
       <Box>
         <h1>처리 대기</h1>
         <Row>
