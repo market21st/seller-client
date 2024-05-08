@@ -36,7 +36,6 @@ const Logo = styled.a`
 
 const LogoImg = styled.img`
   display: block;
-  width: 130px;
 `;
 
 const BackImg = styled.img`
@@ -188,7 +187,6 @@ const LogIn = () => {
         <Logo href="/">
           <LogoImg src={logoImg} alt="dd" />
         </Logo>
-
         <BackImg src={loginImg} alt="dd" />
       </Grid>
       <Grid
@@ -202,7 +200,7 @@ const LogIn = () => {
         textAlign={"center"}
       >
         <Inner>
-          <Title>Seller Admin</Title>
+          <Title>Partner Admin</Title>
           <form onKeyDown={mykeydown}>
             <TextField
               fullWidth
@@ -250,7 +248,7 @@ const LogIn = () => {
         <CompanyInfo>
           <h3>(주)21세기전파상</h3>
           <p>
-            서울시 서초구 강남대로 53길 8, 602 | 대표: 박영준
+            서울 강남구 테헤란로27길 16, BMY타워 7층 | 대표: 박영준
             <br />
             고객센터: 02-3453-7460 | 사업자등록번호: 85481-01496
           </p>

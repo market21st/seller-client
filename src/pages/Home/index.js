@@ -4,13 +4,14 @@ import styled from "styled-components";
 import { FormControl, Select, MenuItem } from "@mui/material";
 
 import { manageDate, statistics } from "../../api/myInfo";
+import Popup from "../../components/Popup";
 
 const Container = styled.div`
   width: 100%;
   height: 100%;
   padding: 50px 59px 0;
   .MuiOutlinedInput-notchedOutline {
-    border: 2px solid #505bca;
+    border: 2px solid #0082ff;
   }
 `;
 
@@ -63,7 +64,7 @@ const searchSelect = {
   background: "#fff",
   height: "40px",
   width: "120px",
-  color: "#505BCA",
+  color: "#0082FF",
   fontSize: "17px",
   fontWeight: "500",
 };
@@ -100,6 +101,7 @@ const Home = () => {
 
   return (
     <Container>
+      <Popup />
       <Box>
         <h1>처리 대기</h1>
         <Row>

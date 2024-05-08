@@ -31,7 +31,7 @@ const InnerBox = styled.div`
   }
   span {
     font-size: 14px;
-    color: #505bca;
+    color: #0082ff;
   }
   input {
     border-radius: 5px;

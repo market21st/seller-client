@@ -40,7 +40,7 @@ const CategoryBox = styled.div`
   }
   .active {
     color: #fff;
-    background: #4552ce;
+    background: #0082ff;
   }
 `;
 

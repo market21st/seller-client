@@ -36,7 +36,7 @@ const CancelBtn = styled.button`
 const CheckBtn = styled.button`
   width: 110px;
   height: 36px;
-  background: #505bca;
+  background: #0082ff;
   color: #fff;
   font-size: 0.8rem;
   border-radius: 1px;

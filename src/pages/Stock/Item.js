@@ -302,7 +302,7 @@ const ListBtnBox = styled.div`
     border-radius: 5px;
   }
   button:last-child {
-    background: #4552ce;
+    background: #0082ff;
     color: #fff;
     margin-left: 10px;
   }

@@ -42,6 +42,10 @@ export const LoginUser = async (params) => {
       window.localStorage.setItem("isLogin", "true");
       window.localStorage.setItem("corpLogo", res.data.data.corpImage);
       window.localStorage.setItem("corpName", res.data.data.corpName);
+      window.localStorage.setItem(
+        "deliveryPeriod",
+        res.data.data.deliveryPeriod || ""
+      );
     }
     return res.data;
   } catch (err) {
