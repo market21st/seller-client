@@ -172,7 +172,10 @@ const Sidebar = ({ children }) => {
     );
   };
   const link3 = () => {
-    window.open("https://image.21market.kr/info/us/bizReg.pdf", "_blank");
+    window.open(
+      "https://image.21market.kr/production/seller/51d1a35b-7cdd-4acf-a1e1-5c2e06fcbf42.pdf",
+      "_blank"
+    );
   };
   const link4 = () => {
     window.open(
@@ -214,7 +217,14 @@ const Sidebar = ({ children }) => {
               <img src={localStorage.getItem("corpLogo")} alt="브랜드로고" />
             </div>
             <span>{localStorage.getItem("corpName")}</span>
-            <a>내 스토어 준비중</a>
+            <a
+              href={`https://www.21market.kr/partner/detail/${localStorage.getItem(
+                "id"
+              )}`}
+              target="_blank"
+            >
+              내 스토어 바로가기
+            </a>
           </Profile>
           <Menu>
             <li>
