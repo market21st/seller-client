@@ -172,7 +172,10 @@ const Sidebar = ({ children }) => {
     );
   };
   const link3 = () => {
-    window.open("https://image.21market.kr/info/us/bizReg.pdf", "_blank");
+    window.open(
+      "https://image.21market.kr/production/seller/51d1a35b-7cdd-4acf-a1e1-5c2e06fcbf42.pdf",
+      "_blank"
+    );
   };
   const link4 = () => {
     window.open(
