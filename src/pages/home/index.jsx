@@ -130,52 +130,54 @@ export default Home;
 const Container = styled.div`
   width: 100%;
   height: 100%;
-  padding: 50px 59px 0;
+  padding: 52px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
   .MuiOutlinedInput-notchedOutline {
     border: 2px solid #0082ff;
   }
 `;
 
 const Box = styled.div`
-  margin-bottom: 30px;
-  font-size: 24px;
-  /* font-weight: 500; */
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
   h1 {
     display: flex;
-    align-items: flex-end;
+    align-items: center;
+    gap: 16px;
     font-size: 24px;
-    /* font-weight: 500; */
-  }
-  p {
-    margin-right: 18px;
   }
 `;
 
 const Row = styled.div`
   display: flex;
-  align-items: center;
+  gap: 24px;
 `;
 
 const ContentBox = styled.div`
-  margin: 15px 22px 0 0;
-  padding: 15px 25px;
-  background: #fff;
-  border-radius: 10px;
   width: 180px;
   height: 120px;
+  padding: 16px;
+  background: #fff;
+  border-radius: 10px;
   box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.1);
-  text-align: center;
-  /* font-weight: 500; */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
   h2 {
-    font-size: 15px;
-    /* font-weight: 500; */
-    padding-bottom: 10px;
+    width: 100%;
+    font-size: initial;
+    font-weight: initial;
+    text-align: center;
     border-bottom: 2px solid #e1e7ef;
+    padding-bottom: 8px;
   }
   span {
-    display: inline-block;
     border-bottom: 1px solid #404040;
     padding-bottom: 2px;
-    margin-top: 20px;
+    font-size: 24px;
   }
 `;

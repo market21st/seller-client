@@ -116,9 +116,9 @@ const LogIn = () => {
       <AlertModal isOpen={alertOpen} onClose={alertHandleClose} text={text} />
       <Grid item xs={8} sx={{ position: "relative" }}>
         <Logo href="/">
-          <LogoImg src={logoImg} alt="dd" />
+          <LogoImg src={logoImg} alt="로고" />
         </Logo>
-        <BackImg src={loginImg} alt="dd" />
+        <BackImg src={loginImg} alt="로그인 이미지" />
       </Grid>
       <Grid
         container

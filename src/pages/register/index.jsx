@@ -231,9 +231,8 @@ const Register = () => {
       <AlertModal isOpen={alertModal} onClose={aleatHandleClose} text={text} />
       <Grid item xs={4} sx={{ position: "relative" }}>
         <Logo href="/">
-          <LogoImg src={logoImg} alt="크래커 로고" />
+          <LogoImg src={logoImg} alt="로고" />
         </Logo>
-
         <BackImg src={loginImg} alt="로그인 이미지" />
       </Grid>
       <Grid
@@ -292,7 +291,6 @@ const Logo = styled.a`
 `;
 const LogoImg = styled.img`
   display: block;
-  width: 130px;
 `;
 
 const BackImg = styled.img`

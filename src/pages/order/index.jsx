@@ -406,9 +406,8 @@ const DateInputs = styled.div`
 const CheckList = styled.div`
   display: flex;
   align-items: center;
-  span {
-    margin-right: 20px;
-  }
+  flex-wrap: wrap;
+  gap: 16px;
   label {
     padding-left: 12px;
   }
