@@ -430,7 +430,7 @@ const TextArea = styled.textarea`
   border-radius: 5px;
   padding: 14px;
   margin-top: 8px;
-  font-weight: 800;
+  font-weight: 700;
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
   line-height: 1.5;
 `;
@@ -455,7 +455,7 @@ const InfoContainer = styled.div`
     border-radius: 5px;
     padding: 14px;
     margin-top: 8px;
-    font-weight: 800;
+    font-weight: 700;
     box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
   }
 `;
@@ -496,10 +496,10 @@ const RowInnerAreaM = styled.div`
   span {
     font-size: 14px;
     padding-left: 10px;
-    font-weight: 300;
+    /* font-weight: 300; */
   }
   button {
-    font-weight: 300;
+    /* font-weight: 300; */
     color: #7e7e7e;
     font-size: 14px;
     border-bottom: 1px solid #7e7e7e;

@@ -249,7 +249,7 @@ const GradeList = styled.ul`
     border: 1px solid #404040;
     border-radius: 8px;
     font-size: 16px;
-    font-weight: 500;
+    /* font-weight: 500; */
     cursor: pointer;
   }
   .active {
@@ -262,7 +262,7 @@ const InfoList = styled.ul`
   width: 100%;
   padding: 0 14px;
   h3 {
-    font-weight: 500;
+    /* font-weight: 500; */
     margin: 20px 0 8px;
   }
   ul {

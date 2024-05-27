@@ -220,7 +220,7 @@ const InnerBox = styled.div`
   outline: none;
   p {
     color: red;
-    font-weight: 500;
+    /* font-weight: 500; */
     margin: 0 30px;
     font-size: 14px;
   }
@@ -229,7 +229,7 @@ const InnerBox = styled.div`
 const Text = styled.h2`
   font-size: 1.2rem;
   line-height: 1.5;
-  font-weight: 500;
+  /* font-weight: 500; */
   margin: 35px 30px 5px;
 `;
 
@@ -248,7 +248,7 @@ const CancelBtn = styled.button`
   font-size: 14px;
   margin-right: 40px;
   background: none;
-  font-weight: 500;
+  /* font-weight: 500; */
 `;
 
 const CheckBtn = styled.button`
@@ -258,7 +258,7 @@ const CheckBtn = styled.button`
   color: #fff;
   font-size: 14px;
   border-radius: 1px;
-  font-weight: 500;
+  /* font-weight: 500; */
 `;
 
 const Contents = styled.div`
@@ -285,7 +285,7 @@ const RowInner = styled.div`
   textarea {
     border-radius: 5px;
     padding: 18px 14px;
-    font-weight: 800;
+    font-weight: 700;
     box-sizing: border-box;
     width: 80%;
     border: 1px solid #404040;

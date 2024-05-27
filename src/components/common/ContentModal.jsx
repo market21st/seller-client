@@ -71,7 +71,7 @@ const CancelBtn = styled.button`
   font-size: 14px;
   margin-right: 40px;
   background: none;
-  font-weight: 500;
+  /* font-weight: 500; */
 `;
 
 const CheckBtn = styled.button`
@@ -81,7 +81,7 @@ const CheckBtn = styled.button`
   color: #fff;
   font-size: 14px;
   border-radius: 1px;
-  font-weight: 500;
+  /* font-weight: 500; */
 `;
 
 const Text = styled.h2`

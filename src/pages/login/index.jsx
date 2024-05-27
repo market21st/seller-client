@@ -260,7 +260,7 @@ const CompanyInfo = styled.div`
   width: 22rem;
   font-size: 14px;
   h3 {
-    font-weight: 600;
+    font-weight: 500;
     line-height: 1.2;
   }
   p {
@@ -271,7 +271,7 @@ const CompanyInfo = styled.div`
     margin-top: 20px;
   }
   button {
-    font-weight: 600;
+    font-weight: 500;
     cursor: pointer;
   }
 `;

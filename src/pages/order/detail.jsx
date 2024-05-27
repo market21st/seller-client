@@ -399,7 +399,7 @@ const Container = styled.div`
   padding: 50px 59px;
   h1 {
     font-size: 24px;
-    font-weight: 500;
+    /* font-weight: 500; */
   }
   & .MuiOutlinedInput-notchedOutline {
     border: none !important;
@@ -417,7 +417,7 @@ const RowInner = styled.div`
   input {
     border-radius: 5px;
     padding: 18px 14px;
-    font-weight: 800;
+    font-weight: 700;
     box-sizing: border-box;
     width: 100%;
     box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
@@ -437,7 +437,7 @@ const RowInnerTop = styled.div`
   input {
     border-radius: 5px;
     padding: 18px 14px;
-    font-weight: 800;
+    font-weight: 700;
     box-sizing: border-box;
     width: 100%;
     box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
@@ -514,7 +514,7 @@ const FilterBtn = styled.div`
     font-size: 14px;
     background: #fff;
     color: #404040;
-    font-weight: 500;
+    /* font-weight: 500; */
     border-radius: 5px;
     box-shadow: 0px 2px 5px rgb(0 0 0 / 10%);
   }
@@ -537,6 +537,6 @@ const BtnBox = styled.div`
     /* font-weight: 500; */
     border-radius: 5px;
     box-shadow: 0px 2px 5px rgb(0 0 0 / 10%);
-    font-weight: 500;
+    /* font-weight: 500; */
   }
 `;

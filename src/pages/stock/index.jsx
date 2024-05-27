@@ -169,7 +169,7 @@ const Container = styled.div`
   height: 100%;
   h1 {
     font-size: 24px;
-    font-weight: 500;
+    /* font-weight: 500; */
   }
   em {
     font-style: normal;
@@ -224,7 +224,7 @@ const ItemBox = styled.li`
 
 const InfoTitle = styled.h2`
   font-size: 18px;
-  font-weight: 500;
+  /* font-weight: 500; */
   margin-bottom: 20px;
   display: flex;
   justify-content: space-between;
@@ -241,7 +241,7 @@ const InfoTitle = styled.h2`
   }
   button {
     font-size: 16px;
-    font-weight: 500;
+    /* font-weight: 500; */
     padding: 10px 20px;
     background: #fff;
     color: #000;
@@ -263,7 +263,7 @@ const ListContainer = styled.div`
     background: #fff;
     border-radius: 15px;
     padding: 10px 24px;
-    font-weight: 800;
+    font-weight: 700;
     margin-bottom: 2vh;
   }
   li:last-child {

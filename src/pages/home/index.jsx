@@ -139,12 +139,12 @@ const Container = styled.div`
 const Box = styled.div`
   margin-bottom: 30px;
   font-size: 24px;
-  font-weight: 500;
+  /* font-weight: 500; */
   h1 {
     display: flex;
     align-items: flex-end;
     font-size: 24px;
-    font-weight: 500;
+    /* font-weight: 500; */
   }
   p {
     margin-right: 18px;
@@ -165,10 +165,10 @@ const ContentBox = styled.div`
   height: 120px;
   box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.1);
   text-align: center;
-  font-weight: 500;
+  /* font-weight: 500; */
   h2 {
     font-size: 15px;
-    font-weight: 500;
+    /* font-weight: 500; */
     padding-bottom: 10px;
     border-bottom: 2px solid #e1e7ef;
   }

@@ -355,7 +355,7 @@ const InnerBox = styled.div`
     padding: 14px;
     width: 100%;
 
-    font-weight: 800;
+    font-weight: 700;
     border: 1px solid #000;
     box-sizing: border-box;
   }

@@ -279,7 +279,7 @@ const Price = styled.p`
   display: flex;
   justify-content: center;
   align-items: center;
-  font-weight: 500;
+  /* font-weight: 500; */
   span {
     background: #fcbaba;
     border-radius: 5px;

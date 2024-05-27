@@ -1587,7 +1587,7 @@ const Contents = styled.div`
   margin-top: 15px;
   overflow-y: scroll;
   line-height: 1.2;
-  font-weight: 300;
+  /* font-weight: 300; */
   font-size: 14px;
   section {
     position: relative;
@@ -1597,11 +1597,11 @@ const Contents = styled.div`
     }
   }
   p {
-    font-weight: 600;
+    font-weight: 500;
     margin: 16px 0;
   }
   h4 {
-    font-weight: 400;
+    /* font-weight: 400; */
     margin: 10px 0 5px;
   }
 `;

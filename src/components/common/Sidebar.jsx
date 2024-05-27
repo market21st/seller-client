@@ -208,7 +208,7 @@ const Profile = styled.div`
     border-radius: 50%;
   }
   span {
-    font-weight: 600;
+    font-weight: 500;
   }
   a {
     width: 100%;
@@ -217,7 +217,7 @@ const Profile = styled.div`
     background-color: #f1f4f8;
     border-radius: 10px;
     font-size: 14px;
-    font-weight: 500;
+    /* font-weight: 500; */
   }
 `;
 
@@ -251,7 +251,7 @@ const Menu = styled.ul`
     display: flex;
     align-items: center;
     height: 44px;
-    font-weight: 600;
+    font-weight: 500;
     border-radius: 10px;
   }
   li a:hover {
@@ -272,7 +272,7 @@ const MyInfo = styled.div`
     display: flex;
     align-items: center;
     height: 44px;
-    font-weight: 600;
+    font-weight: 500;
     border-radius: 10px;
   }
   button:hover {
@@ -295,7 +295,7 @@ const ButtonBox = styled.div`
     align-items: center;
     height: 40px;
     font-size: 14px;
-    font-weight: 500;
+    /* font-weight: 500; */
   }
 `;
 

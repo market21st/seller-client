@@ -331,7 +331,7 @@ const BtnBox = styled.div`
   border-top: 2px solid #d0d6f3;
   margin-top: 40px;
   transform: translate();
-  font-weight: 500;
+  /* font-weight: 500; */
   a {
     display: block;
     padding: 14px 23px;

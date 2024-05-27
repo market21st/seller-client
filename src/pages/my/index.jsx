@@ -464,7 +464,7 @@ const Container = styled.div`
   h2 {
     font-size: 14px;
     color: #5a6080;
-    font-weight: 400;
+    /* font-weight: 400; */
     line-height: 1.5;
   }
   & .MuiOutlinedInput-notchedOutline {
@@ -557,7 +557,7 @@ const FormBox = styled.div`
       span {
         width: 200px;
         font-size: 14px;
-        font-weight: 500;
+        /* font-weight: 500; */
       }
     }
   }

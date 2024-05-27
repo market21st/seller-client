@@ -325,7 +325,7 @@ const Container = styled.div`
   padding: 50px 59px 0;
   h1 {
     font-size: 24px;
-    font-weight: 500;
+    /* font-weight: 500; */
   }
   .area {
     width: 279px;
@@ -354,7 +354,7 @@ const SearchArea = styled.div`
   input {
     border-radius: 10px;
     padding: 10px 14px;
-    font-weight: 500;
+    /* font-weight: 500; */
     box-sizing: border-box;
   }
   .orderNum {
@@ -423,13 +423,13 @@ const Area = styled.div`
     color: #fff;
     padding: 12px 35px;
     background: #0082ff;
-    font-weight: 500;
+    /* font-weight: 500; */
   }
 `;
 
 const InfoTitle = styled.h2`
   font-size: 18px;
-  font-weight: 500;
+  /* font-weight: 500; */
   margin-bottom: 20px;
   display: flex;
   justify-content: space-between;
@@ -454,7 +454,7 @@ const FilterBtn = styled.div`
     padding: 10px 15px;
     background: #fff;
     color: #000;
-    font-weight: 500;
+    /* font-weight: 500; */
     border-radius: 5px;
   }
   button:last-child {
