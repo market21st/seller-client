@@ -26,15 +26,17 @@ article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
 	display: block;
 }
-*{ font-family: 'Spoqa Han Sans','Sans-serif'; }
+* { font-family: 'Spoqa Han Sans Neo', 'sans-serif'; }
 body {
 	line-height: 1;
-	
 }
 div{
-	font-weight: 500;
+	/* font-weight: 500; */
 }
 h3{
+	/* font-weight: 500; */
+}
+h1, h2, h3, h4, h5, h6 {
 	font-weight: 500;
 }
 ol, ul {

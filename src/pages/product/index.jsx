@@ -15,49 +15,9 @@ import {
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { getStock } from "../../api/stock";
-import ListModal from "../../components/listmodal";
+import ListModal from "../../components/common/ListModal";
 
-const Container = styled.div`
-  width: 100%;
-  height: 100%;
-  padding: 50px 59px 50px;
-  h1 {
-    font-size: 24px;
-    font-weight: 500;
-  }
-  em {
-    font-style: normal;
-  }
-  .area {
-    width: 279px;
-  }
-  & .MuiOutlinedInput-notchedOutline {
-    border: none !important;
-  }
-  a {
-    display: block;
-    padding: 10px 0 5px;
-  }
-  .scroll::-webkit-scrollbar {
-    width: 10px;
-  }
-  .scroll::-webkit-scrollbar-thumb {
-    background-color: #0082ff;
-    border-radius: 5px;
-  }
-  .scroll::-webkit-scrollbar-track {
-    background-color: #f8f8f8;
-  }
-`;
-
-const TopBox = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 30px;
-`;
-
-const StockList = () => {
+const ProductList = () => {
   const [optionText, setOptionText] = useState("");
   const [el, setel] = useState([]);
   const [curpage, setCurPage] = useState(1);
@@ -202,4 +162,44 @@ const StockList = () => {
     </>
   );
 };
-export default StockList;
+export default ProductList;
+
+const Container = styled.div`
+  width: 100%;
+  height: 100%;
+  padding: 50px 59px 50px;
+  h1 {
+    font-size: 24px;
+    /* font-weight: 500; */
+  }
+  em {
+    font-style: normal;
+  }
+  .area {
+    width: 279px;
+  }
+  & .MuiOutlinedInput-notchedOutline {
+    border: none !important;
+  }
+  a {
+    display: block;
+    padding: 10px 0 5px;
+  }
+  .scroll::-webkit-scrollbar {
+    width: 10px;
+  }
+  .scroll::-webkit-scrollbar-thumb {
+    background-color: #0082ff;
+    border-radius: 5px;
+  }
+  .scroll::-webkit-scrollbar-track {
+    background-color: #f8f8f8;
+  }
+`;
+
+const TopBox = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+`;

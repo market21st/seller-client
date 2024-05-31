@@ -1,8 +1,9 @@
 import { instance } from "../utils/axios";
 import { Cookies } from "react-cookie";
+
 export const cookies = new Cookies();
 
-export const RegisterUser = async (params) => {
+export const registerUser = async (params) => {
   try {
     const res = await instance.post(`/auth/signup`, params, {
       headers: {
@@ -35,7 +36,7 @@ export const logoutUser = async () => {
 };
 
 // 로그인
-export const LoginUser = async (params) => {
+export const loginUser = async (params) => {
   try {
     const res = await instance.post(`/auth/login`, params);
     if (res.data.statusCode === 200) {
