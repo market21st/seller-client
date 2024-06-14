@@ -30,8 +30,8 @@ footer, header, hgroup, menu, nav, section {
 body {
 	line-height: 1;
 }
-h2, h3, h4, h5, h6 {
-	font-weight: 500;
+h1, h2, h3, h4, h5, h6 {
+	font-weight: initial;
 }
 ol, ul {
 	list-style: none;

@@ -22,7 +22,7 @@ export const getState = async () => {
 };
 
 // 상세
-export const getDetail = async (id) => {
+export const getOrderDetail = async (id) => {
   try {
     const res = await instance.get(`/order/info/${id}`);
     return res.data;

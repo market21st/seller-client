@@ -35,7 +35,7 @@ const TABLE_HEAD_CELLS = [
   "출고 배송정보",
 ];
 
-const statusBgColor = (value) =>
+export const statusBgColor = (value) =>
   value === 500
     ? "success"
     : value === 110 || value === 140
@@ -129,14 +129,14 @@ const OrderListPage = () => {
   }, []);
 
   return (
-    <Wrap>
-      <TitleWrap>
+    <TemplateWrap>
+      <TemplateTitleWrap>
         <h2>주문 배송 관리</h2>
         <h3>모든 주문 내역을 조회할 수 있는 메뉴입니다.</h3>
-      </TitleWrap>
-      <Box>
+      </TemplateTitleWrap>
+      <TemplateBox>
         <h4>주문 검색</h4>
-        <SearchRow>
+        <TemplateRow>
           <p>처리상태</p>
           <Grid container flexWrap={"wrap"}>
             {statusList.map(({ key, value }) => (
@@ -152,8 +152,8 @@ const OrderListPage = () => {
               />
             ))}
           </Grid>
-        </SearchRow>
-        <SearchRow>
+        </TemplateRow>
+        <TemplateRow>
           <p>조회기간 (주문일)</p>
           <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ko">
             <DatePicker
@@ -170,8 +170,8 @@ const OrderListPage = () => {
               onChange={(v) => setEndDate(v)}
             />
           </LocalizationProvider>
-        </SearchRow>
-        <SearchRow>
+        </TemplateRow>
+        <TemplateRow>
           <p>상세조건</p>
           <TextField
             label="주문번호"
@@ -184,7 +184,7 @@ const OrderListPage = () => {
             value={productName}
             onChange={(e) => setProductName(e.target.value)}
           />
-        </SearchRow>
+        </TemplateRow>
         <ButtonWrap>
           <Button variant="contained" size="large" onClick={handleClickSearch}>
             조회
@@ -193,8 +193,8 @@ const OrderListPage = () => {
             초기화
           </Button>
         </ButtonWrap>
-      </Box>
-      <Box>
+      </TemplateBox>
+      <TemplateBox>
         <h4>전체 주문 검색 목록 ({total}건)</h4>
         <Table>
           <TableHead>
@@ -229,7 +229,7 @@ const OrderListPage = () => {
             ))}
           </TableBody>
         </Table>
-      </Box>
+      </TemplateBox>
       <Grid container justifyContent={"center"}>
         <Pagination
           count={Math.ceil(total / take)}
@@ -239,12 +239,12 @@ const OrderListPage = () => {
           showLastButton
         />
       </Grid>
-    </Wrap>
+    </TemplateWrap>
   );
 };
 export default OrderListPage;
 
-const Wrap = styled.div`
+export const TemplateWrap = styled.div`
   padding: 40px 60px;
   display: flex;
   flex-direction: column;
@@ -261,16 +261,19 @@ const Wrap = styled.div`
     color: #8e9ebf;
     font-size: 14px;
     font-weight: 700;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
 `;
 
-const TitleWrap = styled.div`
+export const TemplateTitleWrap = styled.div`
   display: flex;
   flex-direction: column;
   gap: 8px;
 `;
 
-const Box = styled.div`
+export const TemplateBox = styled.div`
   background: #fff;
   padding: 20px;
   display: flex;
@@ -287,13 +290,21 @@ const ButtonWrap = styled.div`
   border-top: 1px solid var(--BlueGray-100, #e4e9f5);
 `;
 
-const SearchRow = styled.div`
+export const TemplateRow = styled.div`
   display: flex;
   align-items: center;
   gap: 10px;
+  font-size: 14px;
   & > p {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
     min-width: 200px;
-    font-size: 14px;
     font-weight: 500;
+    & > span {
+      color: #8e9ebf;
+      font-size: 11px;
+      font-weight: 400;
+    }
   }
 `;

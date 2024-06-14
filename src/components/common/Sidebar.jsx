@@ -190,7 +190,7 @@ const LogoImg = styled.img`
 const Logo = styled.a`
   display: block;
   position: relative;
-  height: 7.6vh;
+  height: 80px;
   width: 80%;
   margin: 0 auto;
 `;
@@ -306,7 +306,7 @@ const Header = styled.div`
   align-items: center;
   justify-content: end;
   background: #0082ff;
-  height: 7.6vh;
+  height: 80px;
   width: 100%;
   padding: 0 59px;
   ul {
