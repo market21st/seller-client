@@ -5,6 +5,7 @@ import { getOrder, getState } from "../../api/order";
 import {
   Button,
   Checkbox,
+  Chip,
   FormControlLabel,
   Grid,
   Pagination,
@@ -34,12 +35,23 @@ const TABLE_HEAD_CELLS = [
   "출고 배송정보",
 ];
 
+const statusBgColor = (value) =>
+  value === 500
+    ? "success"
+    : value === 110 || value === 140
+    ? "error"
+    : "default";
+
 const rowCells = (row) => [
   `${row.productName}\n${row.optionText}`,
   row.gradeText,
   row.merchantUid,
   `${row.createdAt.split("T")[0]} ${row.createdAt.split("T")[1].slice(0, 8)}`,
-  row.statusText,
+  <Chip
+    label={row.statusText}
+    color={statusBgColor(row.status)}
+    onClick={(e) => e.stopPropagation()}
+  />,
   `${row.price.toLocaleString()}원`,
   row.fee,
   `${
@@ -50,6 +62,7 @@ const rowCells = (row) => [
 ];
 
 const OrderListPage = () => {
+  const today = dayjs().set("hour", 0).set("minute", 0).set("second", 0);
   const navigator = useNavigate();
 
   const [statusList, setStatusList] = useState([]);
@@ -57,8 +70,8 @@ const OrderListPage = () => {
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
 
-  const [startDate, setStartDate] = useState(dayjs().add(-1, "M"));
-  const [endDate, setEndDate] = useState(dayjs());
+  const [startDate, setStartDate] = useState(today.add(-1, "M"));
+  const [endDate, setEndDate] = useState(today);
   const [merchantUid, setMerchantUid] = useState("");
   const [productName, setProductName] = useState("");
   const [status, setStatus] = useState([]);
