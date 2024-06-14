@@ -398,8 +398,7 @@ const Container = styled.div`
   overflow-y: scroll;
   padding: 50px 59px;
   h1 {
-    font-size: 24px;
-    /* font-weight: 500; */
+    font-size: 20px;
   }
   & .MuiOutlinedInput-notchedOutline {
     border: none !important;

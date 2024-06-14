@@ -74,7 +74,7 @@ const Container = styled.div`
   padding: 50px 40px;
   box-sizing: border-box;
   h1 {
-    font-size: 24px;
+    font-size: 20px;
     margin-bottom: 20px;
   }
 `;
