@@ -21,6 +21,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import "dayjs/locale/ko";
 import dayjs from "dayjs";
+import StatusUpdateModal from "../../components/order/StatusUpdateModal";
 
 const take = 5;
 
@@ -42,31 +43,12 @@ export const statusBgColor = (value) =>
     ? "error"
     : "default";
 
-const rowCells = (row) => [
-  `${row.productName}\n${row.optionText}`,
-  row.gradeText,
-  row.merchantUid,
-  `${row.createdAt.split("T")[0]} ${row.createdAt.split("T")[1].slice(0, 8)}`,
-  <Chip
-    label={row.statusText}
-    color={statusBgColor(row.status)}
-    onClick={(e) => e.stopPropagation()}
-  />,
-  `${row.price.toLocaleString()}원`,
-  row.fee,
-  `${
-    row.deliveryInformationToAdmin
-      ? `${row.deliveryInformationToAdmin.deliveryCorpNameToAdmin} | ${row.deliveryInformationToAdmin.invoiceNoToAdmin}`
-      : "-"
-  }`,
-];
-
 const OrderListPage = () => {
   const today = dayjs().set("hour", 0).set("minute", 0).set("second", 0);
   const navigator = useNavigate();
 
   const [statusList, setStatusList] = useState([]);
-  const [results, setResults] = useState([]);
+  const [list, setList] = useState([]);
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
 
@@ -75,6 +57,32 @@ const OrderListPage = () => {
   const [merchantUid, setMerchantUid] = useState("");
   const [productName, setProductName] = useState("");
   const [status, setStatus] = useState([]);
+
+  const [isOpenStatusUpdateModal, setIsOpenStatusUpdateModal] = useState(false);
+  const [item, setItem] = useState({});
+
+  const rowCells = (row) => [
+    `${row.productName}\n${row.optionText}`,
+    row.gradeText,
+    row.merchantUid,
+    `${row.createdAt.split("T")[0]} ${row.createdAt.split("T")[1].slice(0, 8)}`,
+    <Chip
+      label={row.statusText}
+      color={statusBgColor(row.status)}
+      onClick={(e) => {
+        e.stopPropagation();
+        setItem(row);
+        handleOpenStatusUpdateModal();
+      }}
+    />,
+    `${row.price.toLocaleString()}원`,
+    row.fee,
+    `${
+      row.deliveryInformationToAdmin
+        ? `${row.deliveryInformationToAdmin.deliveryCorpNameToAdmin} | ${row.deliveryInformationToAdmin.invoiceNoToAdmin}`
+        : "-"
+    }`,
+  ];
 
   const handleClickSearch = () => {
     getList();
@@ -91,18 +99,20 @@ const OrderListPage = () => {
   };
 
   const handleCheckStauts = (value) => {
-    if (status.indexOf(value) === -1) {
-      setStatus([...status, value]);
-    } else {
-      setStatus([...status.filter((v) => v !== value)]);
-    }
+    if (status.indexOf(value) === -1) setStatus([...status, value]);
+    else setStatus([...status.filter((v) => v !== value)]);
+  };
+
+  const handleOpenStatusUpdateModal = () => {
+    setIsOpenStatusUpdateModal(true);
+  };
+  const handleCloseStatusUpdateModal = () => {
+    setIsOpenStatusUpdateModal(false);
   };
 
   const getStatusList = async () => {
     const { data, statusCode } = await getState();
-    if (statusCode === 200) {
-      setStatusList(data.orderStatus);
-    }
+    if (statusCode === 200) setStatusList(data.orderStatus);
   };
   const getList = async (pageValue) => {
     const page = pageValue || 1;
@@ -118,7 +128,7 @@ const OrderListPage = () => {
     const { data, statusCode } = await getOrder(searchData);
     if (statusCode === 200) {
       setTotal(data.total);
-      setResults(data.results);
+      setList(data.results);
       setPage(page);
     }
   };
@@ -129,117 +139,134 @@ const OrderListPage = () => {
   }, []);
 
   return (
-    <TemplateWrap>
-      <TemplateTitleWrap>
-        <h2>주문 배송 관리</h2>
-        <h3>모든 주문 내역을 조회할 수 있는 메뉴입니다.</h3>
-      </TemplateTitleWrap>
-      <TemplateBox>
-        <h4>주문 검색</h4>
-        <TemplateRow>
-          <p>처리상태</p>
-          <Grid container flexWrap={"wrap"}>
-            {statusList.map(({ key, value }) => (
-              <FormControlLabel
-                key={`status_${value}`}
-                label={key}
-                control={
-                  <Checkbox
-                    checked={status.indexOf(value) !== -1}
-                    onChange={() => handleCheckStauts(value)}
-                  />
-                }
-              />
-            ))}
-          </Grid>
-        </TemplateRow>
-        <TemplateRow>
-          <p>조회기간 (주문일)</p>
-          <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ko">
-            <DatePicker
-              format="YYYY-MM-DD"
-              maxDate={endDate}
-              value={startDate}
-              onChange={(v) => setStartDate(v)}
-            />
-            <span>~</span>
-            <DatePicker
-              format="YYYY-MM-DD"
-              minDate={startDate}
-              value={endDate}
-              onChange={(v) => setEndDate(v)}
-            />
-          </LocalizationProvider>
-        </TemplateRow>
-        <TemplateRow>
-          <p>상세조건</p>
-          <TextField
-            label="주문번호"
-            value={merchantUid}
-            onChange={(e) => setMerchantUid(e.target.value)}
-          />
-          <TextField
-            label="상품명"
-            placeholder="갤럭시"
-            value={productName}
-            onChange={(e) => setProductName(e.target.value)}
-          />
-        </TemplateRow>
-        <ButtonWrap>
-          <Button variant="contained" size="large" onClick={handleClickSearch}>
-            조회
-          </Button>
-          <Button variant="outlined" size="large" onClick={handleClickInit}>
-            초기화
-          </Button>
-        </ButtonWrap>
-      </TemplateBox>
-      <TemplateBox>
-        <h4>전체 주문 검색 목록 ({total}건)</h4>
-        <Table>
-          <TableHead>
-            <TableRow>
-              {TABLE_HEAD_CELLS.map((v) => (
-                <TableCell key={`head_cell_${v}`}>{v}</TableCell>
+    <>
+      <StatusUpdateModal
+        open={isOpenStatusUpdateModal}
+        onClose={handleCloseStatusUpdateModal}
+        status={item.status}
+        statusText={item.statusText}
+        statusToBeGroup={item.statusToBeGroup?.results}
+        id={item.id}
+        reload={() => {
+          getList();
+        }}
+      />
+      <TemplateWrap>
+        <TemplateTitleWrap>
+          <h2>주문 배송 관리</h2>
+          <h3>모든 주문 내역을 조회할 수 있는 메뉴입니다.</h3>
+        </TemplateTitleWrap>
+        <TemplateBox>
+          <h4>주문 검색</h4>
+          <TemplateRow>
+            <p>처리상태</p>
+            <Grid container flexWrap={"wrap"}>
+              {statusList.map(({ key, value }) => (
+                <FormControlLabel
+                  key={`status_${value}`}
+                  label={key}
+                  control={
+                    <Checkbox
+                      checked={status.indexOf(value) !== -1}
+                      onChange={() => handleCheckStauts(value)}
+                    />
+                  }
+                />
               ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {results.map((row) => (
-              <TableRow
-                key={`row_${row.id}`}
-                sx={{
-                  "&:last-child td, &:last-child th": { border: 0 },
-                  "&:hover": {
-                    background: "#F2F8FF",
-                  },
-                  cursor: "pointer",
-                }}
-                onClick={() => handleClickRow(row.id)}
-              >
-                {rowCells(row).map((v, idx) => (
-                  <TableCell
-                    key={`row_cell_${idx}`}
-                    sx={{ whiteSpace: "pre-wrap" }}
-                  >
-                    {v}
-                  </TableCell>
+            </Grid>
+          </TemplateRow>
+          <TemplateRow>
+            <p>조회기간 (주문일)</p>
+            <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ko">
+              <DatePicker
+                format="YYYY-MM-DD"
+                maxDate={endDate}
+                value={startDate}
+                onChange={(v) => setStartDate(v)}
+              />
+              <span>~</span>
+              <DatePicker
+                format="YYYY-MM-DD"
+                minDate={startDate}
+                value={endDate}
+                onChange={(v) => setEndDate(v)}
+              />
+            </LocalizationProvider>
+          </TemplateRow>
+          <TemplateRow>
+            <p>상세조건</p>
+            <TextField
+              label="주문번호"
+              value={merchantUid}
+              onChange={(e) => setMerchantUid(e.target.value)}
+            />
+            <TextField
+              label="상품명"
+              placeholder="갤럭시"
+              value={productName}
+              onChange={(e) => setProductName(e.target.value)}
+            />
+          </TemplateRow>
+          <ButtonWrap>
+            <Button
+              variant="contained"
+              size="large"
+              onClick={handleClickSearch}
+            >
+              조회
+            </Button>
+            <Button variant="outlined" size="large" onClick={handleClickInit}>
+              초기화
+            </Button>
+          </ButtonWrap>
+        </TemplateBox>
+        <TemplateBox>
+          <h4>전체 주문 검색 목록 ({total}건)</h4>
+          <Table>
+            <TableHead>
+              <TableRow>
+                {TABLE_HEAD_CELLS.map((v) => (
+                  <TableCell key={`head_cell_${v}`}>{v}</TableCell>
                 ))}
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TemplateBox>
-      <Grid container justifyContent={"center"}>
-        <Pagination
-          count={Math.ceil(total / take)}
-          page={page}
-          onChange={(e, v) => handleChangePage(v)}
-          showFirstButton
-          showLastButton
-        />
-      </Grid>
-    </TemplateWrap>
+            </TableHead>
+            <TableBody>
+              {list?.map((row) => (
+                <TableRow
+                  key={`row_${row.id}`}
+                  sx={{
+                    "&:last-child td, &:last-child th": { border: 0 },
+                    "&:hover": {
+                      background: "#F2F8FF",
+                    },
+                    cursor: "pointer",
+                  }}
+                  onClick={() => handleClickRow(row.id)}
+                >
+                  {rowCells(row).map((v, idx) => (
+                    <TableCell
+                      key={`row_cell_${idx}`}
+                      sx={{ whiteSpace: "pre-wrap" }}
+                    >
+                      {v}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TemplateBox>
+        <Grid container justifyContent={"center"}>
+          <Pagination
+            count={Math.ceil(total / take)}
+            page={page}
+            onChange={(e, v) => handleChangePage(v)}
+            showFirstButton
+            showLastButton
+          />
+        </Grid>
+      </TemplateWrap>
+    </>
   );
 };
 export default OrderListPage;
@@ -295,6 +322,7 @@ export const TemplateRow = styled.div`
   align-items: center;
   gap: 10px;
   font-size: 14px;
+  padding: 6px 0;
   & > p {
     display: flex;
     flex-direction: column;

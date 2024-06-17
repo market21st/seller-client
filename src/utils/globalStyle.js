@@ -28,7 +28,7 @@ footer, header, hgroup, menu, nav, section {
 }
 * { font-family: 'Spoqa Han Sans Neo', 'sans-serif'; }
 body {
-	line-height: 1;
+	line-height: 1.4;
 }
 h1, h2, h3, h4, h5, h6 {
 	font-weight: initial;
