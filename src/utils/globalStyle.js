@@ -54,6 +54,8 @@ const GlobalStyles = createGlobalStyle`
 		font-size: inherit;
 		color: inherit;
 		font-family: inherit;
+		padding: 0;
+		cursor: pointer;
 	}
 	a {
 		color: inherit;

@@ -50,30 +50,29 @@ const GradeModal = ({ isOpen, onClose }) => {
     <Modal
       open={isOpen}
       onClose={onClose}
-      aria-labelledby="modal-modal-title"
-      aria-describedby="modal-modal-description"
+      sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
     >
-      <InnerBox>
-        <CategoryBox>
+      <ModalWrap>
+        <button>
           <img src={closeIcon} alt="닫기" onClick={onClose} />
-          <ul>
-            {cetagory?.map((el, idx) => (
-              <li
-                key={idx}
-                onClick={() => {
-                  setCetagoryNum(idx);
-                  setNum(0);
-                }}
-                className={cetagoryNum === idx ? "active" : ""}
-              >
-                {el}
-              </li>
-            ))}
-          </ul>
-        </CategoryBox>
+        </button>
+        <CategoryList>
+          {cetagory?.map((el, idx) => (
+            <li
+              key={idx}
+              onClick={() => {
+                setCetagoryNum(idx);
+                setNum(0);
+              }}
+              className={cetagoryNum === idx ? "active" : ""}
+            >
+              {el}
+            </li>
+          ))}
+        </CategoryList>
         <Contents>
           {cetagoryNum > 1 ? null : (
-            <section>
+            <ImageWrap>
               <ul
                 className={
                   slideNum === 1 ? "left100" : slideNum === 2 ? "left200" : ""
@@ -93,9 +92,8 @@ const GradeModal = ({ isOpen, onClose }) => {
                   <img src={nextIcon} alt="다음" />
                 </button>
               </BtnBox>
-            </section>
+            </ImageWrap>
           )}
-
           <GradeList>
             {grades?.map((el, idx) => (
               <li
@@ -109,125 +107,130 @@ const GradeModal = ({ isOpen, onClose }) => {
               </li>
             ))}
           </GradeList>
-          <InfoList>
+          <ul>
             {/* S급 */}
-            <List className={num === 0 ? "active" : ""}>
-              <h3>외관 기준</h3>
-              <ul>
-                <li>액정 : 기스없이 깨끗해요.</li>
-                <li>외관 : 기스없이 깨끗해요.</li>
-                <li>테두리 : 찍힘이 없이 개끗해요.</li>
-              </ul>
-              <h3>성능 기준</h3>
-              <ul>
-                <li>배터리 효율 최소 85% 이상</li>
-                <li>전체 기능 및 성능 검수를 통과한 100% 정상 작동 기기</li>
-              </ul>
-            </List>
+            <Info className={num === 0 ? "active" : ""}>
+              <div>
+                <h3>외관 기준</h3>
+                <ul>
+                  <li>액정 : 기스없이 깨끗해요.</li>
+                  <li>외관 : 기스없이 깨끗해요.</li>
+                  <li>테두리 : 찍힘이 없이 개끗해요.</li>
+                </ul>
+              </div>
+              <div>
+                <h3>성능 기준</h3>
+                <ul>
+                  <li>배터리 효율 최소 85% 이상</li>
+                  <li>전체 기능 및 성능 검수를 통과한 100% 정상 작동 기기</li>
+                </ul>
+              </div>
+            </Info>
             {/* A급 */}
-            <List className={num === 1 ? "active" : ""}>
-              <h3>외관 기준</h3>
-              <ul>
-                <li>액정 : 기스없이 깨끗해요.</li>
-                <li>외관 : 미세한 기스가 있을 수 있어요.</li>
-                <li>테두리 : 미세한 까짐이 있어요.</li>
-              </ul>
-              <h3>성능 기준</h3>
-              <ul>
-                <li>배터리 효율 최소 85% 이상</li>
-                <li>전체 기능 및 성능 검수를 통과한 100% 정상 작동 기기</li>
-              </ul>
-            </List>
+            <Info className={num === 1 ? "active" : ""}>
+              <div>
+                <h3>외관 기준</h3>
+                <ul>
+                  <li>액정 : 기스없이 깨끗해요.</li>
+                  <li>외관 : 미세한 기스가 있을 수 있어요.</li>
+                  <li>테두리 : 미세한 까짐이 있어요.</li>
+                </ul>
+              </div>
+              <div>
+                <h3>성능 기준</h3>
+                <ul>
+                  <li>배터리 효율 최소 85% 이상</li>
+                  <li>전체 기능 및 성능 검수를 통과한 100% 정상 작동 기기</li>
+                </ul>
+              </div>
+            </Info>
             {/* B급 */}
-            <List className={num === 2 ? "active" : ""}>
-              <h3>외관 기준</h3>
-              <ul>
-                <li>액정 : 잔기스가 있지만 화면을 볼 때 거슬리지 않아요.</li>
-                <li>외관 : 육안으로 확인되는 기스가 있어요.</li>
-                <li>테두리 : 까짐과 찍힘이 있어요.</li>
-              </ul>
-              <h3>성능 기준</h3>
-              <ul>
-                <li>배터리 효율 최소 80% 이상</li>
-                <li>전체 기능 및 성능 검수를 통과한 100% 정상 작동 기기</li>
-              </ul>
-            </List>
-          </InfoList>
+            <Info className={num === 2 ? "active" : ""}>
+              <div>
+                <h3>외관 기준</h3>
+                <ul>
+                  <li>액정 : 잔기스가 있지만 화면을 볼 때 거슬리지 않아요.</li>
+                  <li>외관 : 육안으로 확인되는 기스가 있어요.</li>
+                  <li>테두리 : 까짐과 찍힘이 있어요.</li>
+                </ul>
+              </div>
+              <div>
+                <h3>성능 기준</h3>
+                <ul>
+                  <li>배터리 효율 최소 80% 이상</li>
+                  <li>전체 기능 및 성능 검수를 통과한 100% 정상 작동 기기</li>
+                </ul>
+              </div>
+            </Info>
+          </ul>
         </Contents>
-      </InnerBox>
+      </ModalWrap>
     </Modal>
   );
 };
 
 export default GradeModal;
 
-const InnerBox = styled.div`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: #fff;
-  width: 490px;
-  box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.25);
-  border-radius: 2px;
-  outline: none;
-`;
-
-const CategoryBox = styled.div`
-  background: #fff;
-  padding: 0 0 15px;
-  align-items: flex-end;
+const ModalWrap = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
-  ul {
-    width: 100%;
+  width: 450px;
+  max-width: 90%;
+  & > button {
     display: flex;
-    justify-content: space-between;
-    padding: 0 35px;
+    position: absolute;
+    top: 10px;
+    right: 10px;
   }
+`;
+
+const CategoryList = styled.ul`
+  background: #fff;
+  display: flex;
+  gap: 8px;
+  padding: 50px 20px 10px;
   li {
-    border-radius: 15px;
-    padding: 10px 18px;
-    color: #404040;
-    font-size: 20px;
+    width: 100%;
+    font-weight: 500;
+    border-radius: 8px;
+    padding: 10px;
+    text-align: center;
     cursor: pointer;
   }
-  img {
-    padding: 5px;
-    cursor: pointer;
-  }
-  .active {
+  li.active {
     color: #fff;
     background: #0082ff;
   }
 `;
+
 const Contents = styled.div`
-  padding: 20px 35px 44px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 20px;
   background: #e9e9e9;
-  section {
+`;
+
+const ImageWrap = styled.div`
+  position: relative;
+  overflow: hidden;
+  ul {
     position: relative;
-    overflow: hidden;
-    ul {
-      position: relative;
-      display: flex;
-      justify-content: space-between;
-      left: 0%;
-    }
-    .left100 {
+    display: flex;
+    left: 0%;
+    &.left100 {
       left: -100%;
     }
-    .left200 {
+    &.left200 {
       left: -200%;
     }
-    li {
-      margin: 0 10px;
-    }
     img {
-      display: block;
+      width: 410px;
+      object-fit: cover;
     }
   }
 `;
-
 const BtnBox = styled.div`
   display: flex;
   justify-content: space-between;
@@ -235,21 +238,21 @@ const BtnBox = styled.div`
   top: 50%;
   transform: translateY(-50%);
   width: 100%;
-  padding: 0 12px;
+  button {
+    padding: 10px;
+  }
 `;
 
 const GradeList = styled.ul`
-  margin-top: 20px;
   display: flex;
-  justify-content: space-between;
-  width: 100%;
-  padding: 0 14px;
+  gap: 16px;
   li {
-    padding: 18px 30px;
-    border: 1px solid #404040;
+    width: 100%;
+    font-weight: 500;
     border-radius: 8px;
-    font-size: 16px;
-    /* font-weight: 500; */
+    padding: 10px 20px;
+    border: 1px solid #404040;
+    text-align: center;
     cursor: pointer;
   }
   .active {
@@ -258,28 +261,23 @@ const GradeList = styled.ul`
   }
 `;
 
-const InfoList = styled.ul`
-  width: 100%;
-  padding: 0 14px;
-  h3 {
-    /* font-weight: 500; */
-    margin: 20px 0 8px;
-  }
-  ul {
+const Info = styled.li`
+  display: none;
+  flex-direction: column;
+  gap: 16px;
+  & > div {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-size: 14px;
+    h3 {
+      font-weight: 500;
+    }
     li {
-      width: 100%;
-      list-style: disc;
-      font-size: 14px;
-      color: #747474;
-      margin-left: 14px;
-      line-height: 1.5;
+      color: #5a6080;
     }
   }
-  .active {
-    display: block;
+  &.active {
+    display: flex;
   }
-`;
-
-const List = styled.li`
-  display: none;
 `;
