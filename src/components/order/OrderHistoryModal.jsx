@@ -69,6 +69,7 @@ export default OrderHistoryModal;
 export const ModalWrap = styled.div`
   position: relative;
   width: 800px;
+  max-width: 80%;
   max-height: 80%;
   overflow-y: auto;
   padding: 40px;
