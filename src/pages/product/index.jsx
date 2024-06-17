@@ -16,6 +16,7 @@ import {
 import SearchIcon from "@mui/icons-material/Search";
 import { getStock } from "../../api/stock";
 import ListModal from "../../components/common/ListModal";
+import { TemplateTitleWrap, TemplateWrap } from "../order";
 
 const ProductList = () => {
   const [optionText, setOptionText] = useState("");
@@ -80,10 +81,10 @@ const ProductList = () => {
         id={listmodal.id}
         onClose={onClickClose}
       />
-      <Container>
-        <TopBox>
-          <h1>상품 등록</h1>
-        </TopBox>
+      <TemplateWrap>
+        <TemplateTitleWrap>
+          <h2>상품 등록</h2>
+        </TemplateTitleWrap>
         <Grid container marginBottom={"20px"}>
           <Grid item xs={6}>
             <Grid container position={"relative"} alignItems="center">
@@ -91,19 +92,12 @@ const ProductList = () => {
                 fullWidth
                 size="small"
                 placeholder={"모델명을 입력하세요."}
-                variant="outlined"
                 value={optionText || ""}
-                autoComplete={"off"}
                 inputProps={{
                   style: {
                     paddingLeft: "36px",
                     height: "30px",
-                    border: "2px solid #0082FF",
-                    borderRadius: "20px",
                   },
-                }}
-                sx={{
-                  "input:focus": { boxShadow: 2 },
                 }}
                 onChange={(e) => setOptionText(e.target.value)}
               />
@@ -158,7 +152,7 @@ const ProductList = () => {
             onChange={(e, page) => onChangePage(page)}
           />
         </Grid>
-      </Container>
+      </TemplateWrap>
     </>
   );
 };
@@ -194,11 +188,4 @@ const Container = styled.div`
   .scroll::-webkit-scrollbar-track {
     background-color: #f8f8f8;
   }
-`;
-
-const TopBox = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 30px;
 `;

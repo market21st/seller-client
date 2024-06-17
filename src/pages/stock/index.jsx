@@ -1,12 +1,13 @@
 import React, { useEffect, useCallback, useState } from "react";
 import styled from "styled-components";
 import Item from "../../components/stock/Item";
-import { Grid, TextField, Pagination, Tabs, Tab } from "@mui/material";
+import { Grid, TextField, Pagination, Tabs, Tab, Button } from "@mui/material";
 import { getStockList } from "../../api/stock";
 import defaultIcon from "../../assets/default.png";
 import GradeModal from "../../components/stock/GradeModal";
 import { debounce } from "../../utils/debounce";
 import SearchIcon from "@mui/icons-material/Search";
+import { TemplateTitleWrap, TemplateWrap } from "../order";
 
 const StockList = () => {
   const [listData, setListData] = useState([]);
@@ -56,10 +57,10 @@ const StockList = () => {
   return (
     <>
       <GradeModal isOpen={gradeModal} onClose={gradeModalClose} />
-      <Container>
-        <TopBox>
-          <h1>재고 관리</h1>
-        </TopBox>
+      <TemplateWrap>
+        <TemplateTitleWrap>
+          <h2>재고 관리</h2>
+        </TemplateTitleWrap>
         <SearchArea>
           <Grid item xs={6}>
             <Grid container position={"relative"} alignItems="center">
@@ -67,22 +68,12 @@ const StockList = () => {
                 fullWidth
                 size="small"
                 placeholder={"모델명을 입력하세요."}
-                variant="outlined"
                 value={optionText || ""}
-                autoComplete={"off"}
                 inputProps={{
                   style: {
                     paddingLeft: "36px",
                     height: "30px",
-                    border: "2px solid #0082FF",
-                    borderRadius: "20px",
-                    "&.Mui-focused fieldset": {
-                      borderColor: "green",
-                    },
                   },
-                }}
-                sx={{
-                  "input:focus": { boxShadow: 2 },
                 }}
                 onChange={(e) => setOptionText(e.target.value)}
               />
@@ -94,20 +85,19 @@ const StockList = () => {
         </SearchArea>
         <InfoTitle>
           <p>
-            우선판매권을 얻으려면<span>현재 최저가미만의 가격</span>을
+            우선판매권을 얻으려면 <span>현재 최저가미만의 가격</span>을
             입력해야합니다.
           </p>
-          <div>
-            <button
-              onClick={() => {
-                setGradeModal(true);
-              }}
-            >
-              등급 기준 보기
-            </button>
-          </div>
+          <Button
+            variant="contained"
+            size="large"
+            onClick={() => {
+              setGradeModal(true);
+            }}
+          >
+            등급 기준 보기
+          </Button>
         </InfoTitle>
-
         <ListContainer>
           <Tabs
             value={type}
@@ -158,7 +148,7 @@ const StockList = () => {
             onChange={(e, page) => onChangePage(page)}
           />
         </Grid>
-      </Container>
+      </TemplateWrap>
     </>
   );
 };
@@ -195,25 +185,15 @@ const Container = styled.div`
   }
 `;
 
-const TopBox = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 50px 59px 0;
-  margin-bottom: 30px;
-`;
-
 const SearchArea = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  padding: 0 59px 0;
 `;
 
 const ItemBox = styled.li`
   box-shadow: 4px 4px 4px 0px rgba(0, 0, 0, 0.1);
-  padding: 0 59px 0;
   h2 {
     width: 100%;
     padding: 30px;
@@ -221,40 +201,24 @@ const ItemBox = styled.li`
   }
 `;
 
-const InfoTitle = styled.h2`
-  font-size: 18px;
-  /* font-weight: 500; */
+const InfoTitle = styled.div`
   margin-bottom: 20px;
   display: flex;
   justify-content: space-between;
-  padding: 0 59px 0;
-  align-items: flex-end;
+  align-items: center;
+  p {
+    font-size: 20px;
+    font-weight: 500;
+  }
   span {
     color: #d74b4b;
     padding: 0 4px;
   }
-  button:first-child {
-    border: 2px solid #0082ff;
-    color: #0082ff;
-    background: none;
-  }
-  button {
-    font-size: 16px;
-    /* font-weight: 500; */
-    padding: 10px 20px;
-    background: #fff;
-    color: #000;
-    border: 1.5px solid #404040;
-    border-radius: 5px;
-    margin-left: 20px;
-  }
 `;
 
 const ListContainer = styled.div`
-  overflow-y: scroll;
   width: 100%;
-  padding: 0 59px 0;
-  -ms-overflow-style: none;
+  overflow-y: auto;
   li {
     display: flex;
     justify-content: space-between;

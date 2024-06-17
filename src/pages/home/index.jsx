@@ -49,41 +49,41 @@ const Home = () => {
     <Container>
       <Popup />
       <Box>
-        <h1>처리 대기</h1>
+        <h2>처리 대기</h2>
         <Row>
           <ContentBox>
-            <h2>신규주문</h2>
+            <h3>신규주문</h3>
             <span>{userData.newOrdersCount}건</span>
           </ContentBox>
           <ContentBox>
-            <h2>배송 준비중</h2>
+            <h3>배송 준비중</h3>
             <span>{userData.readyToDeliveryCount}건</span>
           </ContentBox>
           <ContentBox>
-            <h2>반품 요청</h2>
+            <h3>반품 요청</h3>
             <span>{userData.requestToReturnCount}건</span>
           </ContentBox>
         </Row>
       </Box>
       <Box>
-        <h1>제품 현황</h1>
+        <h2>제품 현황</h2>
         <Row>
           <ContentBox>
-            <h2>판매중 제품</h2>
+            <h3>판매중 제품</h3>
             <span>{userData.onSaleCount}건</span>
           </ContentBox>
           <ContentBox>
-            <h2>숨김 제품</h2>
+            <h3>숨김 제품</h3>
             <span>{userData.hidedCount}건</span>
           </ContentBox>
           <ContentBox>
-            <h2>품절 제품</h2>
+            <h3>품절 제품</h3>
             <span>{userData.soldOutCount}건</span>
           </ContentBox>
         </Row>
       </Box>
       <Box>
-        <h1>
+        <h2>
           <p>주문 현황</p>
           <div>
             <FormControl sx={{ width: "100%" }}>
@@ -106,18 +106,18 @@ const Home = () => {
               </Select>
             </FormControl>
           </div>
-        </h1>
+        </h2>
         <Row>
           <ContentBox>
-            <h2>총 주문 건수</h2>
+            <h3>총 주문 건수</h3>
             <span>{userData.totalOrdersCount}건</span>
           </ContentBox>
           <ContentBox>
-            <h2>환불 건수</h2>
+            <h3>환불 건수</h3>
             <span>{userData.requestToRefundCount}건</span>
           </ContentBox>
           <ContentBox>
-            <h2>예상 매출액</h2>
+            <h3>예상 매출액</h3>
             <span>{Math.ceil(userData.expectTakeSum)}원</span>
           </ContentBox>
         </Row>
@@ -128,26 +128,22 @@ const Home = () => {
 export default Home;
 
 const Container = styled.div`
-  width: 100%;
-  height: 100%;
-  padding: 52px;
+  padding: 40px 60px;
   display: flex;
   flex-direction: column;
   gap: 32px;
-  .MuiOutlinedInput-notchedOutline {
-    border: 2px solid #0082ff;
-  }
 `;
 
 const Box = styled.div`
   display: flex;
   flex-direction: column;
   gap: 16px;
-  h1 {
+  h2 {
     display: flex;
     align-items: center;
     gap: 16px;
     font-size: 20px;
+    font-weight: 700;
   }
 `;
 
@@ -167,7 +163,7 @@ const ContentBox = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 24px;
-  h2 {
+  h3 {
     width: 100%;
     font-size: initial;
     font-weight: initial;

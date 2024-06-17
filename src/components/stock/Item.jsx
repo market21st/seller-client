@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import AlertModal from "../common/AlertModal";
 // Mui
-import { FormControl, Select, MenuItem } from "@mui/material";
+import { FormControl, Select, MenuItem, Button } from "@mui/material";
 import { toast } from "react-hot-toast";
 // Api
 import { editStock, DeleteItem } from "../../api/stock";
@@ -215,8 +215,12 @@ const Item = ({
           </FormControl>
         </EditArea>
         <ListBtnBox>
-          <button onClick={deleteList}>삭제</button>
-          <button onClick={edit}>저장</button>
+          <Button variant="outlined" size="large" onClick={deleteList}>
+            삭제
+          </Button>
+          <Button variant="contained" size="large" onClick={edit}>
+            저장
+          </Button>
         </ListBtnBox>
       </ItemBox>
     </>
@@ -291,17 +295,6 @@ const Price = styled.p`
 `;
 
 const ListBtnBox = styled.div`
-  width: 15%;
   display: flex;
-  justify-content: center;
-  button {
-    padding: 7px 19px;
-    background: #e8e8e8;
-    border-radius: 5px;
-  }
-  button:last-child {
-    background: #0082ff;
-    color: #fff;
-    margin-left: 10px;
-  }
+  gap: 16px;
 `;
