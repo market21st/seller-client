@@ -307,7 +307,6 @@ const Header = styled.div`
   justify-content: end;
   background: #0082ff;
   height: 80px;
-  width: 100%;
   padding: 0 59px;
   ul {
     display: flex;
