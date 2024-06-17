@@ -1,7 +1,6 @@
 import React from "react";
 import {
   Button,
-  Grid,
   Modal,
   Table,
   TableBody,
@@ -68,6 +67,7 @@ const OrderHistoryModal = ({ open, onClose, history }) => {
 export default OrderHistoryModal;
 
 export const ModalWrap = styled.div`
+  position: relative;
   width: 800px;
   max-height: 80%;
   overflow-y: auto;

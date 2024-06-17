@@ -146,6 +146,8 @@ const StockList = () => {
             count={Math.ceil(total / 10)}
             page={curpage}
             onChange={(e, page) => onChangePage(page)}
+            showFirstButton
+            showLastButton
           />
         </Grid>
       </TemplateWrap>

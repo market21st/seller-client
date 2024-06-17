@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Grid, Modal, Button } from "@mui/material";
-import styled from "styled-components";
+import { Grid, Modal, Button, Typography } from "@mui/material";
 import { getOptions, getMyProduct, postProduct } from "../../api/stock";
 import { toast } from "react-hot-toast";
 import closeIcon from "../../assets/close.png";
+import { ModalWrap } from "../order/OrderHistoryModal";
 
 const ListModal = ({ isOpen, onClose, id }) => {
   const [data, setData] = useState([]);
@@ -53,97 +53,75 @@ const ListModal = ({ isOpen, onClose, id }) => {
     <Modal
       open={isOpen}
       onClose={onClose}
-      aria-labelledby="modal-modal-title"
-      aria-describedby="modal-modal-description"
+      sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
     >
-      <InnerBox>
-        <Grid container position={"relative"} alignItems="center">
-          <Text>상품 리스트</Text>
-          <Img src={closeIcon} alt="닫기" onClick={onClose} />
-        </Grid>
+      <ModalWrap>
         <Grid
-          container
-          overflow={"auto"}
-          flexWrap="nowrap"
-          maxHeight="700px"
-          flexDirection={"column"}
-          padding={"0 50px 40px"}
+          display={"inline-flex"}
+          position={"absolute"}
+          top={20}
+          right={20}
+          sx={{ cursor: "pointer" }}
         >
+          <img
+            src={closeIcon}
+            alt="닫기"
+            onClick={onClose}
+            width={32}
+            height={32}
+          />
+        </Grid>
+        <h2>상품 리스트</h2>
+        <Grid component={"ul"} container flexDirection={"column"}>
           {data.map((v, idx) => (
             <Grid
-              container
               key={v.id}
-              flexWrap="nowrap"
-              justifyContent="space-between"
-              alignItems="center"
+              component={"li"}
+              container
+              justifyContent={"space-between"}
+              alignItems={"center"}
+              gap={2}
+              py={2}
               borderTop={idx ? "1px solid #eee" : "none"}
-              py="15px"
-              gap="25px"
             >
-              <Grid display={"inline-flex"} alignItems="center">
-                <Grid item marginRight={"25px"}>
-                  <img src={v.thumb} alt="" style={{ width: "55px" }} />
-                </Grid>
-                <Grid
-                  item
-                  fontWeight="700"
-                  letterSpacing="0.4px"
-                  whiteSpace={"nowrap"}
-                >
+              <Grid display={"inline-flex"} alignItems={"center"} gap={2}>
+                <img
+                  src={v.thumb}
+                  alt=""
+                  width={50}
+                  style={{ objectFit: "cover" }}
+                />
+                <Typography fontWeight={500} whiteSpace={"nowrap"}>
                   {v.optionText}
-                </Grid>
+                </Typography>
               </Grid>
-              <Grid display={"inline-flex"} columnGap={"10px"}>
+              <Grid display={"inline-flex"} gap={2}>
                 {[
                   { value: "2", txt: "S급" },
                   { value: "1", txt: "A급" },
                   { value: "0", txt: "B급" },
                 ].map(({ txt, value }) => (
-                  <Grid key={value}>
-                    <Button
-                      variant={
-                        current[v.id]
-                          ? current[v.id]?.indexOf(value) !== -1
-                            ? "contained"
-                            : "outlined"
+                  <Button
+                    key={value}
+                    variant={
+                      current[v.id]
+                        ? current[v.id]?.indexOf(value) !== -1
+                          ? "contained"
                           : "outlined"
-                      }
-                      onClick={() => onResult(value, v.id)}
-                    >
-                      {txt}
-                    </Button>
-                  </Grid>
+                        : "outlined"
+                    }
+                    onClick={() => onResult(value, v.id)}
+                  >
+                    {txt}
+                  </Button>
                 ))}
               </Grid>
             </Grid>
           ))}
         </Grid>
-      </InnerBox>
+      </ModalWrap>
     </Modal>
   );
 };
 
 export default ListModal;
-
-const InnerBox = styled.div`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: #fff;
-  box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.25);
-  border-radius: 10px;
-  outline: none;
-`;
-const Text = styled.h2`
-  font-size: 1.2rem;
-  line-height: 1.5;
-  margin: 40px 50px 20px;
-`;
-const Img = styled.img`
-  width: 36px;
-  height: 36px;
-  position: absolute;
-  right: 20px;
-  cursor: pointer;
-`;
