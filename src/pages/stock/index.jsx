@@ -59,7 +59,7 @@ const StockList = () => {
       <GradeModal isOpen={gradeModal} onClose={gradeModalClose} />
       <TemplateWrap>
         <TemplateTitleWrap>
-          <h2>재고 관리</h2>
+          <h2>판매중인 상품</h2>
         </TemplateTitleWrap>
         <SearchArea>
           <Grid item xs={6}>

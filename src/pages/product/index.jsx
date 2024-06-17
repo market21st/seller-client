@@ -83,7 +83,7 @@ const ProductList = () => {
       />
       <TemplateWrap>
         <TemplateTitleWrap>
-          <h2>상품 등록</h2>
+          <h2>전체 상품 목록</h2>
         </TemplateTitleWrap>
         <Grid container marginBottom={"20px"}>
           <Grid item xs={6}>
