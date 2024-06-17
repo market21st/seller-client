@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import CloseIcon from "@mui/icons-material/Close";
-import PostModal from "../../components/register/PostModal";
+import PostModal from "../../components/common/PostModal";
 import AlertModal from "../../components/common/AlertModal";
 import { FormControl, Select, MenuItem, Button, Grid } from "@mui/material";
 import { myInfo, editMyInfo } from "../../api/myInfo";
@@ -174,22 +173,12 @@ const MyPage = () => {
   return (
     <>
       <AlertModal isOpen={alertModal} onClose={aleatHandleClose} text={text} />
-      {popup ? (
-        <ModalBack>
-          <ModalPost>
-            <h1>
-              주소검색
-              <CloseIcon onClick={handleComplete} />
-            </h1>
-            <PostModal
-              closeEvent={handleComplete}
-              handleComplete={handleComplete}
-              company={enroll_company}
-              setcompany={setEnroll_company}
-            />
-          </ModalPost>
-        </ModalBack>
-      ) : null}
+      <PostModal
+        open={popup}
+        onClose={handleComplete}
+        company={enroll_company}
+        setcompany={setEnroll_company}
+      />
       <TemplateWrap>
         <TemplateTitleWrap>
           <h2>내 스토어 정보 관리</h2>
@@ -454,36 +443,6 @@ const MyPage = () => {
   );
 };
 export default MyPage;
-
-const ModalBack = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 88;
-`;
-const ModalPost = styled.div`
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  width: 350px;
-  border: 1px solid #ddd;
-  height: 560px;
-  overflow: hidden;
-  background: #fff;
-  h1 {
-    font-size: 18px;
-    color: #909090;
-    padding: 15px 15px;
-    border-bottom: 1px solid #ddd;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-`;
 
 const Input = styled.input`
   width: 400px;

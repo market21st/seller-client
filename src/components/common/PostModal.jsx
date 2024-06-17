@@ -1,20 +1,14 @@
+import { Modal } from "@mui/material";
 import React from "react";
 import DaumPostcode from "react-daum-postcode";
+import styled from "styled-components";
 
 const postCodeStyle = {
-  display: "block",
-  position: "absolute",
-  top: "65px",
-  left: "50%",
-  transform: "translateX(-50%)",
-  width: "95%",
-  height: "90%",
-  margin: "0 auto",
-  background: "#fff",
+  width: "100%",
+  height: "100%",
 };
 
-const PostModal = (props) => {
-  const onClose = props.closeEvent;
+const PostModal = ({ open, onClose, company, setcompany }) => {
   const complete = (data) => {
     let fullAddress = data.address;
     let extraAddress = "";
@@ -29,22 +23,37 @@ const PostModal = (props) => {
       }
       fullAddress += extraAddress !== "" ? ` (${extraAddress})` : "";
     }
-    props.setcompany({
-      ...props.company,
+    setcompany({
+      ...company,
       address1: fullAddress,
       address2: data.zonecode,
     });
   };
 
   return (
-    <DaumPostcode
-      style={postCodeStyle}
-      className="postmodal"
-      // autoClose
+    <Modal
+      open={open}
       onClose={onClose}
-      onComplete={complete}
-    />
+      sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
+    >
+      <ModalWrap>
+        <DaumPostcode
+          style={postCodeStyle}
+          className="postmodal"
+          // autoClose
+          onClose={onClose}
+          onComplete={complete}
+        />
+      </ModalWrap>
+    </Modal>
   );
 };
 
 export default PostModal;
+
+const ModalWrap = styled.div`
+  width: 500px;
+  height: 700px;
+  max-width: 90%;
+  max-height: 80%;
+`;
