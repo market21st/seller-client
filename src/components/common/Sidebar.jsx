@@ -2,9 +2,7 @@ import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-// Mui
 import { Grid } from "@mui/material";
-// Images
 import logoImg from "../../assets/header.png";
 import EmojiImg from "../../assets/grinning_emoji.png";
 import { logoutUser } from "../../api/user";
@@ -49,18 +47,14 @@ const Sidebar = ({ children }) => {
   };
 
   return (
-    <Grid container>
+    <Grid container position={"relative"}>
       <Grid
-        container
+        display={"inline-flex"}
         direction={"column"}
         justifyContent={"space-between"}
-        item
-        sx={{
-          background: "#fff",
-          width: "210px",
-          height: "100%",
-          position: "fixed",
-        }}
+        width={"210px"}
+        height={"100%"}
+        position={"fixed"}
       >
         <div>
           <Logo href="/">
@@ -81,84 +75,68 @@ const Sidebar = ({ children }) => {
               내 스토어 바로가기
             </a>
           </Profile>
-          <Menu>
-            <li>
-              {location.pathname.includes("product") ? (
-                <Link to="/product" className="focus">
-                  전체 상품 목록
-                </Link>
-              ) : (
-                <Link to="/product">전체 상품 목록</Link>
-              )}
-            </li>
-            <li>
-              {location.pathname.includes("stock") ? (
-                <Link to="/stock" className="focus">
-                  판매중인 상품
-                </Link>
-              ) : (
-                <Link to="/stock">판매중인 상품</Link>
-              )}
-            </li>
-            <li>
-              {location.pathname.includes("order") ? (
-                <Link to="/order" className="focus">
-                  주문 배송 관리
-                </Link>
-              ) : (
-                <Link to="/order">주문 배송 관리</Link>
-              )}
-            </li>
-          </Menu>
-          <MyInfo>
-            {location.pathname.includes("mypage") ? (
-              <button
-                onClick={() => {
-                  navigate("/mypage");
-                }}
-                className="focus"
-              >
-                내 스토어 정보 관리
-              </button>
-            ) : (
-              <button
-                onClick={() => {
-                  navigate("/mypage");
-                }}
-              >
-                내 스토어 정보 관리
-              </button>
-            )}
-          </MyInfo>
-        </div>
-        <div>
           <SubProfile>
             <li>
               <p>평균 배송기간</p>
-              <span>
-                {localStorage.getItem("deliveryPeriod")
-                  ? `${localStorage.getItem("deliveryPeriod")}일`
-                  : "확인중"}
-              </span>
+              <span>{localStorage.getItem("deliveryPeriod")}일</span>
+            </li>
+            <li>
+              <p>검수통과율</p>
+              <span>{localStorage.getItem("deliveryPeriod")}%</span>
             </li>
           </SubProfile>
-          <ButtonBox>
-            <button onClick={link1}>회사소개서</button>
-            <button onClick={link4}>운영정책</button>
-            <button onClick={link2}>이용가이드</button>
-            <button onClick={link3}>사업자등록증</button>
-          </ButtonBox>
+          <Menu>
+            <li>
+              <Link
+                to="/product"
+                className={location.pathname.includes("product") ? "focus" : ""}
+              >
+                전체 상품 목록
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/stock"
+                className={location.pathname.includes("stock") ? "focus" : ""}
+              >
+                판매중인 상품
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/order"
+                className={location.pathname.includes("order") ? "focus" : ""}
+              >
+                주문 배송 관리
+              </Link>
+            </li>
+          </Menu>
+          <MyInfo>
+            <button
+              onClick={() => {
+                navigate("/mypage");
+              }}
+              className={location.pathname.includes("mypage") ? "focus" : ""}
+            >
+              내 스토어 정보 관리
+            </button>
+          </MyInfo>
         </div>
+        <ButtonBox>
+          <button onClick={link1}>회사소개서</button>
+          <button onClick={link4}>운영정책</button>
+          <button onClick={link2}>이용가이드</button>
+          <button onClick={link3}>사업자등록증</button>
+        </ButtonBox>
       </Grid>
       <Grid
-        item
-        sx={{
-          background: "#f1f4f8",
-          width: "calc(100% - 210px)",
-          minHeight: "100%",
-          position: "absolute",
-          left: "210px",
-        }}
+        display={"inline-flex"}
+        flexDirection={"column"}
+        width={"calc(100% - 210px)"}
+        minHeight={"100vh"}
+        position={"absolute"}
+        left={210}
+        bgcolor={"#F1F4F8"}
       >
         <Header>
           <ul>
@@ -173,7 +151,7 @@ const Sidebar = ({ children }) => {
             </li>
           </ul>
         </Header>
-        <Grid sx={{ width: "100%" }}>{children}</Grid>
+        <div>{children}</div>
       </Grid>
     </Grid>
   );
@@ -218,21 +196,19 @@ const Profile = styled.div`
     background-color: #f1f4f8;
     border-radius: 10px;
     font-size: 14px;
-    /* font-weight: 500; */
   }
 `;
 
 const SubProfile = styled.ul`
-  padding: 10px 0;
-  background: #26324d;
+  padding: 8px 0;
+  background-color: #f2f8ff;
+  color: #4a5c80;
   display: flex;
-  justify-content: center;
   li {
+    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 4px;
-    color: #f5f7fc;
     p {
       font-size: 10px;
     }
@@ -241,12 +217,13 @@ const SubProfile = styled.ul`
       font-weight: 700;
     }
   }
+  li:first-of-type {
+    border-right: 2px solid #cce6ff;
+  }
 `;
 
-// 메뉴
 const Menu = styled.ul`
   padding: 10px;
-  border-top: 1px solid #e6f3ff;
   li a {
     padding: 0 20px;
     display: flex;
@@ -285,7 +262,6 @@ const MyInfo = styled.div`
   }
 `;
 
-// 하단 버튼(사업자등록증, 로그아웃)
 const ButtonBox = styled.div`
   width: 100%;
   padding: 10px;
@@ -296,11 +272,9 @@ const ButtonBox = styled.div`
     align-items: center;
     height: 40px;
     font-size: 14px;
-    /* font-weight: 500; */
   }
 `;
 
-// 헤더
 const Header = styled.div`
   display: flex;
   align-items: center;
