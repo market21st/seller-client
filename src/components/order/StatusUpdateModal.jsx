@@ -60,10 +60,6 @@ const StatusUpdateModal = ({
       sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
     >
       <ModalWrap>
-        <h2>주문 처리상태 변경</h2>
-        <h3>
-          출고가능 여부에 따라 [출고대기] 또는 [출고불가 신청]으로 변경해주세요
-        </h3>
         <Grid
           component={"form"}
           container
@@ -74,6 +70,11 @@ const StatusUpdateModal = ({
             handleUpdateStatus();
           }}
         >
+          <h2>주문 처리상태 변경</h2>
+          <h3>
+            출고가능 여부에 따라 [출고대기] 또는 [출고불가 신청]으로
+            변경해주세요
+          </h3>
           <FormControl disabled>
             <InputLabel>현재</InputLabel>
             <Select label="현재" value={status}>

@@ -84,7 +84,7 @@ const OrderListPage = () => {
     }`,
   ];
 
-  const handleClickSearch = () => {
+  const handleSearch = () => {
     getList();
   };
   const handleClickInit = () => {
@@ -157,68 +157,78 @@ const OrderListPage = () => {
           <h3>모든 주문 내역을 조회할 수 있는 메뉴입니다.</h3>
         </TemplateTitleWrap>
         <TemplateBox>
-          <h4>주문 검색</h4>
-          <TemplateRow>
-            <p>처리상태</p>
-            <Grid container flexWrap={"wrap"}>
-              {statusList.map(({ key, value }) => (
-                <FormControlLabel
-                  key={`status_${value}`}
-                  label={key}
-                  control={
-                    <Checkbox
-                      checked={status.indexOf(value) !== -1}
-                      onChange={() => handleCheckStauts(value)}
-                    />
-                  }
+          <Grid
+            component={"form"}
+            container
+            flexDirection={"column"}
+            gap={2}
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleSearch();
+            }}
+          >
+            <h4>주문 검색</h4>
+            <TemplateRow>
+              <p>처리상태</p>
+              <Grid container flexWrap={"wrap"}>
+                {statusList.map(({ key, value }) => (
+                  <FormControlLabel
+                    key={`status_${value}`}
+                    label={key}
+                    control={
+                      <Checkbox
+                        checked={status.indexOf(value) !== -1}
+                        onChange={() => handleCheckStauts(value)}
+                      />
+                    }
+                  />
+                ))}
+              </Grid>
+            </TemplateRow>
+            <TemplateRow>
+              <p>조회기간 (주문일)</p>
+              <LocalizationProvider
+                dateAdapter={AdapterDayjs}
+                adapterLocale="ko"
+              >
+                <DatePicker
+                  format="YYYY-MM-DD"
+                  maxDate={endDate}
+                  value={startDate}
+                  onChange={(v) => setStartDate(v)}
                 />
-              ))}
-            </Grid>
-          </TemplateRow>
-          <TemplateRow>
-            <p>조회기간 (주문일)</p>
-            <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ko">
-              <DatePicker
-                format="YYYY-MM-DD"
-                maxDate={endDate}
-                value={startDate}
-                onChange={(v) => setStartDate(v)}
+                <span>~</span>
+                <DatePicker
+                  format="YYYY-MM-DD"
+                  minDate={startDate}
+                  value={endDate}
+                  onChange={(v) => setEndDate(v)}
+                />
+              </LocalizationProvider>
+            </TemplateRow>
+            <TemplateRow>
+              <p>상세조건</p>
+              <TextField
+                label="주문번호"
+                value={merchantUid}
+                onChange={(e) => setMerchantUid(e.target.value)}
               />
-              <span>~</span>
-              <DatePicker
-                format="YYYY-MM-DD"
-                minDate={startDate}
-                value={endDate}
-                onChange={(v) => setEndDate(v)}
+              <TextField
+                label="상품명"
+                placeholder="갤럭시"
+                value={productName}
+                onChange={(e) => setProductName(e.target.value)}
               />
-            </LocalizationProvider>
-          </TemplateRow>
-          <TemplateRow>
-            <p>상세조건</p>
-            <TextField
-              label="주문번호"
-              value={merchantUid}
-              onChange={(e) => setMerchantUid(e.target.value)}
-            />
-            <TextField
-              label="상품명"
-              placeholder="갤럭시"
-              value={productName}
-              onChange={(e) => setProductName(e.target.value)}
-            />
-          </TemplateRow>
-          <ButtonWrap>
-            <Button
-              variant="contained"
-              size="large"
-              onClick={handleClickSearch}
-            >
-              조회
-            </Button>
-            <Button variant="outlined" size="large" onClick={handleClickInit}>
-              초기화
-            </Button>
-          </ButtonWrap>
+            </TemplateRow>
+            <ButtonWrap>
+              <Button variant="contained" size="large" type="submit">
+                조회
+              </Button>
+              <Button variant="outlined" size="large" onClick={handleClickInit}>
+                초기화
+              </Button>
+            </ButtonWrap>
+          </Grid>
         </TemplateBox>
         <TemplateBox>
           <h4>전체 주문 검색 목록 ({total}건)</h4>
