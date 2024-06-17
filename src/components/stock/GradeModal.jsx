@@ -5,7 +5,7 @@ import closeIcon from "../../assets/close.png";
 import nextIcon from "../../assets/next.png";
 import prevIcon from "../../assets/prev.png";
 
-const ContentModal = ({ isOpen, onClose }) => {
+const GradeModal = ({ isOpen, onClose }) => {
   // 카테고리 클릭시
   const [cetagoryNum, setCetagoryNum] = useState(0);
 
@@ -159,7 +159,7 @@ const ContentModal = ({ isOpen, onClose }) => {
   );
 };
 
-export default ContentModal;
+export default GradeModal;
 
 const InnerBox = styled.div`
   position: absolute;
