@@ -62,24 +62,22 @@ const StockList = () => {
           <h2>판매중인 상품</h2>
         </TemplateTitleWrap>
         <SearchArea>
-          <Grid item xs={6}>
-            <Grid container position={"relative"} alignItems="center">
-              <TextField
-                fullWidth
-                size="small"
-                placeholder={"모델명을 입력하세요."}
-                value={optionText || ""}
-                inputProps={{
-                  style: {
-                    paddingLeft: "36px",
-                    height: "30px",
-                  },
-                }}
-                onChange={(e) => setOptionText(e.target.value)}
-              />
-              <Grid height="24px" sx={{ position: "absolute", left: "10px" }}>
-                <SearchIcon />
-              </Grid>
+          <Grid container position={"relative"} alignItems="center">
+            <TextField
+              size="small"
+              placeholder={"모델명을 입력하세요."}
+              value={optionText || ""}
+              inputProps={{
+                style: {
+                  paddingLeft: "36px",
+                  height: "30px",
+                  width: "500px",
+                },
+              }}
+              onChange={(e) => setOptionText(e.target.value)}
+            />
+            <Grid height="24px" sx={{ position: "absolute", left: "10px" }}>
+              <SearchIcon />
             </Grid>
           </Grid>
         </SearchArea>
