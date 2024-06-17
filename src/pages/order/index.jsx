@@ -330,7 +330,7 @@ const ButtonWrap = styled.div`
 export const TemplateRow = styled.div`
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 16px;
   font-size: 14px;
   padding: 6px 0;
   & > p {
