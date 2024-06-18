@@ -22,6 +22,7 @@ import {
 import dayjs from "dayjs";
 import OrderHistoryModal from "../../components/order/OrderHistoryModal";
 import StatusUpdateModal from "../../components/order/StatusUpdateModal";
+import toast from "react-hot-toast";
 
 const TABLE_HEAD_CELLS = ["변경 처리상태", "변경 일시", "변경 주체"];
 
@@ -51,6 +52,30 @@ const OrderDetailPage = () => {
   };
   const handleCloseStatusUpdateModal = () => {
     setIsOpenStatusUpdateModal(false);
+  };
+
+  const handleClickChip = () => {
+    const status = detail.status;
+    if (status === 120 || status === 130 || status === 200) {
+      toast.success("담당자가 주문 처리상태 확인중이에요.", { duration: 4000 });
+      return;
+    } else if (status === 150) {
+      toast.success(
+        "담당자가 주문 처리상태 확인중이에요.\n[출고불 신청]을 철회하고 싶으면 21세기전파상 담당자에게 연락해 주세요.",
+        { duration: 4000 }
+      );
+      return;
+    } else if (status === 160) {
+      toast.success(
+        "담당자가 주문 처리상태 확인중이에요.\n[출고불가확정] 처리된 주문은 되돌릴 수 없어요.",
+        { duration: 4000 }
+      );
+      return;
+    } else if (status === 999) {
+      toast.success("매입취소 건은 정산내역에서 제외돼요.", { duration: 4000 });
+      return;
+    }
+    handleOpenStatusUpdateModal();
   };
 
   const getDetail = async () => {
@@ -101,7 +126,7 @@ const OrderDetailPage = () => {
             <Chip
               label={detail.statusText}
               color={statusBgColor(detail.status)}
-              onClick={handleOpenStatusUpdateModal}
+              onClick={handleClickChip}
             />
           </TemplateRow>
           <TemplateRow>
