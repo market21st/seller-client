@@ -96,7 +96,7 @@ const StockList = () => {
             등급 기준 보기
           </Button>
         </InfoTitle>
-        <ListContainer>
+        <div>
           <Tabs
             value={type}
             onChange={handleChange}
@@ -107,7 +107,7 @@ const StockList = () => {
             <Tab label="최저가 아닌 상품" value={"2"} />
             <Tab label="오늘 등록한 상품" value={"3"} />
           </Tabs>
-          <ul>
+          <List>
             {listData.length > 0 ? (
               listData.map((el, idx) => (
                 <Item
@@ -132,8 +132,8 @@ const StockList = () => {
                 <h2>등록된 상품이 없습니다.</h2>
               </ItemBox>
             )}
-          </ul>
-        </ListContainer>
+          </List>
+        </div>
         <Grid
           container
           justifyContent={"center"}
@@ -216,24 +216,9 @@ const InfoTitle = styled.div`
   }
 `;
 
-const ListContainer = styled.div`
-  width: 100%;
-  overflow-y: auto;
-  li {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: #fff;
-    border-radius: 15px;
-    padding: 10px 24px;
-    font-weight: 700;
-    margin-bottom: 2vh;
-  }
-  li:last-child {
-    margin-bottom: 0;
-  }
-  img {
-    width: 75px;
-    box-sizing: border-box;
-  }
+const List = styled.ul`
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px 0;
 `;

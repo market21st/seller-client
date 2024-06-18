@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import AlertModal from "../common/AlertModal";
-// Mui
-import { FormControl, Select, MenuItem, Button } from "@mui/material";
+import {
+  FormControl,
+  Select,
+  MenuItem,
+  Button,
+  TextField,
+} from "@mui/material";
 import { toast } from "react-hot-toast";
-// Api
 import { editStock, DeleteItem } from "../../api/stock";
 
 const Item = ({
@@ -160,68 +164,57 @@ const Item = ({
         closeBtn={text.includes("정말 삭제") ? alertClose : false}
       />
       <ItemBox>
-        <img src={thumb} alt={optionText} style={{ width: "50px" }} />
-        <h3 style={{ lineHeight: "30px" }}>{`${optionText}`}</h3>
-        <Grade>{gradeText}</Grade>
-        <Price>
-          <span>최저가</span>
-          {lowestPrice ? lowestPrice.toLocaleString() : "없음"}
-        </Price>
-        <EditArea>
-          <p>
-            <input
-              type="text"
+        <div>
+          <Image>
+            <img src={thumb} alt={optionText} />
+          </Image>
+          <Name>{optionText}</Name>
+          <Grade>{gradeText}</Grade>
+          <Price>
+            <span>최저가</span>
+            {lowestPrice ? lowestPrice.toLocaleString() : "없음"}
+          </Price>
+          <EditArea>
+            <TextField
+              label="가격"
               placeholder="0"
               value={stockData.price || ""}
               onChange={handlePrice}
               name="price"
-            ></input>
-            <label>가격</label>
-          </p>
-          <p>
-            <input
-              type="text"
+            />
+            <TextField
+              label="재고"
               placeholder="0"
               value={stockData.stock || ""}
               onChange={handlePrice}
               name="stock"
             />
-            <label>재고</label>
-          </p>
-
-          <FormControl sx={{ width: "28%" }}>
-            <Select
-              onChange={onChange}
-              displayEmpty
-              inputProps={{ "aria-label": "Without label" }}
-              value={
-                stockData.isActive == ""
-                  ? isActive == 0
-                    ? "숨김"
-                    : "판매중"
-                  : stockData.isActive
-              }
-              name="isActive"
-              sx={{
-                background: "#fff",
-                borderRadius: "5px",
-                border: "1px solid #464646",
-                height: "50px",
-              }}
-            >
-              <MenuItem value="판매중">판매중</MenuItem>
-              <MenuItem value="숨김">숨김</MenuItem>
-            </Select>
-          </FormControl>
-        </EditArea>
-        <ListBtnBox>
+            <FormControl sx={{ width: 200 }}>
+              <Select
+                name="isActive"
+                value={
+                  stockData.isActive == ""
+                    ? isActive == 0
+                      ? "숨김"
+                      : "판매중"
+                    : stockData.isActive
+                }
+                onChange={onChange}
+              >
+                <MenuItem value="판매중">판매중</MenuItem>
+                <MenuItem value="숨김">숨김</MenuItem>
+              </Select>
+            </FormControl>
+          </EditArea>
+        </div>
+        <ButtonWrap>
           <Button variant="outlined" size="large" onClick={deleteList}>
             삭제
           </Button>
           <Button variant="contained" size="large" onClick={edit}>
             저장
           </Button>
-        </ListBtnBox>
+        </ButtonWrap>
       </ItemBox>
     </>
   );
@@ -230,71 +223,60 @@ const Item = ({
 export default Item;
 
 const ItemBox = styled.li`
-  white-space: pre-line;
-  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.1);
-  h3 {
-    padding-left: 20px;
-    text-align: left;
-    line-height: 1.3;
-    width: 30%;
-  }
-`;
-
-const Grade = styled.div`
-  width: 3%;
-  text-align: center;
-`;
-
-const EditArea = styled.div`
+  width: 100%;
+  padding: 10px 20px;
+  border-radius: 10px;
+  background: #fff;
+  display: flex;
   justify-content: space-between;
   align-items: center;
-  display: flex;
-  width: 30%;
-  input {
-    width: 100%;
-    border: 1px solid #464646;
-    border-radius: 5px;
-    padding-right: 12px;
-    height: 46px;
-    margin-right: 14px;
-    text-align: right;
-  }
+  gap: 20px;
   p {
-    position: relative;
-    label {
-      position: absolute;
-      top: -10%;
-      left: 10%;
-      background: #fff;
-      font-size: 12px;
-      padding: 0 3px;
-    }
+    font-weight: 500;
   }
-  p:nth-child(1) {
-    width: 32%;
+  & > div:first-of-type {
+    width: 90%;
+    display: flex;
+    align-items: center;
+    gap: 20px;
   }
-  p:nth-child(2) {
-    width: 22%;
+`;
+
+const Image = styled.div`
+  display: flex;
+  img {
+    width: 50px;
+    object-fit: contain;
   }
+`;
+
+const Name = styled.p`
+  width: 20%;
+`;
+
+const Grade = styled.p`
+  width: 5%;
 `;
 
 const Price = styled.p`
-  width: 15%;
+  width: 10%;
   display: flex;
-  justify-content: center;
   align-items: center;
-  /* font-weight: 500; */
+  gap: 8px;
   span {
+    padding: 4px 8px;
+    font-size: 12px;
     background: #fcbaba;
-    border-radius: 5px;
-    color: #404040;
-    font-size: 10px;
-    padding: 4px 5px;
-    margin-right: 6px;
+    border-radius: 8px;
   }
 `;
 
-const ListBtnBox = styled.div`
+const EditArea = styled.div`
   display: flex;
-  gap: 16px;
+  gap: 20px;
+`;
+
+const ButtonWrap = styled.div`
+  display: flex;
+  gap: 20px;
 `;
