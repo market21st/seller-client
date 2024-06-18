@@ -85,6 +85,18 @@ export const ModalWrap = styled.div`
   h3 {
     font-weight: 500;
     padding: 10px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    span {
+      padding: 6px 10px;
+      border-radius: 8px;
+      background: #26324d;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 500;
+      white-space: nowrap;
+    }
   }
 `;
 

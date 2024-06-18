@@ -105,6 +105,7 @@ const OrderDetailPage = () => {
         status={detail.status}
         statusText={detail.statusText}
         statusToBeGroup={detail.statusToBeGroup?.results}
+        lastInspectionFailComment={detail.lastInspectionFailComment}
         id={detail.id}
         reload={() => {
           getDetail();

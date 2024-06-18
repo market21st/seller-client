@@ -13,6 +13,18 @@ import { ModalButtonWrap, ModalWrap } from "./OrderHistoryModal";
 import styled from "styled-components";
 import { editOrderStatus, getDelivery } from "../../api/order";
 
+const DESC_LIST = {
+  500: [
+    "[출고불가신청]을 하는 경우 해당 상품/옵션의 재고수량이 0으로 변경돼요.",
+    "출고불가 신청 후 [출고불가확정] 처리된 주문은 되돌릴 수 없어요.",
+  ],
+  140: [
+    "검수 미통과된 상품으로 1일 이내(영업일 기준) 반송될 예정이예요.",
+    "[출고불가신청]을 하는 경우 해당 상품/옵션의 재고수량이 0으로 변경돼요.",
+    "출고불가 신청 후 [출고불가확정] 처리된 주문은 되돌릴 수 없어요.",
+  ],
+};
+
 const StatusUpdateModal = ({
   open,
   onClose,
@@ -21,6 +33,7 @@ const StatusUpdateModal = ({
   statusToBeGroup,
   id,
   reload,
+  lastInspectionFailComment,
 }) => {
   const [data, setData] = useState({});
   const [etcComment, setEtcComment] = useState("");
@@ -71,10 +84,16 @@ const StatusUpdateModal = ({
           }}
         >
           <h2>주문 처리상태 변경</h2>
-          <h3>
-            출고가능 여부에 따라 [출고대기] 또는 [출고불가 신청]으로
-            변경해주세요
-          </h3>
+          {status === 500 ? (
+            <h3>
+              출고가능 여부에 따라 [출고대기] 또는 [출고불가신청]으로
+              변경해주세요
+            </h3>
+          ) : status === 140 ? (
+            <h3>
+              <span>검수미통과</span>사유: {lastInspectionFailComment}
+            </h3>
+          ) : null}
           <FormControl disabled>
             <InputLabel>현재</InputLabel>
             <Select label="현재" value={status}>
@@ -155,13 +174,9 @@ const StatusUpdateModal = ({
             </OptionWrap>
           ) : null}
           <DescWrap>
-            <li>
-              [출고불가 신청]을 하는 경우 해당 상품/옵션의 재고수량이 0으로
-              변경돼요.
-            </li>
-            <li>
-              출고불가 신청 후 [출고불가 확정] 처리된 주문은 되돌릴 수 없어요.
-            </li>
+            {DESC_LIST[status]?.map((v) => (
+              <li key={v}>{v}</li>
+            ))}
           </DescWrap>
           <ModalButtonWrap>
             <Button onClick={onClose} variant="outlined" size="large">
