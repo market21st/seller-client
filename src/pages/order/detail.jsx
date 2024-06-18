@@ -71,7 +71,7 @@ const OrderDetailPage = () => {
         { duration: 4000 }
       );
       return;
-    } else if (status === 999) {
+    } else if (status === 990) {
       toast.success("매입취소 건은 정산내역에서 제외돼요.", { duration: 4000 });
       return;
     }
