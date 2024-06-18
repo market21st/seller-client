@@ -169,8 +169,7 @@ const Container = styled.div`
   height: 100%;
   padding: 50px 59px 50px;
   h1 {
-    font-size: 24px;
-    /* font-weight: 500; */
+    font-size: 20px;
   }
   em {
     font-style: normal;

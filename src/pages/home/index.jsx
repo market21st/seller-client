@@ -133,7 +133,7 @@ const Container = styled.div`
   padding: 52px;
   display: flex;
   flex-direction: column;
-  gap: 40px;
+  gap: 32px;
   .MuiOutlinedInput-notchedOutline {
     border: 2px solid #0082ff;
   }
@@ -142,18 +142,18 @@ const Container = styled.div`
 const Box = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 16px;
   h1 {
     display: flex;
     align-items: center;
     gap: 16px;
-    font-size: 24px;
+    font-size: 20px;
   }
 `;
 
 const Row = styled.div`
   display: flex;
-  gap: 24px;
+  gap: 16px;
 `;
 
 const ContentBox = styled.div`
@@ -178,6 +178,7 @@ const ContentBox = styled.div`
   span {
     border-bottom: 1px solid #404040;
     padding-bottom: 2px;
-    font-size: 24px;
+    font-size: 20px;
+    font-weight: 500;
   }
 `;
