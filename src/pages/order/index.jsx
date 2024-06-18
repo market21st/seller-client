@@ -15,6 +15,7 @@ import {
   TableHead,
   TableRow,
   TextField,
+  Typography,
 } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -266,28 +267,34 @@ const OrderListPage = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {list?.map((row) => (
-                <TableRow
-                  key={`row_${row.id}`}
-                  sx={{
-                    "&:last-child td, &:last-child th": { border: 0 },
-                    "&:hover": {
-                      background: "#F2F8FF",
-                    },
-                    cursor: "pointer",
-                  }}
-                  onClick={() => handleClickRow(row.id)}
-                >
-                  {rowCells(row).map((v, idx) => (
-                    <TableCell
-                      key={`row_cell_${idx}`}
-                      sx={{ whiteSpace: "pre-wrap" }}
-                    >
-                      {v}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))}
+              {list.length ? (
+                list?.map((row) => (
+                  <TableRow
+                    key={`row_${row.id}`}
+                    sx={{
+                      "&:last-child td, &:last-child th": { border: 0 },
+                      "&:hover": {
+                        background: "#F2F8FF",
+                      },
+                      cursor: "pointer",
+                    }}
+                    onClick={() => handleClickRow(row.id)}
+                  >
+                    {rowCells(row).map((v, idx) => (
+                      <TableCell
+                        key={`row_cell_${idx}`}
+                        sx={{ whiteSpace: "pre-wrap" }}
+                      >
+                        {v}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))
+              ) : (
+                <Typography fontWeight={500} px={1} py={2}>
+                  주문건이 없습니다.
+                </Typography>
+              )}
             </TableBody>
           </Table>
         </TemplateBox>

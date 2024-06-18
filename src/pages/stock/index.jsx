@@ -128,9 +128,7 @@ const StockList = () => {
                 />
               ))
             ) : (
-              <ItemBox>
-                <h2>등록된 상품이 없습니다.</h2>
-              </ItemBox>
+              <NoRows>등록된 상품이 없습니다.</NoRows>
             )}
           </List>
         </div>
@@ -192,13 +190,8 @@ const SearchArea = styled.div`
   width: 100%;
 `;
 
-const ItemBox = styled.li`
-  box-shadow: 4px 4px 4px 0px rgba(0, 0, 0, 0.1);
-  h2 {
-    width: 100%;
-    padding: 30px;
-    text-align: center;
-  }
+const NoRows = styled.li`
+  font-weight: 500;
 `;
 
 const InfoTitle = styled.div`
