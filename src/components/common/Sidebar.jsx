@@ -40,7 +40,7 @@ const Sidebar = ({ children }) => {
   const logout = async () => {
     const { statusCode } = await logoutUser();
     if (statusCode == 200) {
-      window.localStorage.clear();
+      localStorage.removeItem("isLogin");
       navigate("/");
       window.location.reload();
     }
@@ -82,7 +82,7 @@ const Sidebar = ({ children }) => {
             </li>
             <li>
               <p>검수통과율</p>
-              <span>{localStorage.getItem("deliveryPeriod")}%</span>
+              <span>{localStorage.getItem("inspectionPassRate")}%</span>
             </li>
           </SubProfile>
           <Menu>

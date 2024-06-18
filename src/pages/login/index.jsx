@@ -68,7 +68,7 @@ const LogIn = () => {
       userId: id,
       password: pw,
     });
-    if (statusCode == 200) {
+    if (statusCode === 200) {
       window.location.reload();
       navigate("/");
     }
