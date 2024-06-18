@@ -4,6 +4,7 @@ import { getOptions, getMyProduct, postProduct } from "../../api/stock";
 import { toast } from "react-hot-toast";
 import closeIcon from "../../assets/close.png";
 import styled from "styled-components";
+import { ModalWrap } from "../order/OrderHistoryModal";
 
 const ListModal = ({ isOpen, onClose, id }) => {
   const [data, setData] = useState([]);
@@ -55,7 +56,7 @@ const ListModal = ({ isOpen, onClose, id }) => {
       onClose={onClose}
       sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
     >
-      <ModalWrap>
+      <Wrap>
         <Grid
           display={"inline-flex"}
           position={"absolute"}
@@ -119,31 +120,13 @@ const ListModal = ({ isOpen, onClose, id }) => {
             </Grid>
           ))}
         </Grid>
-      </ModalWrap>
+      </Wrap>
     </Modal>
   );
 };
 
 export default ListModal;
 
-const ModalWrap = styled.div`
-  position: relative;
+const Wrap = styled(ModalWrap)`
   width: 600px;
-  max-width: 80%;
-  max-height: 80%;
-  overflow-y: auto;
-  padding: 40px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  border-radius: 10px;
-  background: #fff;
-  h2 {
-    font-size: 18px;
-    font-weight: 700;
-  }
-  h3 {
-    font-weight: 500;
-    padding: 10px 0;
-  }
 `;

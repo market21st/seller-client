@@ -2,6 +2,7 @@ import { Modal } from "@mui/material";
 import React from "react";
 import DaumPostcode from "react-daum-postcode";
 import styled from "styled-components";
+import closeIcon from "../../assets/close.png";
 
 const postCodeStyle = {
   width: "100%",
@@ -37,6 +38,9 @@ const PostModal = ({ open, onClose, company, setcompany }) => {
       sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
     >
       <ModalWrap>
+        <button>
+          <img src={closeIcon} alt="닫기" onClick={onClose} />
+        </button>
         <DaumPostcode
           style={postCodeStyle}
           className="postmodal"
@@ -52,8 +56,17 @@ const PostModal = ({ open, onClose, company, setcompany }) => {
 export default PostModal;
 
 const ModalWrap = styled.div`
+  position: relative;
+  background: #fff;
   width: 500px;
   height: 700px;
   max-width: 90%;
   max-height: 80%;
+  padding-top: 50px;
+  & > button {
+    display: flex;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+  }
 `;

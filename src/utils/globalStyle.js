@@ -44,6 +44,9 @@ const GlobalStyles = createGlobalStyle`
 	}
 
 	/* custom */
+	* {
+		box-sizing: border-box;
+	}
 	body {
 		font-family: 'Spoqa Han Sans Neo', 'sans-serif';
 		line-height: 1.4;
