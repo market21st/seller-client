@@ -83,8 +83,8 @@ const StockList = () => {
         </SearchArea>
         <InfoTitle>
           <p>
-            우선판매권을 얻으려면 <span>현재 최저가미만의 가격</span>을
-            입력해야합니다.
+            우선 판매권을 얻으려면 <span>현재 최저가 미만의 가격</span>을
+            입력해야 합니다.
           </p>
           <Button
             variant="contained"
