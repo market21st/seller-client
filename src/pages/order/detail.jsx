@@ -72,7 +72,10 @@ const OrderDetailPage = () => {
       );
       return;
     } else if (status === 990) {
-      toast.success("매입취소 건은 정산내역에서 제외돼요.", { duration: 4000 });
+      toast.success(
+        `주문취소 건은 정산내역에서 제외돼요.\n주문취소 사유: ${detail.lastOrderCancellationComment}`,
+        { duration: 4000 }
+      );
       return;
     }
     handleOpenStatusUpdateModal();
