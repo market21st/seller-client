@@ -35,7 +35,7 @@ instance.interceptors.response.use(
           return;
         }
       } catch (err) {
-        window.localStorage.clear();
+        localStorage.removeItem("isLogin");
         window.location.replace("/");
       }
     } else {
