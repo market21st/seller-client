@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { ModalButtonWrap, ModalWrap } from "../order/OrderHistoryModal";
 
-const AlertModal = ({ isOpen, onClose, text, closeBtn }) => {
+const AlertModal = ({ open, text, onClose, onConfirm }) => {
   const navigate = useNavigate();
   const nav = () => navigate("/");
   if (text && text?.includes("가입이 완료")) {
@@ -13,21 +13,23 @@ const AlertModal = ({ isOpen, onClose, text, closeBtn }) => {
 
   return (
     <Modal
-      open={isOpen}
-      onClose={closeBtn ? closeBtn : onClose}
+      open={open}
+      onClose={onClose}
       sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
     >
       <Wrap>
         <Title>{text}</Title>
         <ModalButtonWrap>
-          {closeBtn ? (
-            <Button variant="outlined" size="large" onClick={closeBtn}>
-              취소
+          {onClose ? (
+            <Button variant="outlined" size="large" onClick={onClose}>
+              {onConfirm ? "취소" : "확인"}
             </Button>
           ) : null}
-          <Button variant="contained" size="large" onClick={onClose}>
-            확인
-          </Button>
+          {onConfirm ? (
+            <Button variant="contained" size="large" onClick={onConfirm}>
+              확인
+            </Button>
+          ) : null}
         </ModalButtonWrap>
       </Wrap>
     </Modal>

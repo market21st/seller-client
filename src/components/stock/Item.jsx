@@ -162,12 +162,7 @@ const Item = ({
 
   return (
     <>
-      <AlertModal
-        isOpen={alertModal}
-        onClose={aleatHandleClose}
-        text={text}
-        closeBtn={text.includes("정말 삭제") ? alertClose : false}
-      />
+      <AlertModal open={alertModal} onClose={alertClose} text={text} />
       <ItemBox>
         <div>
           <Image>

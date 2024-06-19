@@ -86,10 +86,10 @@ const StatusUpdateModal = ({
   return (
     <>
       <AlertModal
-        isOpen={isOpenAlertModal}
-        onClose={handleUpdateStatus}
+        open={isOpenAlertModal}
         text={`출고불가 신청을 하는 경우\n${productName}/${optionText} 상품의\n재고수량이 ‘0’으로 변경되어 품절처리 됩니다.`}
-        closeBtn={handleCloseAlretModal}
+        onConfirm={handleUpdateStatus}
+        onClose={handleCloseAlretModal}
       />
       <Modal
         open={open}

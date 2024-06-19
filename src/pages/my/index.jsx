@@ -178,7 +178,7 @@ const MyPage = () => {
 
   return (
     <>
-      <AlertModal isOpen={alertModal} onClose={aleatHandleClose} text={text} />
+      <AlertModal open={alertModal} onClose={aleatHandleClose} text={text} />
       <PostModal
         open={popup}
         onClose={handleComplete}
