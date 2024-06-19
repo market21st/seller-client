@@ -14,8 +14,8 @@ import {
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { getStock } from "../../api/stock";
-import ListModal from "../../components/common/ListModal";
 import { TemplateBox, TemplateTitleWrap, TemplateWrap } from "../order";
+import ListModal from "../../components/product/ListModal";
 
 const take = 10;
 

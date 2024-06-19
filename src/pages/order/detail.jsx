@@ -110,6 +110,8 @@ const OrderDetailPage = () => {
         statusToBeGroup={detail.statusToBeGroup?.results}
         lastInspectionFailComment={detail.lastInspectionFailComment}
         id={detail.id}
+        productName={detail.productName}
+        optionText={detail.optionText}
         reload={() => {
           getDetail();
           getHistory();

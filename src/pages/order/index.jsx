@@ -195,6 +195,8 @@ const OrderListPage = () => {
         statusToBeGroup={item.statusToBeGroup?.results}
         lastInspectionFailComment={item.lastInspectionFailComment}
         id={item.id}
+        productName={item.productName}
+        optionText={item.optionText}
         reload={() => {
           getList();
         }}

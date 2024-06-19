@@ -12,6 +12,7 @@ import React, { useEffect, useState } from "react";
 import { ModalButtonWrap, ModalWrap } from "./OrderHistoryModal";
 import styled from "styled-components";
 import { editOrderStatus, getDelivery } from "../../api/order";
+import AlertModal from "../common/AlertModal";
 
 const DESC_LIST = {
   500: [
@@ -34,10 +35,21 @@ const StatusUpdateModal = ({
   id,
   reload,
   lastInspectionFailComment,
+  productName,
+  optionText,
 }) => {
+  const [isOpenAlertModal, setOpenAlertModal] = useState(false);
+
   const [data, setData] = useState({});
   const [etcComment, setEtcComment] = useState("");
   const [deliveryCorpList, setDeliveryCorpList] = useState([]);
+
+  const handleOpenAlretModal = () => {
+    setOpenAlertModal(true);
+  };
+  const handleCloseAlretModal = () => {
+    setOpenAlertModal(false);
+  };
 
   const getDeliveryCorpList = async () => {
     const { data, statusCode } = await getDelivery();
@@ -45,6 +57,10 @@ const StatusUpdateModal = ({
   };
 
   const handleUpdateStatus = async () => {
+    if (data.status === 150 && !isOpenAlertModal) {
+      handleOpenAlretModal();
+      return;
+    }
     const formData = {
       ...data,
       comment: data.comment === "기타 (직접입력)" ? etcComment : data.comment,
@@ -52,6 +68,7 @@ const StatusUpdateModal = ({
     const { statusCode } = await editOrderStatus(id, formData);
     if (statusCode === 200) {
       reload();
+      handleCloseAlretModal();
       onClose();
     }
   };
@@ -67,128 +84,138 @@ const StatusUpdateModal = ({
   }, []);
 
   return (
-    <Modal
-      open={open}
-      onClose={onClose}
-      sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
-    >
-      <ModalWrap>
-        <Grid
-          component={"form"}
-          container
-          flexDirection={"column"}
-          gap={2}
-          onSubmit={(e) => {
-            e.preventDefault();
-            handleUpdateStatus();
-          }}
-        >
-          <h2>주문 처리상태 변경</h2>
-          {status === 500 ? (
-            <h3>
-              출고가능 여부에 따라 [출고대기] 또는 [출고불가신청]으로
-              변경해주세요
-            </h3>
-          ) : status === 140 ? (
-            <h3>
-              <span>검수미통과</span>사유: {lastInspectionFailComment}
-            </h3>
-          ) : null}
-          <FormControl disabled>
-            <InputLabel>현재</InputLabel>
-            <Select label="현재" value={status}>
-              <MenuItem value={status}>{statusText}</MenuItem>
-            </Select>
-          </FormControl>
-          <FormControl required>
-            <InputLabel>변경 후</InputLabel>
-            <Select
-              label="변경 후"
-              value={data.status || ""}
-              onChange={(e) => setData({ status: e.target.value })}
-            >
-              {statusToBeGroup?.map(({ key, value }) => (
-                <MenuItem value={value} key={value}>
-                  {key}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-          {/* 출고완료 */}
-          {data.status === 120 ? (
-            <OptionWrap>
-              <p>출고 배송정보</p>
-              <div>
-                <FormControl required>
-                  <InputLabel>택배사</InputLabel>
-                  <Select
-                    label="택배사"
-                    value={data.deliveryCorp || ""}
-                    onChange={(e) =>
-                      setData({ ...data, deliveryCorp: e.target.value })
-                    }
-                  >
-                    {deliveryCorpList.map(({ key, value }) => (
-                      <MenuItem value={value} key={value}>
-                        {key}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-                <TextField
-                  required
-                  placeholder="운송장번호"
-                  value={data.invoiceNo}
-                  onChange={(e) =>
-                    setData({ ...data, invoiceNo: e.target.value })
-                  }
-                />
-              </div>
-            </OptionWrap>
-          ) : null}
-          {/* 출고불가신청 */}
-          {data.status === 150 ? (
-            <OptionWrap>
-              <p>출고불가 신청 사유</p>
-              <div>
-                <FormControl required>
-                  <Select
-                    value={data.comment || ""}
-                    onChange={(e) =>
-                      setData({ ...data, comment: e.target.value })
-                    }
-                  >
-                    <MenuItem value="재고 부족">재고 부족</MenuItem>
-                    <MenuItem value="기타 (직접입력)">기타 (직접입력)</MenuItem>
-                  </Select>
-                </FormControl>
-                {data.comment === "기타 (직접입력)" ? (
+    <>
+      <AlertModal
+        isOpen={isOpenAlertModal}
+        onClose={handleUpdateStatus}
+        text={`출고불가 신청을 하는 경우\n${productName}/${optionText} 상품의\n재고수량이 ‘0’으로 변경되어 품절처리 됩니다.`}
+        closeBtn={handleCloseAlretModal}
+      />
+      <Modal
+        open={open}
+        onClose={onClose}
+        sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
+      >
+        <ModalWrap>
+          <Grid
+            component={"form"}
+            container
+            flexDirection={"column"}
+            gap={2}
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleUpdateStatus();
+            }}
+          >
+            <h2>주문 처리상태 변경</h2>
+            {status === 500 ? (
+              <h3>
+                출고가능 여부에 따라 [출고대기] 또는 [출고불가신청]으로
+                변경해주세요
+              </h3>
+            ) : status === 140 ? (
+              <h3>
+                <span>검수미통과</span>사유: {lastInspectionFailComment}
+              </h3>
+            ) : null}
+            <FormControl disabled>
+              <InputLabel>현재</InputLabel>
+              <Select label="현재" value={status}>
+                <MenuItem value={status}>{statusText}</MenuItem>
+              </Select>
+            </FormControl>
+            <FormControl required>
+              <InputLabel>변경 후</InputLabel>
+              <Select
+                label="변경 후"
+                value={data.status || ""}
+                onChange={(e) => setData({ status: e.target.value })}
+              >
+                {statusToBeGroup?.map(({ key, value }) => (
+                  <MenuItem value={value} key={value}>
+                    {key}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            {/* 출고완료 */}
+            {data.status === 120 ? (
+              <OptionWrap>
+                <p>출고 배송정보</p>
+                <div>
+                  <FormControl required>
+                    <InputLabel>택배사</InputLabel>
+                    <Select
+                      label="택배사"
+                      value={data.deliveryCorp || ""}
+                      onChange={(e) =>
+                        setData({ ...data, deliveryCorp: e.target.value })
+                      }
+                    >
+                      {deliveryCorpList.map(({ key, value }) => (
+                        <MenuItem value={value} key={value}>
+                          {key}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
                   <TextField
                     required
-                    placeholder="출고불가 사유를 입력해 주세요."
-                    value={etcComment || ""}
-                    onChange={(e) => setEtcComment(e.target.value)}
+                    placeholder="운송장번호"
+                    value={data.invoiceNo}
+                    onChange={(e) =>
+                      setData({ ...data, invoiceNo: e.target.value })
+                    }
                   />
-                ) : null}
-              </div>
-            </OptionWrap>
-          ) : null}
-          <DescWrap>
-            {DESC_LIST[status]?.map((v) => (
-              <li key={v}>{v}</li>
-            ))}
-          </DescWrap>
-          <ModalButtonWrap>
-            <Button onClick={onClose} variant="outlined" size="large">
-              취소
-            </Button>
-            <Button variant="contained" size="large" type="submit">
-              확인
-            </Button>
-          </ModalButtonWrap>
-        </Grid>
-      </ModalWrap>
-    </Modal>
+                </div>
+              </OptionWrap>
+            ) : null}
+            {/* 출고불가신청 */}
+            {data.status === 150 ? (
+              <OptionWrap>
+                <p>출고불가 신청 사유</p>
+                <div>
+                  <FormControl required>
+                    <Select
+                      value={data.comment || ""}
+                      onChange={(e) =>
+                        setData({ ...data, comment: e.target.value })
+                      }
+                    >
+                      <MenuItem value="재고 부족">재고 부족</MenuItem>
+                      <MenuItem value="기타 (직접입력)">
+                        기타 (직접입력)
+                      </MenuItem>
+                    </Select>
+                  </FormControl>
+                  {data.comment === "기타 (직접입력)" ? (
+                    <TextField
+                      required
+                      placeholder="출고불가 사유를 입력해 주세요."
+                      value={etcComment || ""}
+                      onChange={(e) => setEtcComment(e.target.value)}
+                    />
+                  ) : null}
+                </div>
+              </OptionWrap>
+            ) : null}
+            <DescWrap>
+              {DESC_LIST[status]?.map((v) => (
+                <li key={v}>{v}</li>
+              ))}
+            </DescWrap>
+            <ModalButtonWrap>
+              <Button onClick={onClose} variant="outlined" size="large">
+                취소
+              </Button>
+              <Button variant="contained" size="large" type="submit">
+                확인
+              </Button>
+            </ModalButtonWrap>
+          </Grid>
+        </ModalWrap>
+      </Modal>
+    </>
   );
 };
 
