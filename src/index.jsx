@@ -5,16 +5,18 @@ import App from "./layout/index";
 import { Toaster } from "react-hot-toast";
 import { BrowserRouter } from "react-router-dom";
 import { createTheme, ThemeProvider } from "@mui/material";
+import { green, red } from "@mui/material/colors";
 
 export const theme = createTheme({
   palette: {
     primary: { main: "#0082FF" },
-    secondary: { main: "#A65895" },
+    error: { main: red[100] },
+    success: { main: green[100] },
   },
   components: {
     MuiTableCell: {
       styleOverrides: {
-        root: { padding: "10px", fontFamily: "'Spoqa Han Sans','Sans-serif'" },
+        root: { padding: "10px", fontFamily: "inherit" },
       },
     },
   },
