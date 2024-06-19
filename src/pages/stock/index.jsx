@@ -1,7 +1,15 @@
 import React, { useEffect, useCallback, useState } from "react";
 import styled from "styled-components";
 import Item from "../../components/stock/Item";
-import { Grid, TextField, Pagination, Tabs, Tab, Button } from "@mui/material";
+import {
+  Grid,
+  TextField,
+  Pagination,
+  Tabs,
+  Tab,
+  Button,
+  InputAdornment,
+} from "@mui/material";
 import { getStockList } from "../../api/stock";
 import defaultIcon from "../../assets/default.png";
 import GradeModal from "../../components/stock/GradeModal";
@@ -61,26 +69,19 @@ const StockList = () => {
         <TemplateTitleWrap>
           <h2>판매중인 상품</h2>
         </TemplateTitleWrap>
-        <SearchArea>
-          <Grid container position={"relative"} alignItems="center">
-            <TextField
-              size="small"
-              placeholder={"모델명을 입력하세요."}
-              value={optionText || ""}
-              inputProps={{
-                style: {
-                  paddingLeft: "36px",
-                  height: "30px",
-                  width: "500px",
-                },
-              }}
-              onChange={(e) => setOptionText(e.target.value)}
-            />
-            <Grid height="24px" sx={{ position: "absolute", left: "10px" }}>
-              <SearchIcon />
-            </Grid>
-          </Grid>
-        </SearchArea>
+        <TextField
+          placeholder="모델명을 입력하세요."
+          value={optionText || ""}
+          onChange={(e) => setOptionText(e.target.value)}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <SearchIcon />
+              </InputAdornment>
+            ),
+          }}
+          sx={{ width: "500px" }}
+        />
         <InfoTitle>
           <p>
             우선 판매권을 얻으려면 <span>현재 최저가 미만의 가격</span>을
@@ -181,13 +182,6 @@ const Container = styled.div`
   .scroll::-webkit-scrollbar-track {
     background-color: #f8f8f8;
   }
-`;
-
-const SearchArea = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
 `;
 
 const NoRows = styled.li`

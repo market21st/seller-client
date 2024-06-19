@@ -10,6 +10,7 @@ import {
   Button,
   Pagination,
   TableRow,
+  InputAdornment,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { getStock } from "../../api/stock";
@@ -80,29 +81,19 @@ const ProductList = () => {
         <TemplateTitleWrap>
           <h2>전체 상품 목록</h2>
         </TemplateTitleWrap>
-        <Grid
-          container
-          position={"relative"}
-          alignItems="center"
-          marginBottom={"20px"}
-        >
-          <TextField
-            size="small"
-            placeholder={"모델명을 입력하세요."}
-            value={optionText || ""}
-            inputProps={{
-              style: {
-                paddingLeft: "36px",
-                height: "30px",
-                width: "500px",
-              },
-            }}
-            onChange={(e) => setOptionText(e.target.value)}
-          />
-          <Grid height="24px" sx={{ position: "absolute", left: "10px" }}>
-            <SearchIcon />
-          </Grid>
-        </Grid>
+        <TextField
+          placeholder="모델명을 입력하세요."
+          value={optionText || ""}
+          onChange={(e) => setOptionText(e.target.value)}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <SearchIcon />
+              </InputAdornment>
+            ),
+          }}
+          sx={{ width: "500px" }}
+        />
         <TemplateBox>
           <Table>
             <TableHead>
