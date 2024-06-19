@@ -44,12 +44,15 @@ export const statusBgColor = (value) =>
     ? "error"
     : "default";
 
+const statusKeys = [110, 120, 130, 140, 150, 160, 200, 500, 990];
+
 const OrderListPage = () => {
   const today = dayjs().set("hour", 0).set("minute", 0).set("second", 0);
   const navigator = useNavigate();
   const location = useLocation();
   const params = new URLSearchParams(location.search);
 
+  const [isCheckAllStatus, setCheckAllStatus] = useState(!params.get("status"));
   const [statusList, setStatusList] = useState([]);
   const [list, setList] = useState([]);
   const [total, setTotal] = useState(0);
@@ -59,9 +62,9 @@ const OrderListPage = () => {
   const [endDate, setEndDate] = useState(today);
   const [merchantUid, setMerchantUid] = useState("");
   const [productName, setProductName] = useState("");
-  const [status, setStatus] = useState([
-    params.get("status") && Number(params.get("status")),
-  ]);
+  const [status, setStatus] = useState(
+    params.get("status") ? [Number(params.get("status"))] : [...statusKeys]
+  );
 
   const [isOpenStatusUpdateModal, setIsOpenStatusUpdateModal] = useState(false);
   const [item, setItem] = useState({});
@@ -102,6 +105,12 @@ const OrderListPage = () => {
     getList(value);
   };
 
+  const handleCheckAllStatus = () => {
+    if (isCheckAllStatus) setStatus([]);
+    else setStatus([...statusList.map((v) => v.value)]);
+
+    setCheckAllStatus(!isCheckAllStatus);
+  };
   const handleCheckStauts = (value) => {
     if (status.indexOf(value) === -1) setStatus([...status, value]);
     else setStatus([...status.filter((v) => v !== value)]);
@@ -169,6 +178,12 @@ const OrderListPage = () => {
     getStatusList();
     getList();
   }, []);
+  useEffect(() => {
+    if (!statusList.length) return;
+
+    if (status.length === statusList.length) setCheckAllStatus(true);
+    else setCheckAllStatus(false);
+  }, [status, statusList]);
 
   return (
     <>
@@ -204,6 +219,15 @@ const OrderListPage = () => {
             <TemplateRow>
               <p>처리상태</p>
               <Grid container flexWrap={"wrap"}>
+                <FormControlLabel
+                  label={"전체"}
+                  control={
+                    <Checkbox
+                      checked={isCheckAllStatus}
+                      onChange={handleCheckAllStatus}
+                    />
+                  }
+                />
                 {statusList.map(({ key, value }) => (
                   <FormControlLabel
                     key={`status_${value}`}
@@ -245,12 +269,14 @@ const OrderListPage = () => {
                 label="주문번호"
                 value={merchantUid}
                 onChange={(e) => setMerchantUid(e.target.value)}
+                sx={{ width: "300px" }}
               />
               <TextField
                 label="상품명"
                 placeholder="갤럭시"
                 value={productName}
                 onChange={(e) => setProductName(e.target.value)}
+                sx={{ width: "300px" }}
               />
             </TemplateRow>
             <ButtonWrap>
