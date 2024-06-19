@@ -145,21 +145,6 @@ const Home = () => {
         </Box>
         <Box>
           <Grid container alignItems={"center"} gap={2}>
-            <FormControl>
-              <Select
-                size="small"
-                value={date}
-                onChange={(e) => setDate(e.target.value)}
-                name="infoId"
-                sx={{ width: "120px" }}
-              >
-                {dateList?.map((el, idx) => (
-                  <MenuItem key={idx} value={el}>
-                    {el}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
             <h3>정산 예정</h3>
             <p>정산 기준일에 대한 안내글</p>
           </Grid>

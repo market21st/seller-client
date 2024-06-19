@@ -1,8 +1,14 @@
 import React, { useEffect, useState } from "react";
-import styled from "styled-components";
 import PostModal from "../../components/common/PostModal";
 import AlertModal from "../../components/common/AlertModal";
-import { FormControl, Select, MenuItem, Button, Grid } from "@mui/material";
+import {
+  FormControl,
+  Select,
+  MenuItem,
+  Button,
+  Grid,
+  TextField,
+} from "@mui/material";
 import { myInfo, editMyInfo } from "../../api/myInfo";
 import {
   TemplateBox,
@@ -194,12 +200,18 @@ const MyPage = () => {
           </TemplateRow>
           <TemplateRow>
             <p>비밀번호</p>
-            <Input type="password" name="password" onChange={onChange} />
-            <Input
+            <TextField
+              type="password"
+              name="password"
+              onChange={onChange}
+              sx={{ width: "300px" }}
+            />
+            <TextField
               type="password"
               name="passwordCheck"
               onChange={onChange}
               placeholder="비밀번호 확인"
+              sx={{ width: "300px" }}
             />
           </TemplateRow>
         </TemplateBox>
@@ -207,31 +219,29 @@ const MyPage = () => {
           <h4>담당자 정보</h4>
           <TemplateRow>
             <p>담당자 이름</p>
-            <Input
-              className="area"
-              type="text"
+            <TextField
               name="corpCeo"
-              onChange={onChange}
               value={userInfo.corpCeo || ""}
+              onChange={onChange}
+              sx={{ width: "300px" }}
             />
           </TemplateRow>
           <TemplateRow>
             <p>담당자 이메일</p>
-            <Input
-              className="area"
-              type="text"
+            <TextField
               name="corpEmail"
+              value={userInfo.corpEmail || ""}
               onChange={onChange}
-              defaultValue={userInfo.corpEmail || ""}
+              sx={{ width: "300px" }}
             />
           </TemplateRow>
           <TemplateRow>
             <p>담당자 휴대폰 번호</p>
-            <Input
-              type="text"
+            <TextField
               name="phone"
+              value={userInfo.phone || ""}
               onChange={onChange}
-              defaultValue={userInfo.phone || ""}
+              sx={{ width: "300px" }}
             />
           </TemplateRow>
         </TemplateBox>
@@ -239,71 +249,61 @@ const MyPage = () => {
           <h4>회사 정보</h4>
           <TemplateRow>
             <p>상호명</p>
-            <Input
-              type="text"
+            <TextField
               name="corpName"
-              onChange={onChange}
               value={userInfo.corpName || ""}
+              onChange={onChange}
+              sx={{ width: "300px" }}
             />
           </TemplateRow>
           <TemplateRow>
             <p>회사 주소 (우편번호)</p>
             <Grid container flexDirection={"column"} gap={2}>
               <Grid container gap={2}>
-                <Input
-                  className="small"
-                  type="text"
+                <TextField
                   name="corpPost"
-                  onChange={onChange}
                   value={enroll_company.address2 || ""}
-                  placeholder="우편번호"
-                />
-                <Input
-                  className="area"
-                  type="text"
-                  name="corpAddr1"
                   onChange={onChange}
+                  placeholder="우편번호"
+                  disabled
+                  sx={{ width: "200px" }}
+                />
+                <TextField
+                  name="corpAddr1"
                   value={enroll_company.address1 || ""}
+                  onChange={onChange}
+                  disabled
+                  sx={{ width: "400px" }}
                 />
                 <Button variant="contained" onClick={handleComplete}>
                   검색
                 </Button>
               </Grid>
-              <Input
-                className="area"
-                type="text"
+              <TextField
                 name="corpAddr2"
-                onChange={onChange}
                 value={userInfo.corpAddr2 || ""}
+                onChange={onChange}
                 placeholder="상세 주소"
+                sx={{ width: "400px" }}
               />
             </Grid>
           </TemplateRow>
           <TemplateRow>
             <p>회사 대표번호</p>
-            <Input
-              type="text"
+            <TextField
               name="corpContact"
+              value={userInfo.corpContact || ""}
               onChange={onChange}
-              defaultValue={userInfo.corpContact || ""}
+              sx={{ width: "300px" }}
             />
           </TemplateRow>
           <TemplateRow>
             <p>사업자 분류</p>
-            <FormControl>
+            <FormControl sx={{ width: "300px" }}>
               <Select
-                onChange={onChange}
-                displayEmpty
-                inputProps={{ "aria-label": "Without label" }}
-                value={userInfo.bizType || ""}
                 name="bizType"
-                sx={{
-                  width: "400px",
-                  height: "56px",
-                  padding: "10px 5px",
-                  borderRadius: "8px",
-                  border: "1px solid #8e9edf",
-                }}
+                value={userInfo.bizType || ""}
+                onChange={onChange}
               >
                 <MenuItem value="개인사업자">개인사업자</MenuItem>
                 <MenuItem value="법인사업자">법인사업자</MenuItem>
@@ -312,20 +312,11 @@ const MyPage = () => {
           </TemplateRow>
           <TemplateRow>
             <p>과세유형</p>
-            <FormControl>
+            <FormControl sx={{ width: "300px" }}>
               <Select
-                onChange={onChange}
-                displayEmpty
-                inputProps={{ "aria-label": "Without label" }}
-                value={userInfo.taxType || ""}
                 name="taxType"
-                sx={{
-                  width: "400px",
-                  height: "56px",
-                  padding: "10px 5px",
-                  borderRadius: "8px",
-                  border: "1px solid #8e9edf",
-                }}
+                value={userInfo.taxType || ""}
+                onChange={onChange}
               >
                 <MenuItem value="단위과세">단위과세</MenuItem>
                 <MenuItem value="간이과세">간이과세</MenuItem>
@@ -339,19 +330,21 @@ const MyPage = () => {
                 {userInfo.bizFile}
               </a>
               <Grid container gap={2}>
-                <Input
+                <input
                   id="bizFile"
                   type="file"
                   name="bizFile"
                   accept=".pdf"
                   onChange={(e) => {
-                    if (e.target.files[0]) {
-                      setBizFile(e.target.files[0]);
-                    }
+                    if (e.target.files[0]) setBizFile(e.target.files[0]);
                   }}
                   style={{ display: "none" }}
                 />
-                <Input type="text" value={bizFile.name || ""} readOnly />
+                <TextField
+                  value={bizFile.name || ""}
+                  disabled
+                  sx={{ width: "300px" }}
+                />
                 <Button variant="contained">
                   <label htmlFor="bizFile">파일 첨부</label>
                 </Button>
@@ -360,20 +353,20 @@ const MyPage = () => {
           </TemplateRow>
           <TemplateRow>
             <p>사업자번호</p>
-            <Input
-              type="text"
+            <TextField
               name="bizNum"
-              onChange={onChange}
               value={userInfo.bizNum || ""}
+              onChange={onChange}
+              sx={{ width: "300px" }}
             />
           </TemplateRow>
           <TemplateRow>
             <p>통신판매업 신고번호</p>
-            <Input
-              type="text"
+            <TextField
               name="salesNum"
-              onChange={onChange}
               value={userInfo.salesNum || ""}
+              onChange={onChange}
+              sx={{ width: "300px" }}
             />
           </TemplateRow>
         </TemplateBox>
@@ -381,18 +374,17 @@ const MyPage = () => {
           <h4>정산 정보</h4>
           <TemplateRow>
             <p>정산 계좌번호</p>
-            <Input
-              className="small"
-              type="text"
+            <TextField
               name="bankName"
-              onChange={onChange}
               value={userInfo.bankName || ""}
-            />
-            <Input
-              type="text"
-              name="bankAccount"
               onChange={onChange}
+              sx={{ width: "300px" }}
+            />
+            <TextField
+              name="bankAccount"
               value={userInfo.bankAccount || ""}
+              onChange={onChange}
+              sx={{ width: "300px" }}
             />
           </TemplateRow>
         </TemplateBox>
@@ -405,7 +397,7 @@ const MyPage = () => {
                 {userInfo.corpImage}
               </a>
               <Grid container gap={2}>
-                <Input
+                <input
                   id="logoFile"
                   type="file"
                   name="corpImage"
@@ -415,7 +407,11 @@ const MyPage = () => {
                   accept="jpeg, .jpg, .png"
                   style={{ display: "none" }}
                 />
-                <Input type="text" value={logoFile.name || ""} readOnly />
+                <TextField
+                  value={logoFile.name || ""}
+                  disabled
+                  sx={{ width: "300px" }}
+                />
                 <Button variant="contained">
                   <label htmlFor="logoFile">파일 첨부</label>
                 </Button>
@@ -424,12 +420,13 @@ const MyPage = () => {
           </TemplateRow>
           <TemplateRow>
             <p>파트너 소개글</p>
-            <TextArea
-              type="text"
+            <TextField
               name="corpDesc"
+              value={userInfo.corpDesc || ""}
               onChange={onChange}
-              defaultValue={userInfo.corpDesc || ""}
+              multiline
               rows={10}
+              sx={{ width: "600px" }}
             />
           </TemplateRow>
         </TemplateBox>
@@ -443,23 +440,3 @@ const MyPage = () => {
   );
 };
 export default MyPage;
-
-const Input = styled.input`
-  width: 400px;
-  box-sizing: border-box;
-  height: 56px;
-  padding: 10px 20px;
-  border-radius: 8px;
-  border: 1px solid #8e9ebf;
-  &.small {
-    width: 200px;
-  }
-`;
-const TextArea = styled.textarea`
-  width: 600px;
-  box-sizing: border-box;
-  padding: 10px 20px;
-  border-radius: 8px;
-  border: 1px solid #8e9ebf;
-  resize: none;
-`;
