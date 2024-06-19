@@ -33,7 +33,7 @@ const ListModal = ({ isOpen, onClose, id }) => {
       infoId: id,
       optionId,
       grade,
-      price: "100",
+      price: "5000",
       stock: "",
     };
     const { statusCode } = await postProduct(list);
