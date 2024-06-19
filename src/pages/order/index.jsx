@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { getOrder, getState } from "../../api/order";
 import {
   Button,
@@ -15,7 +15,6 @@ import {
   TableHead,
   TableRow,
   TextField,
-  Typography,
 } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -48,6 +47,8 @@ export const statusBgColor = (value) =>
 const OrderListPage = () => {
   const today = dayjs().set("hour", 0).set("minute", 0).set("second", 0);
   const navigator = useNavigate();
+  const location = useLocation();
+  const params = new URLSearchParams(location.search);
 
   const [statusList, setStatusList] = useState([]);
   const [list, setList] = useState([]);
@@ -58,7 +59,9 @@ const OrderListPage = () => {
   const [endDate, setEndDate] = useState(today);
   const [merchantUid, setMerchantUid] = useState("");
   const [productName, setProductName] = useState("");
-  const [status, setStatus] = useState([]);
+  const [status, setStatus] = useState([
+    params.get("status") && Number(params.get("status")),
+  ]);
 
   const [isOpenStatusUpdateModal, setIsOpenStatusUpdateModal] = useState(false);
   const [item, setItem] = useState({});
@@ -295,9 +298,9 @@ const OrderListPage = () => {
                   </TableRow>
                 ))
               ) : (
-                <Typography fontWeight={500} px={1} py={2}>
-                  주문건이 없습니다.
-                </Typography>
+                <TableRow>
+                  <TableCell>주문건이 없습니다.</TableCell>
+                </TableRow>
               )}
             </TableBody>
           </Table>

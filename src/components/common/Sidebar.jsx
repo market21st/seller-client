@@ -49,6 +49,7 @@ const Sidebar = ({ children }) => {
   return (
     <Grid container position={"relative"}>
       <Grid
+        container
         display={"inline-flex"}
         direction={"column"}
         justifyContent={"space-between"}
