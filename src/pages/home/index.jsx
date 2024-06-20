@@ -13,6 +13,7 @@ import Popup from "../../components/common/Popup";
 import ArrowForwardIcon from "../../assets/arrow_forward.svg";
 import dayjs from "dayjs";
 import { Link } from "react-router-dom";
+import AccountsPolicy from "../../assets/accounts_policy.png";
 
 const Home = () => {
   const [dateList, setDateList] = useState([]);
@@ -84,7 +85,7 @@ const Home = () => {
               </Link>
             </Item>
             <Item isLink>
-              <span>검수 통과</span>
+              <span>매입확정(검수통과)</span>
               <Link to={"/order?status=200"}>
                 <p>
                   <b>{dashboard.passedInspectionCount}</b>건
@@ -144,6 +145,15 @@ const Home = () => {
           </ul>
         </Box>
         <Box>
+          <Grid container justifyContent={"center"} alignItems={"center"}>
+            <img
+              src={AccountsPolicy}
+              alt="정산 정책 변경 안내"
+              style={{ width: "90%" }}
+            />
+          </Grid>
+        </Box>
+        {/* <Box>
           <Grid container alignItems={"center"} gap={2}>
             <h3>정산 예정</h3>
             <p>정산 기준일에 대한 안내글</p>
@@ -166,7 +176,7 @@ const Home = () => {
               </p>
             </Item>
           </ul>
-        </Box>
+        </Box> */}
       </Container>
     </>
   );
