@@ -14,7 +14,7 @@ import dayjs from "dayjs";
 const TABLE_HEAD_CELLS = ["변경 일시", "처리상태", "사유"];
 
 const rowCells = (row) => [
-  dayjs(row.createdAt).format("YYYY/MM/DD HH:mm:ss"),
+  dayjs(row.createdAt).format("YYYY.MM.DD HH:mm:ss"),
   row.statusText,
   row.reason?.contents,
 ];

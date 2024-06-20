@@ -73,15 +73,14 @@ const OrderListPage = () => {
     `${row.productName}\n${row.optionText}`,
     row.gradeText,
     row.merchantUid,
-    `${row.createdAt.split("T")[0]} ${row.createdAt.split("T")[1].slice(0, 8)}`,
-    <Chip
-      label={row.statusText}
-      color={statusBgColor(row.status)}
-      onClick={(e) => {
-        e.stopPropagation();
-        handleClickChip(row);
-      }}
-    />,
+    dayjs(row.createdAt).format("YYYY.MM.DD HH:mm:ss"),
+    <div onClick={(e) => e.stopPropagation()}>
+      <Chip
+        label={row.statusText}
+        color={statusBgColor(row.status)}
+        onClick={() => handleClickChip(row)}
+      />
+    </div>,
     `${row.price.toLocaleString()}원`,
     row.fee,
     `${
@@ -130,7 +129,7 @@ const OrderListPage = () => {
       return;
     } else if (status === 150) {
       toast.success(
-        "담당자가 주문 처리상태 확인중이에요.\n[출고불 신청]을 철회하고 싶으면 21세기전파상 담당자에게 연락해 주세요.",
+        "담당자가 주문 처리상태 확인중이에요.\n[출고불가신청]을 철회하고 싶으면 21세기전파상 담당자에게 연락해 주세요.",
         { duration: 4000 }
       );
       return;
