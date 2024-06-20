@@ -28,7 +28,7 @@ const TABLE_HEAD_CELLS = ["변경 처리상태", "변경 일시", "변경 주체
 
 const rowCells = (row) => [
   row.contents,
-  dayjs(row.createdAt).format("YYYY/MM/DD HH:mm:ss"),
+  dayjs(row.createdAt).format("YYYY.MM.DD HH:mm:ss"),
   row.workUser,
 ];
 
@@ -61,7 +61,7 @@ const OrderDetailPage = () => {
       return;
     } else if (status === 150) {
       toast.success(
-        "담당자가 주문 처리상태 확인중이에요.\n[출고불 신청]을 철회하고 싶으면 21세기전파상 담당자에게 연락해 주세요.",
+        "담당자가 주문 처리상태 확인중이에요.\n[출고불가신청]을 철회하고 싶으면 21세기전파상 담당자에게 연락해 주세요.",
         { duration: 4000 }
       );
       return;
@@ -137,7 +137,7 @@ const OrderDetailPage = () => {
           </TemplateRow>
           <TemplateRow>
             <p>주문일자</p>
-            <span>{dayjs(detail.createdAt).format("YYYY/MM/DD HH:mm:ss")}</span>
+            <span>{dayjs(detail.createdAt).format("YYYY.MM.DD HH:mm:ss")}</span>
           </TemplateRow>
           <TemplateRow>
             <p>상품명 - 옵션</p>
@@ -173,7 +173,7 @@ const OrderDetailPage = () => {
               {detail.deliveryInformationToAdmin?.createdAtOfReleaseToAdmin
                 ? dayjs(
                     detail.deliveryInformationToAdmin?.createdAtOfReleaseToAdmin
-                  ).format("YYYY/MM/DD HH:mm:ss")
+                  ).format("YYYY.MM.DD HH:mm:ss")
                 : "-"}
               )
             </span>
@@ -205,7 +205,7 @@ const OrderDetailPage = () => {
                 ? dayjs(
                     detail.deliveryInformationToPartner
                       ?.createdAtOfReleaseToPartner
-                  ).format("YYYY/MM/DD HH:mm:ss")
+                  ).format("YYYY.MM.DD HH:mm:ss")
                 : "-"}
               )
             </span>
