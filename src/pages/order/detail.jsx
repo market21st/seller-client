@@ -20,16 +20,15 @@ import {
   TableRow,
 } from "@mui/material";
 import dayjs from "dayjs";
-import OrderHistoryModal from "../../components/order/OrderHistoryModal";
 import StatusUpdateModal from "../../components/order/StatusUpdateModal";
 import toast from "react-hot-toast";
 
-const TABLE_HEAD_CELLS = ["변경 처리상태", "변경 일시", "변경 주체"];
+const TABLE_HEAD_CELLS = ["처리상태", "변경 일시", "사유"];
 
 const rowCells = (row) => [
-  row.contents,
+  row.statusText,
   dayjs(row.createdAt).format("YYYY.MM.DD HH:mm:ss"),
-  row.workUser,
+  row.reason?.contents,
 ];
 
 const OrderDetailPage = () => {
@@ -37,15 +36,7 @@ const OrderDetailPage = () => {
 
   const [detail, setDetail] = useState({});
   const [history, setHistory] = useState([]);
-  const [isOpenHistoryModal, setIsOpenHistoryModal] = useState(false);
   const [isOpenStatusUpdateModal, setIsOpenStatusUpdateModal] = useState(false);
-
-  const handleOpenHistoryModal = () => {
-    setIsOpenHistoryModal(true);
-  };
-  const handleCloseHistoryModal = () => {
-    setIsOpenHistoryModal(false);
-  };
 
   const handleOpenStatusUpdateModal = () => {
     setIsOpenStatusUpdateModal(true);
@@ -97,11 +88,6 @@ const OrderDetailPage = () => {
 
   return (
     <>
-      <OrderHistoryModal
-        open={isOpenHistoryModal}
-        onClose={handleCloseHistoryModal}
-        history={history}
-      />
       <StatusUpdateModal
         open={isOpenStatusUpdateModal}
         onClose={handleCloseStatusUpdateModal}
@@ -212,12 +198,7 @@ const OrderDetailPage = () => {
           </TemplateRow>
         </TemplateBox>
         <TemplateBox>
-          <h4>
-            주문 처리상태{" "}
-            <Button variant="outlined" onClick={handleOpenHistoryModal}>
-              상태변경 내역 전체보기
-            </Button>
-          </h4>
+          <h4>주문 처리상태</h4>
           <Table>
             <TableHead>
               <TableRow>
@@ -227,7 +208,7 @@ const OrderDetailPage = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {detail.memos?.map((row, idx) => (
+              {history?.map((row, idx) => (
                 <TableRow
                   key={`row_${idx}`}
                   sx={{
@@ -235,16 +216,10 @@ const OrderDetailPage = () => {
                     "&:hover": {
                       background: "#F2F8FF",
                     },
-                    cursor: "pointer",
                   }}
                 >
                   {rowCells(row).map((v, idx) => (
-                    <TableCell
-                      key={`row_cell_${idx}`}
-                      sx={{ whiteSpace: "pre-wrap" }}
-                    >
-                      {v}
-                    </TableCell>
+                    <TableCell key={`row_cell_${idx}`}>{v || "-"}</TableCell>
                   ))}
                 </TableRow>
               ))}
