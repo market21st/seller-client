@@ -24,7 +24,7 @@ import dayjs from "dayjs";
 import StatusUpdateModal from "../../components/order/StatusUpdateModal";
 import toast from "react-hot-toast";
 
-const take = 5;
+const take = 10;
 
 const TABLE_HEAD_CELLS = [
   "상품명/옵션",
