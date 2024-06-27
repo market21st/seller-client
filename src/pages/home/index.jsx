@@ -1,19 +1,12 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import {
-  FormControl,
-  Select,
-  MenuItem,
-  Grid,
-  Typography,
-  Button,
-} from "@mui/material";
+import { Grid, Typography, Button } from "@mui/material";
 import { manageDate, statistics } from "../../api/myInfo";
 import Popup from "../../components/common/Popup";
 import ArrowForwardIcon from "../../assets/arrow_forward.svg";
 import dayjs from "dayjs";
 import { Link } from "react-router-dom";
-import AccountsPolicy from "../../assets/accounts_policy.png";
+import AccountsPolicyImg from "../../assets/accounts_policy.png";
 
 const Home = () => {
   const [dateList, setDateList] = useState([]);
@@ -147,7 +140,7 @@ const Home = () => {
         <Box>
           <Grid container justifyContent={"center"} alignItems={"center"}>
             <img
-              src={AccountsPolicy}
+              src={AccountsPolicyImg}
               alt="정산 정책 변경 안내"
               style={{ width: "90%" }}
             />
