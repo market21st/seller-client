@@ -40,13 +40,17 @@ export const loginUser = async (params) => {
   try {
     const res = await instance.post(`/auth/login`, params);
     if (res.data.statusCode === 200) {
-      window.localStorage.setItem("isLogin", "true");
-      window.localStorage.setItem("corpLogo", res.data.data.corpImage);
-      window.localStorage.setItem("corpName", res.data.data.corpName);
-      window.localStorage.setItem("id", res.data.data.id);
-      window.localStorage.setItem(
+      localStorage.setItem("isLogin", "true");
+      localStorage.setItem("corpLogo", res.data.data.corpImage);
+      localStorage.setItem("corpName", res.data.data.corpName);
+      localStorage.setItem("id", res.data.data.id);
+      localStorage.setItem(
         "deliveryPeriod",
         res.data.data.deliveryPeriod || ""
+      );
+      localStorage.setItem(
+        "inspectionPassRate",
+        res.data.data.inspectionPassRate || ""
       );
     }
     return res.data;

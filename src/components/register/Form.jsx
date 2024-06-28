@@ -1,11 +1,8 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import CloseIcon from "@mui/icons-material/Close";
-// Mui
 import { FormControl, Select, MenuItem } from "@mui/material";
-// Components
-import PostModal from "./PostModal";
 import InfoModal from "../common/InfoModal";
+import PostModal from "../common/PostModal";
 
 const Form = ({
   active,
@@ -47,20 +44,12 @@ const Form = ({
 
   return (
     <>
-      {popup && (
-        <Container>
-          <h1>
-            주소검색
-            <CloseIcon onClick={handleComplete} />
-          </h1>
-          <PostModal
-            closeEvent={handleComplete}
-            handleComplete={handleComplete}
-            company={enroll_company}
-            setcompany={setEnroll_company}
-          />
-        </Container>
-      )}
+      <PostModal
+        open={popup}
+        onClose={handleComplete}
+        company={enroll_company}
+        setcompany={setEnroll_company}
+      />
       <InfoModal
         isOpen={infoOpen}
         onClose={infoHandleClose}
@@ -460,25 +449,6 @@ const InfoContainer = styled.div`
   }
 `;
 
-const Container = styled.div`
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 33.33%;
-  border: 1px solid #ddd;
-  height: 100vh;
-  background: #fff;
-  h1 {
-    font-size: 18px;
-    color: #909090;
-    padding: 15px 15px;
-    border-bottom: 1px solid #ddd;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-`;
-
 const RowInnerAreaM = styled.div`
   width: 100%;
   div {
@@ -496,10 +466,8 @@ const RowInnerAreaM = styled.div`
   span {
     font-size: 14px;
     padding-left: 10px;
-    /* font-weight: 300; */
   }
   button {
-    /* font-weight: 300; */
     color: #7e7e7e;
     font-size: 14px;
     border-bottom: 1px solid #7e7e7e;

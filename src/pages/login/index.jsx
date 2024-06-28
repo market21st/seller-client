@@ -68,7 +68,7 @@ const LogIn = () => {
       userId: id,
       password: pw,
     });
-    if (statusCode == 200) {
+    if (statusCode === 200) {
       window.location.reload();
       navigate("/");
     }
@@ -113,7 +113,7 @@ const LogIn = () => {
         contents={contentNum}
         title={title}
       />
-      <AlertModal isOpen={alertOpen} onClose={alertHandleClose} text={text} />
+      <AlertModal open={alertOpen} onClose={alertHandleClose} text={text} />
       <Grid item xs={8} sx={{ position: "relative" }}>
         <Logo href="/">
           <LogoImg src={logoImg} alt="로고" />

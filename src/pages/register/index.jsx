@@ -228,7 +228,7 @@ const Register = () => {
 
   return (
     <Grid container height={"100vh"}>
-      <AlertModal isOpen={alertModal} onClose={aleatHandleClose} text={text} />
+      <AlertModal open={alertModal} onClose={aleatHandleClose} text={text} />
       <Grid item xs={4} sx={{ position: "relative" }}>
         <Logo href="/">
           <LogoImg src={logoImg} alt="로고" />

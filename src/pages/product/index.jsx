@@ -1,70 +1,71 @@
 import React, { useEffect, useCallback, useState } from "react";
-import styled from "styled-components";
 import { debounce } from "../../utils/debounce";
 import {
   Grid,
   TextField,
-  TableContainer,
-  Paper,
   Table,
   TableHead,
   TableBody,
   TableCell,
   Button,
   Pagination,
+  TableRow,
+  InputAdornment,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { getStock } from "../../api/stock";
-import ListModal from "../../components/common/ListModal";
+import { TemplateBox, TemplateTitleWrap, TemplateWrap } from "../order";
+import ListModal from "../../components/product/ListModal";
+
+const take = 10;
+
+const TABLE_HEAD_CELLS = ["번호", "모델명", "관리"];
 
 const ProductList = () => {
-  const [optionText, setOptionText] = useState("");
-  const [el, setel] = useState([]);
-  const [curpage, setCurPage] = useState(1);
+  const [list, setList] = useState([]);
   const [total, setTotal] = useState(0);
-  const [listmodal, setListModal] = useState({
+  const [page, setPage] = useState(1);
+
+  const [optionText, setOptionText] = useState("");
+  const [modal, setModal] = useState({
     open: false,
     id: 0,
   });
-  const onClickOpen = (id) => {
-    setListModal({ open: true, id });
+
+  const rowCells = (row, idx) => [
+    idx + 1,
+    row.name,
+    <Button variant="contained" onClick={() => handleOpenModal(row.id)}>
+      추가
+    </Button>,
+  ];
+
+  const handleOpenModal = (id) => {
+    setModal({ open: true, id });
   };
-  const onClickClose = () => {
-    setListModal({ open: false, id: 0 });
+  const handleCloseModal = () => {
+    setModal({ open: false, id: 0 });
   };
+
+  const handleChangePage = (v) => {
+    setPage(v);
+    getInfoList("", v);
+  };
+
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const getInfoList = async (txt = "", v = 1) => {
     const { data, statusCode } = await getStock({
       optionText: txt ? txt : optionText,
       take: 10,
-      page: v ? v : curpage,
+      page: v ? v : page,
     });
     if (statusCode === 200) {
       setTotal(data.total);
-      setel(
-        data?.results?.map(({ id, name }) => (
-          <tr key={id}>
-            <TableCell component="td" align="center">
-              {id}
-            </TableCell>
-            <TableCell component="td" align="center">
-              {name}
-            </TableCell>
-            <TableCell component="td" align="center">
-              <Button onClick={() => onClickOpen(id)} variant="contained">
-                추가
-              </Button>
-            </TableCell>
-          </tr>
-        ))
-      );
+      setList(data.results);
     }
   };
+
   const debounceInfo = debounce(getInfoList, 300);
-  const onChangePage = (v) => {
-    setCurPage(v);
-    getInfoList("", v);
-  };
   const getdebounceInfo = useCallback((txt) => {
     debounceInfo(txt);
   }, []);
@@ -75,130 +76,68 @@ const ProductList = () => {
 
   return (
     <>
-      <ListModal
-        isOpen={listmodal.open}
-        id={listmodal.id}
-        onClose={onClickClose}
-      />
-      <Container>
-        <TopBox>
-          <h1>상품 등록</h1>
-        </TopBox>
-        <Grid container marginBottom={"20px"}>
-          <Grid item xs={6}>
-            <Grid container position={"relative"} alignItems="center">
-              <TextField
-                fullWidth
-                size="small"
-                placeholder={"모델명을 입력하세요."}
-                variant="outlined"
-                value={optionText || ""}
-                autoComplete={"off"}
-                inputProps={{
-                  style: {
-                    paddingLeft: "36px",
-                    height: "30px",
-                    border: "2px solid #0082FF",
-                    borderRadius: "20px",
-                  },
-                }}
-                sx={{
-                  "input:focus": { boxShadow: 2 },
-                }}
-                onChange={(e) => setOptionText(e.target.value)}
-              />
-              <Grid height="24px" sx={{ position: "absolute", left: "10px" }}>
+      <ListModal isOpen={modal.open} id={modal.id} onClose={handleCloseModal} />
+      <TemplateWrap>
+        <TemplateTitleWrap>
+          <h2>전체 상품 목록</h2>
+        </TemplateTitleWrap>
+        <TextField
+          placeholder="모델명을 입력하세요."
+          value={optionText || ""}
+          onChange={(e) => setOptionText(e.target.value)}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
                 <SearchIcon />
-              </Grid>
-            </Grid>
-          </Grid>
-        </Grid>
-        <Grid
-          container
-          item
-          xs
-          flexDirection={"column"}
-          gap="20px"
-          alignItems={"center"}
-          paddingBottom={"20px"}
-        >
-          <TableContainer component={Paper}>
-            <Table>
-              <TableHead>
-                <tr>
-                  <TableCell
-                    component={"th"}
-                    align={"center"}
-                    sx={{ fontWeight: 700, padding: "15px 10px" }}
-                  >
-                    번호
-                  </TableCell>
-                  <TableCell
-                    component={"th"}
-                    align={"center"}
-                    sx={{ fontWeight: 700, padding: "15px 10px" }}
-                  >
-                    모델명
-                  </TableCell>
-                  <TableCell
-                    component={"th"}
-                    align={"center"}
-                    sx={{ fontWeight: 700, padding: "15px 10px" }}
-                  >
-                    관리
-                  </TableCell>
-                </tr>
-              </TableHead>
-              <TableBody>{el}</TableBody>
-            </Table>
-          </TableContainer>
+              </InputAdornment>
+            ),
+          }}
+          sx={{ width: "500px" }}
+        />
+        <TemplateBox>
+          <Table>
+            <TableHead>
+              <TableRow>
+                {TABLE_HEAD_CELLS.map((v) => (
+                  <TableCell key={`head_cell_${v}`}>{v}</TableCell>
+                ))}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {list?.map((row, rowIdx) => (
+                <TableRow
+                  key={`row_${row.id}`}
+                  sx={{
+                    "&:last-child td, &:last-child th": { border: 0 },
+                    "&:hover": {
+                      background: "#F2F8FF",
+                    },
+                  }}
+                >
+                  {rowCells(row, rowIdx).map((v, idx) => (
+                    <TableCell
+                      key={`row_cell_${idx}`}
+                      sx={{ whiteSpace: "pre-wrap" }}
+                    >
+                      {v}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TemplateBox>
+        <Grid container justifyContent={"center"}>
           <Pagination
-            count={Math.ceil(total / 10)}
-            page={curpage}
-            onChange={(e, page) => onChangePage(page)}
+            count={Math.ceil(total / take)}
+            page={page}
+            onChange={(e, v) => handleChangePage(v)}
+            showFirstButton
+            showLastButton
           />
         </Grid>
-      </Container>
+      </TemplateWrap>
     </>
   );
 };
 export default ProductList;
-
-const Container = styled.div`
-  width: 100%;
-  height: 100%;
-  padding: 50px 59px 50px;
-  h1 {
-    font-size: 20px;
-  }
-  em {
-    font-style: normal;
-  }
-  .area {
-    width: 279px;
-  }
-  & .MuiOutlinedInput-notchedOutline {
-    border: none !important;
-  }
-  a {
-    display: block;
-    padding: 10px 0 5px;
-  }
-  .scroll::-webkit-scrollbar {
-    width: 10px;
-  }
-  .scroll::-webkit-scrollbar-thumb {
-    background-color: #0082ff;
-    border-radius: 5px;
-  }
-  .scroll::-webkit-scrollbar-track {
-    background-color: #f8f8f8;
-  }
-`;
-
-const TopBox = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 30px;
-`;

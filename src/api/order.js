@@ -1,3 +1,4 @@
+import toast from "react-hot-toast";
 import { instance } from "../utils/axios";
 
 // 전체
@@ -22,7 +23,7 @@ export const getState = async () => {
 };
 
 // 상세
-export const getDetail = async (id) => {
+export const getOrderDetail = async (id) => {
   try {
     const res = await instance.get(`/order/info/${id}`);
     return res.data;
@@ -44,7 +45,7 @@ export const OrderMemo = async (id, params) => {
 };
 
 // 타입조회
-export const getHistory = async (id, type) => {
+export const getOrderHistory = async (id, type) => {
   try {
     const list = {
       orderId: id,
@@ -59,13 +60,14 @@ export const getHistory = async (id, type) => {
 };
 
 // 상태변경
-export const editStatus = async (id, params) => {
+export const editOrderStatus = async (id, params) => {
   try {
     const res = await instance.patch(`/order/status/${id}`, params);
     return res.data;
-  } catch (err) {
-    console.log(err);
-    return err.response.data;
+  } catch (e) {
+    if (e.response.data.statusCode === 400) {
+      toast.error(e.response.data.message);
+    }
   }
 };
 

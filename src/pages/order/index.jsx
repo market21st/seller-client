@@ -1,469 +1,414 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
-// Components
-import AlertModal from "../../components/common/AlertModal";
-import Paging from "../../components/common/Paging";
-import orderColumns from "../../constants/orderColumns";
-// Api
+import { useLocation, useNavigate } from "react-router-dom";
 import { getOrder, getState } from "../../api/order";
-import { TextField } from "@mui/material";
-import { DataGrid } from "@mui/x-data-grid";
-// Mui
+import {
+  Button,
+  Checkbox,
+  Chip,
+  FormControlLabel,
+  Grid,
+  Pagination,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  TextField,
+} from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import "dayjs/locale/ko";
+import dayjs from "dayjs";
+import StatusUpdateModal from "../../components/order/StatusUpdateModal";
+import toast from "react-hot-toast";
 
-const gridBtm = {
-  "& .MuiDataGrid-columnHeaderTitleContainer": {
-    paddingLeft: "10px",
-    justifyContent: "center",
-  },
-  "& .MuiDataGrid-cell": {
-    paddingLeft: "20px",
-    cursor: "pointer",
-  },
-  "& .MuiDataGrid-iconSeparator": {
-    display: "none",
-  },
-  "& .MuiDataGrid-footerContainer": {
-    display: "none",
-  },
-  "& .MuiDataGrid-columnHeaders": {
-    background: "#f5f7fc",
-  },
-  "& .MuiDataGrid-virtualScroller": {
-    height: "30vh !important",
-    overflowY: "scroll !important",
-  },
-  "& .MuiDataGrid-row:hover": {
-    background: "#E6F3FF",
-  },
-  "& .MuiDataGrid-virtualScrollerContent": {
-    background: "#fff",
-  },
-};
+const take = 10;
 
-const OrderList = () => {
+const TABLE_HEAD_CELLS = [
+  "상품명/옵션",
+  "등급",
+  "주문번호",
+  "주문일시",
+  "처리상태",
+  "판매가",
+  "수수료율",
+  "출고 배송정보",
+];
+
+export const statusBgColor = (value) =>
+  value === 500
+    ? "success"
+    : value === 110 || value === 140
+    ? "error"
+    : "default";
+
+const statusKeys = [110, 120, 130, 140, 150, 160, 200, 500, 990];
+
+const OrderListPage = () => {
+  const today = dayjs().set("hour", 0).set("minute", 0).set("second", 0);
   const navigator = useNavigate();
+  const location = useLocation();
+  const params = new URLSearchParams(location.search);
 
-  const [data, setData] = useState([]);
-  const [total, setTotal] = useState(0);
+  const [isCheckAllStatus, setCheckAllStatus] = useState(!params.get("status"));
   const [statusList, setStatusList] = useState([]);
-
+  const [list, setList] = useState([]);
+  const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
-  const [pageBtn, setPageBtn] = useState(1);
 
-  const handleChangess = async (event, value) => {
-    setPageBtn(value);
-    setPage(value);
+  const [startDate, setStartDate] = useState(today.add(-1, "M"));
+  const [endDate, setEndDate] = useState(today);
+  const [merchantUid, setMerchantUid] = useState("");
+  const [productName, setProductName] = useState("");
+  const [status, setStatus] = useState(
+    params.get("status") ? [Number(params.get("status"))] : [...statusKeys]
+  );
+
+  const [isOpenStatusUpdateModal, setIsOpenStatusUpdateModal] = useState(false);
+  const [item, setItem] = useState({});
+
+  const rowCells = (row) => [
+    `${row.productName}\n${row.optionText}`,
+    row.gradeText,
+    row.merchantUid,
+    dayjs(row.createdAt).format("YYYY.MM.DD HH:mm:ss"),
+    <div onClick={(e) => e.stopPropagation()}>
+      <Chip
+        label={row.statusText}
+        color={statusBgColor(row.status)}
+        onClick={() => handleClickChip(row)}
+      />
+    </div>,
+    `${row.price.toLocaleString()}원`,
+    row.fee,
+    `${
+      row.deliveryInformationToAdmin
+        ? `${row.deliveryInformationToAdmin.deliveryCorpNameToAdmin} | ${row.deliveryInformationToAdmin.invoiceNoToAdmin}`
+        : "-"
+    }`,
+  ];
+
+  const handleSearch = () => {
+    getList();
+  };
+  const handleClickInit = () => {
+    window.location.reload();
+  };
+  const handleClickRow = (id) => {
+    navigator(`/order/item/${id}`);
   };
 
-  // 기간
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
-  const start = `${startDate?.$D}`;
-  const end = `${endDate?.$D}`;
-  const sday = startDate && start.length === 1 ? `0${start}` : start;
-  const eday = endDate && end.length === 1 ? `0${end}` : end;
+  const handleChangePage = (value) => {
+    getList(value);
+  };
 
-  // state
-  const [listData, setListData] = useState([]);
+  const handleCheckAllStatus = () => {
+    if (isCheckAllStatus) setStatus([]);
+    else setStatus([...statusList.map((v) => v.value)]);
 
-  // 상태 목록 조회
-  const getStateList = async () => {
+    setCheckAllStatus(!isCheckAllStatus);
+  };
+  const handleCheckStauts = (value) => {
+    if (status.indexOf(value) === -1) setStatus([...status, value]);
+    else setStatus([...status.filter((v) => v !== value)]);
+  };
+
+  const handleOpenStatusUpdateModal = () => {
+    setIsOpenStatusUpdateModal(true);
+  };
+  const handleCloseStatusUpdateModal = () => {
+    setIsOpenStatusUpdateModal(false);
+  };
+
+  const handleClickChip = (item) => {
+    const status = item.status;
+    if (status === 120 || status === 130 || status === 200) {
+      toast.success("담당자가 주문 처리상태 확인중이에요.", { duration: 4000 });
+      return;
+    } else if (status === 150) {
+      toast.success(
+        "담당자가 주문 처리상태 확인중이에요.\n[출고불가신청]을 철회하고 싶으면 21세기전파상 담당자에게 연락해 주세요.",
+        { duration: 4000 }
+      );
+      return;
+    } else if (status === 160) {
+      toast.success(
+        "담당자가 주문 처리상태 확인중이에요.\n[출고불가확정] 처리된 주문은 되돌릴 수 없어요.",
+        { duration: 4000 }
+      );
+      return;
+    } else if (status === 990) {
+      toast.success(
+        `주문취소 건은 정산내역에서 제외돼요.\n주문취소 사유: ${item.lastOrderCancellationComment}`,
+        { duration: 4000 }
+      );
+      return;
+    }
+    setItem(item);
+    handleOpenStatusUpdateModal();
+  };
+
+  const getStatusList = async () => {
     const { data, statusCode } = await getState();
-    if (statusCode == 200) {
-      setStatusList(data.results);
-    }
+    if (statusCode === 200) setStatusList(data.orderStatus);
   };
-
-  const rowsData = listData?.map((e) => {
-    return {
-      id: e.id,
-      merchantUid: e.merchantUid.split("-")[0],
-      createdAt: `${e.createdAt.split("T")[0]} ${e.createdAt.substring(
-        11,
-        19
-      )}`,
-      uid: e.orderer.name,
-      phone: e.orderer.phone,
-      productName: e.productOption.name,
-      productOption: e.productOption.optionText,
-      productGrade:
-        2 === e.productOption.grade
-          ? "S"
-          : 1 === e.productOption.grade
-          ? "A"
-          : "B",
-      productPrice: Number(e.productOption.price).toLocaleString(),
-      status:
-        e.statusText === "구매완료" && e.invoiceNo ? "배송완료" : e.statusText,
-      new: e.isNew ? "신규주문" : "-",
+  const getList = async (pageValue) => {
+    const page = pageValue || 1;
+    const searchData = {
+      take,
+      page,
+      status,
+      startDate,
+      endDate,
+      merchantUid,
+      productName,
     };
-  });
-
-  // Modal
-  const [alertModal, setAlertModal] = useState(false);
-  const [text, setText] = useState("");
-  const aleatHandleClose = () => {
-    setAlertModal(false);
-    if (text.includes("저장")) {
-      window.location.reload();
-    }
-  };
-
-  // 변경하는 필터값
-  const [userInfo, setUserInfo] = useState({
-    productInfoId: "",
-    optionText: "",
-  });
-
-  function onChange(e) {
-    const { name, value } = e.target;
-    setUserInfo({
-      ...userInfo,
-      [name]: value,
-    });
-  }
-
-  const [checkItems, setCheckItems] = useState([]);
-  const [statusData, setStatusData] = useState([]);
-
-  // 상세보기 링크
-  const handleRowClick = (params) => {
-    const row = params.row;
-    navigator(`/order/item/${row.id}`);
-  };
-
-  // 전체 리스트 조회
-  const getList = async () => {
-    const list = {
-      take: 10,
-      page: page,
-      status: checkItems,
-      merchantUid: userInfo.merchantUid,
-      name: userInfo.name,
-      phone: userInfo.phone,
-      productName: userInfo.productName,
-      startDate: startDate
-        ? `${startDate?.$y}-${startDate?.$M + 1}-${sday}`
-        : "",
-      endDate: endDate ? `${endDate?.$y}-${endDate?.$M + 1}-${eday}` : "",
-    };
-    const { data, statusCode } = await getOrder(list);
-    if (statusCode == 200) {
+    const { data, statusCode } = await getOrder(searchData);
+    if (statusCode === 200) {
       setTotal(data.total);
-      setListData(data.results);
+      setList(data.results);
+      setPage(page);
     }
-  };
-
-  // 체크박스 전체 선택
-  const handleAllCheck = (checked) => {
-    if (checked) {
-      const idArray = [];
-      statusData.forEach((el) => idArray.push(el.value));
-      setCheckItems(idArray);
-    } else {
-      setCheckItems([]);
-    }
-  };
-  // 체크박스 단일 선택
-  const handleSingleCheck = (checked, id) => {
-    if (checked) {
-      setCheckItems((prev) => [...prev, id]);
-    } else {
-      setCheckItems(checkItems.filter((el) => el !== id));
-    }
-  };
-  const onReset = () => {
-    sessionStorage.clear(); // 전체 삭제
   };
 
   useEffect(() => {
-    getStateList();
+    getStatusList();
     getList();
-  }, [pageBtn]);
+  }, []);
+  useEffect(() => {
+    if (!statusList.length) return;
+
+    if (status.length === statusList.length) setCheckAllStatus(true);
+    else setCheckAllStatus(false);
+  }, [status, statusList]);
 
   return (
     <>
-      <AlertModal isOpen={alertModal} onClose={aleatHandleClose} text={text} />
-      <Container>
-        <TopBox>
-          <h1>주문 관리</h1>
-        </TopBox>
-        <SearchArea>
-          <RowInner>
-            <TextInput>
-              <input
-                className="orderNum"
-                type="text"
-                placeholder="주문번호"
-                onChange={onChange}
-                name="merchantUid"
-              />
-              <input
-                className="name"
-                type="text"
-                placeholder="상품명"
-                onChange={onChange}
-                name="productName"
-              />
-            </TextInput>
-            <DateBox>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DateInput>
-                  <DatePicker
-                    fullWidth
-                    value={startDate}
-                    inputFormat={"YYYY-MM-DD"}
-                    onChange={(newValue) => {
-                      setStartDate(newValue);
-                    }}
-                    renderInput={(params) => {
-                      return <TextField {...params} />;
-                    }}
-                  />
-                </DateInput>
-                <DateInputs>~</DateInputs>
-                <DateInput>
-                  <DatePicker
-                    value={endDate}
-                    inputFormat={"YYYY-MM-DD"}
-                    onChange={(newValue) => {
-                      setEndDate(newValue);
-                    }}
-                    renderInput={(params) => <TextField {...params} />}
-                  />
-                </DateInput>
-              </LocalizationProvider>
-            </DateBox>
-          </RowInner>
-          <RowInner>
-            <TextInput>
-              <input
-                className="orderNum"
-                type="text"
-                placeholder="주문자명"
-                onChange={onChange}
-                name="name"
-              />
-              <input
-                className="name"
-                type="text"
-                placeholder="전화번호"
-                onChange={onChange}
-                name="phone"
-              />
-            </TextInput>
-          </RowInner>
-          <CheckList>
-            <span key={100}>
-              <input
-                type="checkbox"
-                name="all"
-                id="all"
-                onChange={(e) => handleAllCheck(e.target.checked)}
-                checked={
-                  checkItems?.length === statusData?.length ? true : false
-                }
-              />
-              <label htmlFor="all">전체</label>
-            </span>
-            {statusList?.map((el, i) => (
-              <span key={el?.value}>
-                <input
-                  type="checkbox"
-                  name={el?.key}
-                  id={el?.value}
-                  onChange={(e) =>
-                    handleSingleCheck(e.target.checked, el.value)
+      <StatusUpdateModal
+        open={isOpenStatusUpdateModal}
+        onClose={handleCloseStatusUpdateModal}
+        status={item.status}
+        statusText={item.statusText}
+        statusToBeGroup={item.statusToBeGroup?.results}
+        lastInspectionFailComment={item.lastInspectionFailComment}
+        id={item.id}
+        productName={item.productName}
+        optionText={item.optionText}
+        reload={() => {
+          getList();
+        }}
+      />
+      <TemplateWrap>
+        <TemplateTitleWrap>
+          <h2>주문 배송 관리</h2>
+          <h3>모든 주문 내역을 조회할 수 있는 메뉴입니다.</h3>
+        </TemplateTitleWrap>
+        <TemplateBox>
+          <Grid
+            component={"form"}
+            container
+            flexDirection={"column"}
+            gap={2}
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleSearch();
+            }}
+          >
+            <h4>주문 검색</h4>
+            <TemplateRow>
+              <p>처리상태</p>
+              <Grid container flexWrap={"wrap"}>
+                <FormControlLabel
+                  label={"전체"}
+                  control={
+                    <Checkbox
+                      checked={isCheckAllStatus}
+                      onChange={handleCheckAllStatus}
+                    />
                   }
-                  checked={checkItems.includes(el.value) ? true : false}
                 />
-                <label htmlFor={el?.value}>{el?.key}</label>
-              </span>
-            ))}
-          </CheckList>
-        </SearchArea>
-        <Area>
-          <FilterBtn>
-            <button onClick={() => window.location.reload()}>초기화</button>
-            <button onClick={getList}>필터적용</button>
-          </FilterBtn>
-        </Area>
-        <GridContainer>
-          <DataGrid
-            sx={gridBtm}
-            autoHeight
-            rows={rowsData}
-            pageSize={10}
-            rowCount={total}
-            columns={orderColumns}
-            experimentalFeatures={{ newEditingApi: true }}
-            onRowClick={handleRowClick}
-            cell--textCenter
+                {statusList.map(({ key, value }) => (
+                  <FormControlLabel
+                    key={`status_${value}`}
+                    label={key}
+                    control={
+                      <Checkbox
+                        checked={status.indexOf(value) !== -1}
+                        onChange={() => handleCheckStauts(value)}
+                      />
+                    }
+                  />
+                ))}
+              </Grid>
+            </TemplateRow>
+            <TemplateRow>
+              <p>조회기간 (주문일)</p>
+              <LocalizationProvider
+                dateAdapter={AdapterDayjs}
+                adapterLocale="ko"
+              >
+                <DatePicker
+                  format="YYYY-MM-DD"
+                  maxDate={endDate}
+                  value={startDate}
+                  onChange={(v) => setStartDate(v)}
+                />
+                <span>~</span>
+                <DatePicker
+                  format="YYYY-MM-DD"
+                  minDate={startDate}
+                  value={endDate}
+                  onChange={(v) => setEndDate(v)}
+                />
+              </LocalizationProvider>
+            </TemplateRow>
+            <TemplateRow>
+              <p>상세조건</p>
+              <TextField
+                label="주문번호"
+                value={merchantUid}
+                onChange={(e) => setMerchantUid(e.target.value)}
+                sx={{ width: "300px" }}
+              />
+              <TextField
+                label="상품명"
+                placeholder="갤럭시"
+                value={productName}
+                onChange={(e) => setProductName(e.target.value)}
+                sx={{ width: "300px" }}
+              />
+            </TemplateRow>
+            <ButtonWrap>
+              <Button variant="contained" size="large" type="submit">
+                조회
+              </Button>
+              <Button variant="outlined" size="large" onClick={handleClickInit}>
+                초기화
+              </Button>
+            </ButtonWrap>
+          </Grid>
+        </TemplateBox>
+        <TemplateBox>
+          <h4>전체 주문 검색 목록 ({total}건)</h4>
+          <Table>
+            <TableHead>
+              <TableRow>
+                {TABLE_HEAD_CELLS.map((v) => (
+                  <TableCell key={`head_cell_${v}`}>{v}</TableCell>
+                ))}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {list.length ? (
+                list?.map((row) => (
+                  <TableRow
+                    key={`row_${row.id}`}
+                    sx={{
+                      "&:last-child td, &:last-child th": { border: 0 },
+                      "&:hover": {
+                        background: "#F2F8FF",
+                      },
+                      cursor: "pointer",
+                    }}
+                    onClick={() => handleClickRow(row.id)}
+                  >
+                    {rowCells(row).map((v, idx) => (
+                      <TableCell
+                        key={`row_cell_${idx}`}
+                        sx={{ whiteSpace: "pre-wrap" }}
+                      >
+                        {v}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell>주문건이 없습니다.</TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </TemplateBox>
+        <Grid container justifyContent={"center"}>
+          <Pagination
+            count={Math.ceil(total / take)}
+            page={page}
+            onChange={(e, v) => handleChangePage(v)}
+            showFirstButton
+            showLastButton
           />
-          <PagingBox>
-            <Paging
-              totalcnt={total}
-              onChangepage={handleChangess}
-              limit={10}
-              currentpage={pageBtn}
-            />
-          </PagingBox>
-        </GridContainer>
-      </Container>
+        </Grid>
+      </TemplateWrap>
     </>
   );
 };
-export default OrderList;
+export default OrderListPage;
 
-const Container = styled.div`
-  width: 100%;
-  height: 100%;
-  padding: 50px 59px 0;
-  h1 {
+export const TemplateWrap = styled.div`
+  padding: 40px 60px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  h2 {
     font-size: 20px;
+    font-weight: 700;
   }
-  .area {
-    width: 279px;
+  h3 {
+    color: #5a6080;
+    font-size: 14px;
   }
-  & .MuiOutlinedInput-notchedOutline {
-    border: none !important;
-  }
-  a {
-    display: block;
-    padding: 10px 0 5px;
-  }
-  .scroll::-webkit-scrollbar {
-    display: none;
+  h4 {
+    color: #8e9ebf;
+    font-size: 14px;
+    font-weight: 700;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
 `;
 
-const TopBox = styled.div`
+export const TemplateTitleWrap = styled.div`
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 30px;
+  flex-direction: column;
+  gap: 8px;
 `;
 
-const SearchArea = styled.div`
-  width: 100%;
-  input {
-    border-radius: 10px;
-    padding: 10px 14px;
-    /* font-weight: 500; */
-    box-sizing: border-box;
-  }
-  .orderNum {
-    width: 36%;
-  }
-  .name {
-    width: 60%;
-  }
-`;
-
-const RowInner = styled.div`
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 20px;
-`;
-
-const TextInput = styled.div`
-  width: 58%;
-  display: flex;
-  justify-content: space-between;
-`;
-
-const GridContainer = styled.div`
-  height: 38vh;
-  /* position: relative;
-  width: 100%;
-  height: 0;
-  padding-bottom: 100%; */
-`;
-
-const DateBox = styled.div`
-  width: 40%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
-const DateInput = styled.div`
-  width: 47%;
+export const TemplateBox = styled.div`
   background: #fff;
-  border-radius: 10px;
-  padding: 10px 14px;
-`;
-
-const DateInputs = styled.div`
-  width: 5%;
-  text-align: center;
-`;
-
-const CheckList = styled.div`
+  padding: 20px;
   display: flex;
-  align-items: center;
-  flex-wrap: wrap;
+  flex-direction: column;
   gap: 16px;
-  label {
-    padding-left: 12px;
-  }
+  border-radius: 10px;
+  border: 1px solid #cfd4f0;
 `;
-const Area = styled.div`
-  height: 110px;
+
+const ButtonWrap = styled.div`
+  padding-top: 20px;
   display: flex;
-  justify-content: center;
+  gap: 16px;
+  border-top: 1px solid var(--BlueGray-100, #e4e9f5);
+`;
+
+export const TemplateRow = styled.div`
+  display: flex;
   align-items: center;
-  button {
-    border-radius: 5px;
-    color: #fff;
-    padding: 12px 35px;
-    background: #0082ff;
-    /* font-weight: 500; */
+  gap: 16px;
+  font-size: 14px;
+  padding: 6px 0;
+  & > p {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 200px;
+    font-weight: 500;
+    & > span {
+      color: #8e9ebf;
+      font-size: 11px;
+      font-weight: 400;
+    }
   }
-`;
-
-const InfoTitle = styled.h2`
-  font-size: 18px;
-  /* font-weight: 500; */
-  margin-bottom: 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  span {
-    color: #d74b4b;
-    padding: 0 4px;
-  }
-  div {
-    border: 1.5px solid #404040;
-    border-radius: 5px;
-    background: #fff;
-    padding: 12px 10px;
-    font-size: 16px;
-  }
-`;
-
-const FilterBtn = styled.div`
-  display: flex;
-  button {
-    width: 118px;
-    padding: 10px 15px;
-    background: #fff;
-    color: #000;
-    /* font-weight: 500; */
-    border-radius: 5px;
-  }
-  button:last-child {
-    color: #fff;
-    background: #0082ff;
-    margin-left: 15px;
-  }
-`;
-const PagingBox = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  margin-top: 20px;
 `;

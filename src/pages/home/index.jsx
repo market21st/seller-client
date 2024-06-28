@@ -1,184 +1,230 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-// Mui
-import { FormControl, Select, MenuItem } from "@mui/material";
+import { Grid, Typography, Button } from "@mui/material";
 import { manageDate, statistics } from "../../api/myInfo";
 import Popup from "../../components/common/Popup";
-
-const searchSelect = {
-  borderRadius: "5px",
-  background: "#fff",
-  height: "40px",
-  width: "120px",
-  color: "#0082FF",
-  fontSize: "17px",
-  fontWeight: "500",
-};
+import ArrowForwardIcon from "../../assets/arrow_forward.svg";
+import dayjs from "dayjs";
+import { Link } from "react-router-dom";
+import AccountsPolicyImg from "../../assets/accounts_policy.png";
 
 const Home = () => {
   const [dateList, setDateList] = useState([]);
   const [date, setDate] = useState("");
-  const [userData, setUserData] = useState([]);
-  const resulte = (code) => code === 200;
+  const [dashboard, setDashboard] = useState({});
 
   const getDate = async () => {
     const { data, statusCode } = await manageDate();
-    if (resulte(statusCode)) {
+    if (statusCode === 200) {
       setDate(data[0]);
       setDateList(data);
     }
   };
   const getStatistics = async () => {
-    const list = {
-      date: date,
-    };
-    const { data, statusCode } = await statistics(list);
-    if (resulte(statusCode)) {
-      setUserData(data);
-    }
+    const { data, statusCode } = await statistics({ date });
+    if (statusCode === 200) setDashboard(data);
   };
+
   useEffect(() => {
     getDate();
   }, []);
-
   useEffect(() => {
     if (date) getStatistics();
   }, [date]);
 
   return (
-    <Container>
+    <>
       <Popup />
-      <Box>
-        <h1>처리 대기</h1>
-        <Row>
-          <ContentBox>
-            <h2>신규주문</h2>
-            <span>{userData.newOrdersCount}건</span>
-          </ContentBox>
-          <ContentBox>
-            <h2>배송 준비중</h2>
-            <span>{userData.readyToDeliveryCount}건</span>
-          </ContentBox>
-          <ContentBox>
-            <h2>반품 요청</h2>
-            <span>{userData.requestToReturnCount}건</span>
-          </ContentBox>
-        </Row>
-      </Box>
-      <Box>
-        <h1>제품 현황</h1>
-        <Row>
-          <ContentBox>
-            <h2>판매중 제품</h2>
-            <span>{userData.onSaleCount}건</span>
-          </ContentBox>
-          <ContentBox>
-            <h2>숨김 제품</h2>
-            <span>{userData.hidedCount}건</span>
-          </ContentBox>
-          <ContentBox>
-            <h2>품절 제품</h2>
-            <span>{userData.soldOutCount}건</span>
-          </ContentBox>
-        </Row>
-      </Box>
-      <Box>
-        <h1>
-          <p>주문 현황</p>
-          <div>
-            <FormControl sx={{ width: "100%" }}>
-              <Select
-                onChange={(e) => {
-                  setDate(e.target.value);
-                }}
-                displayEmpty
-                inputProps={{ "aria-label": "Without label" }}
-                value={date}
-                name="infoId"
-                sx={searchSelect}
-              >
-                {dateList &&
-                  dateList?.map((el, idx) => (
-                    <MenuItem key={idx} value={el}>
-                      {el}
-                    </MenuItem>
-                  ))}
-              </Select>
-            </FormControl>
-          </div>
-        </h1>
-        <Row>
-          <ContentBox>
-            <h2>총 주문 건수</h2>
-            <span>{userData.totalOrdersCount}건</span>
-          </ContentBox>
-          <ContentBox>
-            <h2>환불 건수</h2>
-            <span>{userData.requestToRefundCount}건</span>
-          </ContentBox>
-          <ContentBox>
-            <h2>예상 매출액</h2>
-            <span>{Math.ceil(userData.expectTakeSum)}원</span>
-          </ContentBox>
-        </Row>
-      </Box>
-    </Container>
+      <Container>
+        <Grid container justifyContent={"space-between"} alignItems={"center"}>
+          <h2>대시보드</h2>
+          <Grid display={"inline-flex"} alignItems={"center"} gap={2}>
+            <Typography>
+              {dayjs(dashboard.updatedDate).format("YYYY.MM.DD HH:mm")}
+            </Typography>
+            <Button size="small" variant="outlined" onClick={getStatistics}>
+              업데이트
+            </Button>
+          </Grid>
+        </Grid>
+        <Box>
+          <Grid
+            container
+            justifyContent={"space-between"}
+            alignItems={"center"}
+          >
+            <h3>주문 처리상태</h3>
+            <Link to={"/order"}>
+              <button>
+                <img src={ArrowForwardIcon} alt="arrow" />
+              </button>
+            </Link>
+          </Grid>
+          <ul>
+            <Item isLink>
+              <span>신규 주문</span>
+              <Link to={"/order?status=500"}>
+                <p>
+                  <b>{dashboard.newOrderCount}</b>건
+                </p>
+              </Link>
+            </Item>
+            <Item isLink>
+              <span>출고 대기</span>
+              <Link to={"/order?status=110"}>
+                <p>
+                  <b>{dashboard.preparingOrderCount}</b>건
+                </p>
+              </Link>
+            </Item>
+            <Item isLink>
+              <span>매입확정(검수통과)</span>
+              <Link to={"/order?status=200"}>
+                <p>
+                  <b>{dashboard.passedInspectionCount}</b>건
+                </p>
+              </Link>
+            </Item>
+            <Item isLink>
+              <span>검수 미통과</span>
+              <Link to={"/order?status=140"}>
+                <p>
+                  <b>{dashboard.failedInspectionOrderCount}</b>건
+                </p>
+              </Link>
+            </Item>
+            <Item isLink>
+              <span>출고불가 확정</span>
+              <Link to={"/order?status=160"}>
+                <p>
+                  <b>{dashboard.confirmedNotShippableOrderCount}</b>건
+                </p>
+              </Link>
+            </Item>
+          </ul>
+        </Box>
+        <Box>
+          <Grid
+            container
+            justifyContent={"space-between"}
+            alignItems={"center"}
+          >
+            <h3>상품 관리</h3>
+            <Link to={"/stock"}>
+              <button>
+                <img src={ArrowForwardIcon} alt="arrow" />
+              </button>
+            </Link>
+          </Grid>
+          <ul>
+            <Item>
+              <span>판매중 상품</span>
+              <p>
+                <b>{dashboard.onSaleProductCount}</b>건
+              </p>
+            </Item>
+            <Item>
+              <span>숨김 상품</span>
+              <p>
+                <b>{dashboard.hiddenProductCount}</b>건
+              </p>
+            </Item>
+            <Item>
+              <span>품절 상품</span>
+              <p>
+                <b>{dashboard.outOfStockProductCount}</b>건
+              </p>
+            </Item>
+          </ul>
+        </Box>
+        <Box>
+          <Grid container justifyContent={"center"} alignItems={"center"}>
+            <img
+              src={AccountsPolicyImg}
+              alt="정산 정책 변경 안내"
+              style={{ width: "90%" }}
+            />
+          </Grid>
+        </Box>
+        {/* <Box>
+          <Grid container alignItems={"center"} gap={2}>
+            <h3>정산 예정</h3>
+            <p>정산 기준일에 대한 안내글</p>
+          </Grid>
+          <ul>
+            <Item>
+              <span>매입확정</span>
+              <p>
+                <b>{dashboard.confirmedPurchaseCount}</b>건
+              </p>
+            </Item>
+            <Item>
+              <span>
+                {dayjs(dashboard.updatedDate).format("YYYY.MM.DD")} 예상 정산
+                금액
+              </span>
+              <p>
+                <b>{dashboard.expectedRevenueDuringPeriod?.toLocaleString()}</b>
+                원
+              </p>
+            </Item>
+          </ul>
+        </Box> */}
+      </Container>
+    </>
   );
 };
 export default Home;
 
 const Container = styled.div`
-  width: 100%;
-  height: 100%;
-  padding: 52px;
+  padding: 40px;
   display: flex;
   flex-direction: column;
-  gap: 32px;
-  .MuiOutlinedInput-notchedOutline {
-    border: 2px solid #0082ff;
+  gap: 20px;
+  h2 {
+    font-size: 20px;
+    font-weight: 700;
   }
 `;
 
 const Box = styled.div`
+  padding: 30px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  h1 {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    font-size: 20px;
-  }
-`;
-
-const Row = styled.div`
-  display: flex;
-  gap: 16px;
-`;
-
-const ContentBox = styled.div`
-  width: 180px;
-  height: 120px;
-  padding: 16px;
-  background: #fff;
+  gap: 20px;
   border-radius: 10px;
-  box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.1);
+  border: 1px solid #ced4f4;
+  background: #fff;
+  h3 {
+    font-size: 18px;
+    font-weight: 700;
+  }
+  ul {
+    display: flex;
+    gap: 20px;
+  }
+`;
+
+const Item = styled.li`
+  width: 100%;
+  padding: 20px;
+  border-radius: 8px;
+  background: #eff5fe;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 24px;
-  h2 {
-    width: 100%;
-    font-size: initial;
-    font-weight: initial;
-    text-align: center;
-    border-bottom: 2px solid #e1e7ef;
-    padding-bottom: 8px;
-  }
-  span {
-    border-bottom: 1px solid #404040;
-    padding-bottom: 2px;
-    font-size: 20px;
-    font-weight: 500;
+  gap: 20px;
+  font-size: 18px;
+  font-weight: 500;
+  p {
+    width: fit-content;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    line-height: 1.2;
+    border-bottom: ${({ isLink }) => (isLink ? "1px solid black" : "none")};
+    cursor: ${({ isLink }) => (isLink ? "pointer" : "auto")};
+    b {
+      font-size: 20px;
+    }
   }
 `;
