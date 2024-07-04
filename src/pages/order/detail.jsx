@@ -23,11 +23,12 @@ import dayjs from "dayjs";
 import StatusUpdateModal from "../../components/order/StatusUpdateModal";
 import toast from "react-hot-toast";
 
-const TABLE_HEAD_CELLS = ["처리상태", "변경 일시", "사유"];
+const TABLE_HEAD_CELLS = ["변경 일시", "처리 상태", "변경 주체", "사유"];
 
 const rowCells = (row) => [
-  row.statusText,
   dayjs(row.createdAt).format("YYYY.MM.DD HH:mm:ss"),
+  row.statusText,
+  row.workUser,
   row.reason?.contents,
 ];
 
