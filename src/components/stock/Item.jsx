@@ -99,7 +99,7 @@ const Item = ({
         stockData.price?.slice(-5) === "0,000"
       )
     ) {
-      setText("오천원단위 가격입력만 가능합니다.");
+      setText("가격 입력의 최소단위는 5000원입니다.");
       setAlertModal(true);
       return;
     }
