@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useLocation, useNavigate } from "react-router-dom";
-import { getOrder, getState } from "../../api/order";
+import { getOrder, getState, getOrderExcel } from "../../api/order";
 import {
   Button,
   Checkbox,
@@ -23,6 +23,8 @@ import "dayjs/locale/ko";
 import dayjs from "dayjs";
 import StatusUpdateModal from "../../components/order/StatusUpdateModal";
 import toast from "react-hot-toast";
+import { FileDownloadOutlined } from "@mui/icons-material";
+import { green } from '@mui/material/colors';
 
 const take = 10;
 
@@ -173,6 +175,26 @@ const OrderListPage = () => {
     }
   };
 
+  const getExcel = async () => {
+    const today = dayjs().format("YYYYMMDD");
+    const searchData = {
+      status,
+      startDate,
+      endDate,
+      merchantUid,
+      productName,
+    };
+    const data = await getOrderExcel(searchData);
+    const url = window.URL.createObjectURL(data);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute("download", `${today}_orders.xlsx`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    link.remove();
+  }
+
   useEffect(() => {
     getStatusList();
     getList();
@@ -286,6 +308,11 @@ const OrderListPage = () => {
               </Button>
               <Button variant="outlined" size="large" onClick={handleClickInit}>
                 초기화
+              </Button>
+              <Button onClick={getExcel} variant="outlined" size="medium" sx={{ textTransform: "none", color: green[600], borderColor: green[600]}}>
+                <Grid container alignItems="center" gap={1}>
+                  <FileDownloadOutlined /> 엑셀 다운
+                </Grid>
               </Button>
             </ButtonWrap>
           </Grid>

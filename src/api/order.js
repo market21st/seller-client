@@ -12,6 +12,27 @@ export const getOrder = async (params) => {
   }
 };
 
+// 액셀
+export const getOrderExcel = async (params) => {
+  try {
+    const res = await instance({
+      headers: {
+        'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      },
+      method: "get",
+      url: "/order/excel",
+      responseType: "blob",
+      params: params
+    })
+    if (res.status === 200) {
+      return res.data;
+    }
+    return res.status;
+  } catch (e) {
+    return e.response.data;
+  }
+}
+
 // 상태
 export const getState = async () => {
   try {
