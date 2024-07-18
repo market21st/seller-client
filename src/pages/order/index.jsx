@@ -23,6 +23,7 @@ import "dayjs/locale/ko";
 import dayjs from "dayjs";
 import StatusUpdateModal from "../../components/order/StatusUpdateModal";
 import toast from "react-hot-toast";
+import { getExcel } from "../../api/excel";
 
 const take = 10;
 
@@ -150,6 +151,16 @@ const OrderListPage = () => {
     handleOpenStatusUpdateModal();
   };
 
+  const handleClickDownloadExcel = async () => {
+    // await getExcel("/order/excel", "order", {
+    //   status,
+    //   startDate,
+    //   endDate,
+    //   // merchantUid,
+    //   // productName,
+    // });
+  };
+
   const getStatusList = async () => {
     const { data, statusCode } = await getState();
     if (statusCode === 200) setStatusList(data.orderStatus);
@@ -179,7 +190,6 @@ const OrderListPage = () => {
   }, []);
   useEffect(() => {
     if (!statusList.length) return;
-
     if (status.length === statusList.length) setCheckAllStatus(true);
     else setCheckAllStatus(false);
   }, [status, statusList]);
@@ -291,7 +301,16 @@ const OrderListPage = () => {
           </Grid>
         </TemplateBox>
         <TemplateBox>
-          <h4>전체 주문 검색 목록 ({total}건)</h4>
+          <Grid container justifyContent={"space-between"}>
+            <h4>전체 주문 검색 목록 ({total}건)</h4>
+            <Button
+              variant="contained"
+              color="excel"
+              onClick={handleClickDownloadExcel}
+            >
+              엑셀 다운로드
+            </Button>
+          </Grid>
           <Table>
             <TableHead>
               <TableRow>
