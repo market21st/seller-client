@@ -98,9 +98,9 @@ const ListModal = ({ isOpen, onClose, id }) => {
               </Grid>
               <Grid display={"inline-flex"} gap={2}>
                 {[
-                  { value: "2", txt: "S급" },
-                  { value: "1", txt: "A급" },
-                  { value: "0", txt: "B급" },
+                  { value: "2", txt: "최상급" },
+                  { value: "1", txt: "상급" },
+                  { value: "0", txt: "중급" },
                 ].map(({ txt, value }) => (
                   <Button
                     key={value}
