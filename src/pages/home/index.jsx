@@ -1,36 +1,23 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Grid, Typography, Button } from "@mui/material";
-import { manageDate, statistics } from "../../api/myInfo";
+import { statistics } from "../../api/myInfo";
 import Popup from "../../components/common/Popup";
 import ArrowForwardIcon from "../../assets/arrow_forward.svg";
 import dayjs from "dayjs";
 import { Link } from "react-router-dom";
-import AccountsPolicyImg from "../../assets/accounts_policy.png";
 
 const Home = () => {
-  const [dateList, setDateList] = useState([]);
-  const [date, setDate] = useState("");
   const [dashboard, setDashboard] = useState({});
 
-  const getDate = async () => {
-    const { data, statusCode } = await manageDate();
-    if (statusCode === 200) {
-      setDate(data[0]);
-      setDateList(data);
-    }
-  };
   const getStatistics = async () => {
-    const { data, statusCode } = await statistics({ date });
+    const { data, statusCode } = await statistics();
     if (statusCode === 200) setDashboard(data);
   };
 
   useEffect(() => {
-    getDate();
+    getStatistics();
   }, []);
-  useEffect(() => {
-    if (date) getStatistics();
-  }, [date]);
 
   return (
     <>
@@ -137,39 +124,45 @@ const Home = () => {
             </Item>
           </ul>
         </Box>
-        <Box>
-          <Grid container justifyContent={"center"} alignItems={"center"}>
-            <img
-              src={AccountsPolicyImg}
-              alt="정산 정책 변경 안내"
-              style={{ width: "90%" }}
-            />
-          </Grid>
-        </Box>
-        {/* <Box>
-          <Grid container alignItems={"center"} gap={2}>
-            <h3>정산 예정</h3>
-            <p>정산 기준일에 대한 안내글</p>
-          </Grid>
-          <ul>
-            <Item>
-              <span>매입확정</span>
-              <p>
-                <b>{dashboard.confirmedPurchaseCount}</b>건
-              </p>
-            </Item>
-            <Item>
-              <span>
-                {dayjs(dashboard.updatedDate).format("YYYY.MM.DD")} 예상 정산
-                금액
-              </span>
-              <p>
-                <b>{dashboard.expectedRevenueDuringPeriod?.toLocaleString()}</b>
-                원
-              </p>
-            </Item>
-          </ul>
-        </Box> */}
+        {process.env.NODE_ENV === "development" ||
+        (process.env.NODE_ENV === "production" &&
+          process.env.REACT_APP_VIEWABEL_ID_TO_ACCOUNT_DASHBOARD ==
+            dashboard.sellerId) ? (
+          <Box>
+            <Grid
+              container
+              justifyContent={"space-between"}
+              alignItems={"center"}
+            >
+              <h3>정산 예정</h3>
+              <a
+                href="https://image.21market.kr/partner/settlement_info.png"
+                target="_blank"
+              >
+                <Typography sx={{ textDecoration: "underline" }}>
+                  정산 기준일
+                </Typography>
+              </a>
+            </Grid>
+            <ul>
+              <Item>
+                <span>
+                  정산 건 수<span>매입확정 처리된 주문</span>
+                </span>
+                <p>
+                  <b>{dashboard.expectedSettlementCount}</b>건
+                </p>
+              </Item>
+              <Item>
+                <span>정산 금액</span>
+                <p>
+                  <b>{dashboard.expectedSettlementAmount?.toLocaleString()}</b>
+                  원
+                </p>
+              </Item>
+            </ul>
+          </Box>
+        ) : null}
       </Container>
     </>
   );
@@ -215,6 +208,16 @@ const Item = styled.li`
   gap: 20px;
   font-size: 18px;
   font-weight: 500;
+  span {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    span {
+      font-size: 16px;
+      font-weight: 400;
+      color: #888;
+    }
+  }
   p {
     width: fit-content;
     display: inline-flex;
