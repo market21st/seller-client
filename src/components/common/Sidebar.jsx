@@ -79,7 +79,11 @@ const Sidebar = ({ children }) => {
           <SubProfile>
             <li>
               <p>평균 배송기간</p>
-              <span>{localStorage.getItem("deliveryPeriod")}일</span>
+              <span>
+                {localStorage.getItem("deliveryPeriod")
+                  ? `${localStorage.getItem("deliveryPeriod")}일`
+                  : "확인중"}
+              </span>
             </li>
             <li>
               <p>검수통과율</p>
