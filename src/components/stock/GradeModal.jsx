@@ -35,7 +35,7 @@ const GradeModal = ({ isOpen, onClose }) => {
     cetagoryNum === 0 ? "phone" : "book"
   }`;
   const cetagory = ["스마트폰", "노트북", "워치", "태블릿"];
-  const grades = ["최상급", "상급", "중급"];
+  const grades = ["S급", "A급", "B급"];
 
   useEffect(() => {
     const TextChange = () => {
