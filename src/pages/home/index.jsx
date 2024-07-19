@@ -52,7 +52,7 @@ const Home = () => {
               <span>신규 주문</span>
               <Link to={"/order?status=500"}>
                 <p>
-                  <b>{dashboard.newOrderCount}</b>건
+                  <b>{dashboard.newOrderCount || 0}</b>건
                 </p>
               </Link>
             </Item>
@@ -60,7 +60,7 @@ const Home = () => {
               <span>출고 대기</span>
               <Link to={"/order?status=110"}>
                 <p>
-                  <b>{dashboard.preparingOrderCount}</b>건
+                  <b>{dashboard.preparingOrderCount || 0}</b>건
                 </p>
               </Link>
             </Item>
@@ -68,7 +68,7 @@ const Home = () => {
               <span>매입확정(검수통과)</span>
               <Link to={"/order?status=200"}>
                 <p>
-                  <b>{dashboard.passedInspectionCount}</b>건
+                  <b>{dashboard.passedInspectionCount || 0}</b>건
                 </p>
               </Link>
             </Item>
@@ -76,7 +76,7 @@ const Home = () => {
               <span>검수 미통과</span>
               <Link to={"/order?status=140"}>
                 <p>
-                  <b>{dashboard.failedInspectionOrderCount}</b>건
+                  <b>{dashboard.failedInspectionOrderCount || 0}</b>건
                 </p>
               </Link>
             </Item>
@@ -84,7 +84,7 @@ const Home = () => {
               <span>출고불가 확정</span>
               <Link to={"/order?status=160"}>
                 <p>
-                  <b>{dashboard.confirmedNotShippableOrderCount}</b>건
+                  <b>{dashboard.confirmedNotShippableOrderCount || 0}</b>건
                 </p>
               </Link>
             </Item>
@@ -107,19 +107,19 @@ const Home = () => {
             <Item>
               <span>판매중 상품</span>
               <p>
-                <b>{dashboard.onSaleProductCount}</b>건
+                <b>{dashboard.onSaleProductCount || 0}</b>건
               </p>
             </Item>
             <Item>
               <span>숨김 상품</span>
               <p>
-                <b>{dashboard.hiddenProductCount}</b>건
+                <b>{dashboard.hiddenProductCount || 0}</b>건
               </p>
             </Item>
             <Item>
               <span>품절 상품</span>
               <p>
-                <b>{dashboard.outOfStockProductCount}</b>건
+                <b>{dashboard.outOfStockProductCount || 0}</b>건
               </p>
             </Item>
           </ul>
@@ -150,13 +150,15 @@ const Home = () => {
                   정산 건 수<span>매입확정 처리된 주문</span>
                 </span>
                 <p>
-                  <b>{dashboard.expectedSettlementCount}</b>건
+                  <b>{dashboard.expectedSettlementCount || 0}</b>건
                 </p>
               </Item>
               <Item>
                 <span>정산 금액</span>
                 <p>
-                  <b>{dashboard.expectedSettlementAmount?.toLocaleString()}</b>
+                  <b>
+                    {(dashboard.expectedSettlementAmount || 0).toLocaleString()}
+                  </b>
                   원
                 </p>
               </Item>
