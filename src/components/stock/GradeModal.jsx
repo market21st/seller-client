@@ -121,7 +121,7 @@ const GradeModal = ({ isOpen, onClose }) => {
               <div>
                 <h3>성능 기준</h3>
                 <ul>
-                  <li>배터리 효율 최소 85% 이상</li>
+                  <li>배터리 효율 최소 80% 이상</li>
                   <li>전체 기능 및 성능 검수를 통과한 100% 정상 작동 기기</li>
                 </ul>
               </div>
@@ -139,7 +139,7 @@ const GradeModal = ({ isOpen, onClose }) => {
               <div>
                 <h3>성능 기준</h3>
                 <ul>
-                  <li>배터리 효율 최소 85% 이상</li>
+                  <li>배터리 효율 최소 80% 이상</li>
                   <li>전체 기능 및 성능 검수를 통과한 100% 정상 작동 기기</li>
                 </ul>
               </div>
