@@ -125,7 +125,7 @@ const OrderListPage = () => {
 
   const handleClickChip = (item) => {
     const status = item.status;
-    if (status === 120 || status === 130 || status === 200) {
+    if (status === 120 || status === 130) {
       toast.success("담당자가 주문 처리상태 확인중이에요.", { duration: 4000 });
       return;
     } else if (status === 150) {
@@ -140,11 +140,13 @@ const OrderListPage = () => {
         { duration: 4000 }
       );
       return;
+    } else if (status === 200) {
+      toast.success("매입확정으로 완료 처리된 주문 입니다.", {
+        duration: 4000,
+      });
+      return;
     } else if (status === 990) {
-      toast.success(
-        `주문취소 건은 정산내역에서 제외돼요.\n주문취소 사유: ${item.lastOrderCancellationComment}`,
-        { duration: 4000 }
-      );
+      toast.success("주문취소로 완료 처리된 주문 입니다.", { duration: 4000 });
       return;
     }
     setItem(item);
