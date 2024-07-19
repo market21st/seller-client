@@ -141,12 +141,14 @@ const OrderListPage = () => {
       );
       return;
     } else if (status === 200) {
-      toast.success("매입확정으로 완료 처리된 주문 입니다.", {
+      toast.success("매입확정으로 처리가 완료된 주문 입니다.", {
         duration: 4000,
       });
       return;
     } else if (status === 990) {
-      toast.success("주문취소로 완료 처리된 주문 입니다.", { duration: 4000 });
+      toast.success("주문취소로 처리가 완료된 주문 입니다.", {
+        duration: 4000,
+      });
       return;
     }
     setItem(item);
