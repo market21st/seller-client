@@ -35,7 +35,7 @@ const GradeModal = ({ isOpen, onClose }) => {
     cetagoryNum === 0 ? "phone" : "book"
   }`;
   const cetagory = ["스마트폰", "노트북", "워치", "태블릿"];
-  const grades = ["S등급", "A등급", "B등급"];
+  const grades = ["S급", "A급", "B급"];
 
   useEffect(() => {
     const TextChange = () => {
@@ -121,7 +121,7 @@ const GradeModal = ({ isOpen, onClose }) => {
               <div>
                 <h3>성능 기준</h3>
                 <ul>
-                  <li>배터리 효율 최소 85% 이상</li>
+                  <li>배터리 효율 최소 80% 이상</li>
                   <li>전체 기능 및 성능 검수를 통과한 100% 정상 작동 기기</li>
                 </ul>
               </div>
@@ -139,7 +139,7 @@ const GradeModal = ({ isOpen, onClose }) => {
               <div>
                 <h3>성능 기준</h3>
                 <ul>
-                  <li>배터리 효율 최소 85% 이상</li>
+                  <li>배터리 효율 최소 80% 이상</li>
                   <li>전체 기능 및 성능 검수를 통과한 100% 정상 작동 기기</li>
                 </ul>
               </div>

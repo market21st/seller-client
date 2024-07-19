@@ -12,6 +12,7 @@ export const theme = createTheme({
     primary: { main: "#0082FF" },
     error: { main: red[100] },
     success: { main: green[100] },
+    excel: { main: "#2A8B53", contrastText: "#fff" },
   },
   components: {
     MuiTableCell: {
