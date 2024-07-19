@@ -12,7 +12,7 @@ export const getExcel = async (endUrl, fileName, params) => {
 
     const today = dayjs().format("YYYYMMDD");
     const url = window.URL.createObjectURL(
-      new Blob([res], {
+      new Blob([res.data], {
         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       })
     );

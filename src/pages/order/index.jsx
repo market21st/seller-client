@@ -156,13 +156,13 @@ const OrderListPage = () => {
   };
 
   const handleClickDownloadExcel = async () => {
-    // await getExcel("/order/excel", "order", {
-    //   status,
-    //   startDate,
-    //   endDate,
-    //   // merchantUid,
-    //   // productName,
-    // });
+    await getExcel("/order/excel", "order", {
+      status,
+      startDate,
+      endDate,
+      merchantUid,
+      productName,
+    });
   };
 
   const getStatusList = async () => {
