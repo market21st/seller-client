@@ -110,12 +110,17 @@ const GradeModal = ({ isOpen, onClose }) => {
           <ul>
             {/* S급 */}
             <Info className={num === 0 ? "active" : ""}>
+              {cetagoryNum === 0 ? (
+                <div>
+                  <h3>무역업체 외관 기준 A ~ A- 외관 기준</h3>
+                </div>
+              ) : null}
               <div>
                 <h3>외관 기준</h3>
                 <ul>
-                  <li>액정 : 기스없이 깨끗해요.</li>
-                  <li>외관 : 기스없이 깨끗해요.</li>
-                  <li>테두리 : 찍힘이 없이 개끗해요.</li>
+                  <li>액정 : 기스 없음</li>
+                  <li>외관 : 미세한 생활기스 가능</li>
+                  <li>테두리 : 찍힘 없음</li>
                 </ul>
               </div>
               <div>
@@ -128,12 +133,17 @@ const GradeModal = ({ isOpen, onClose }) => {
             </Info>
             {/* A급 */}
             <Info className={num === 1 ? "active" : ""}>
+              {cetagoryNum === 0 ? (
+                <div>
+                  <h3>무역업체 외관 기준 A- ~ B+ 외관 기준</h3>
+                </div>
+              ) : null}
               <div>
                 <h3>외관 기준</h3>
                 <ul>
-                  <li>액정 : 기스없이 깨끗해요.</li>
-                  <li>외관 : 미세한 기스가 있을 수 있어요.</li>
-                  <li>테두리 : 미세한 까짐이 있어요.</li>
+                  <li>액정 : 미세한 생활기스 가능</li>
+                  <li>외관 : 1-2군데 스크래치 및 까짐 가능</li>
+                  <li>테두리 : 미세한 까짐 및 약한 찍힘 가능</li>
                 </ul>
               </div>
               <div>
@@ -146,12 +156,17 @@ const GradeModal = ({ isOpen, onClose }) => {
             </Info>
             {/* B급 */}
             <Info className={num === 2 ? "active" : ""}>
+              {cetagoryNum === 0 ? (
+                <div>
+                  <h3>무역업체 외관 기준 B+ ~ B 외관 기준</h3>
+                </div>
+              ) : null}
               <div>
                 <h3>외관 기준</h3>
                 <ul>
-                  <li>액정 : 잔기스가 있지만 화면을 볼 때 거슬리지 않아요.</li>
-                  <li>외관 : 육안으로 확인되는 기스가 있어요.</li>
-                  <li>테두리 : 까짐과 찍힘이 있어요.</li>
+                  <li>액정 : 약한 칼 기스, 약잔상 가능</li>
+                  <li>외관 : 스크래치 및 까짐 가능</li>
+                  <li>테두리 : 까짐과 찍힘 가능</li>
                 </ul>
               </div>
               <div>

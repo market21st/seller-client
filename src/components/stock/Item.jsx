@@ -93,13 +93,8 @@ const Item = ({
       setAlertModal(true);
       return;
     }
-    if (
-      !(
-        stockData.price?.slice(-5) === "5,000" ||
-        stockData.price?.slice(-5) === "0,000"
-      )
-    ) {
-      setText("가격 입력의 최소단위는 5000원입니다.");
+    if (stockData.price?.slice(-3) != "000" || stockData?.price?.length < 4) {
+      setText("가격 입력의 최소단위는 1,000원입니다.");
       setAlertModal(true);
       return;
     }
