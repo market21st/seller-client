@@ -87,7 +87,11 @@ const Sidebar = ({ children }) => {
             </li>
             <li>
               <p>검수통과율</p>
-              <span>{localStorage.getItem("inspectionPassRate")}%</span>
+              <span>
+                {localStorage.getItem("inspectionPassRate")
+                  ? `${localStorage.getItem("inspectionPassRate")}%`
+                  : "확인중"}
+              </span>
             </li>
           </SubProfile>
           <Menu>
