@@ -10,8 +10,9 @@ import { green, red } from "@mui/material/colors";
 export const theme = createTheme({
   palette: {
     primary: { main: "#0082FF" },
-    error: { main: red[100] },
+    secondary: { main: "#687BA1" },
     success: { main: green[100] },
+    error: { main: red[100] },
     excel: { main: "#2A8B53", contrastText: "#fff" },
   },
   components: {
