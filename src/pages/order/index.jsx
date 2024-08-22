@@ -216,7 +216,7 @@ const OrderListPage = () => {
       />
       <TemplateWrap>
         <TemplateTitleWrap>
-          <h2>주문 배송 관리</h2>
+          <h2>주문 출고 관리</h2>
           <h3>모든 주문 내역을 조회할 수 있는 메뉴입니다.</h3>
         </TemplateTitleWrap>
         <TemplateBox>

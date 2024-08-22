@@ -79,7 +79,7 @@ const ProductList = () => {
       <ListModal isOpen={modal.open} id={modal.id} onClose={handleCloseModal} />
       <TemplateWrap>
         <TemplateTitleWrap>
-          <h2>전체 상품 목록</h2>
+          <h2>판매 상품 등록</h2>
         </TemplateTitleWrap>
         <TextField
           placeholder="모델명을 입력하세요."

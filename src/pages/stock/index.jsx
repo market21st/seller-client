@@ -67,7 +67,7 @@ const StockList = () => {
       <GradeModal isOpen={gradeModal} onClose={gradeModalClose} />
       <TemplateWrap>
         <TemplateTitleWrap>
-          <h2>판매중인 상품</h2>
+          <h2>판매 상품 관리</h2>
         </TemplateTitleWrap>
         <TextField
           placeholder="모델명을 입력하세요."
