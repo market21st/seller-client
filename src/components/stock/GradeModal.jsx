@@ -112,7 +112,7 @@ const GradeModal = ({ isOpen, onClose }) => {
             <Info className={num === 0 ? "active" : ""}>
               {cetagoryNum === 0 ? (
                 <div>
-                  <h3>무역업체 외관 기준 A ~ A- 외관 기준</h3>
+                  <h3>무역업체 외관 기준 A ~ A-</h3>
                 </div>
               ) : null}
               <div>
@@ -135,7 +135,7 @@ const GradeModal = ({ isOpen, onClose }) => {
             <Info className={num === 1 ? "active" : ""}>
               {cetagoryNum === 0 ? (
                 <div>
-                  <h3>무역업체 외관 기준 A- ~ B+ 외관 기준</h3>
+                  <h3>무역업체 외관 기준 A- ~ B+</h3>
                 </div>
               ) : null}
               <div>
@@ -158,7 +158,7 @@ const GradeModal = ({ isOpen, onClose }) => {
             <Info className={num === 2 ? "active" : ""}>
               {cetagoryNum === 0 ? (
                 <div>
-                  <h3>무역업체 외관 기준 B+ ~ B 외관 기준</h3>
+                  <h3>무역업체 외관 기준 B+ ~ B</h3>
                 </div>
               ) : null}
               <div>
