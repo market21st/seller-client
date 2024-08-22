@@ -126,28 +126,54 @@ const OrderListPage = () => {
   const handleClickChip = (item) => {
     const status = item.status;
     if (status === 120 || status === 130) {
-      toast.success("담당자가 주문 처리상태 확인중이에요.", { duration: 4000 });
+      toast.success("담당자가 주문 처리상태 확인중이에요.", {
+        duration: 4000,
+        position: "bottom-center",
+        style: {
+          marginBottom: 100,
+        },
+      });
       return;
     } else if (status === 150) {
       toast.success(
         "담당자가 주문 처리상태 확인중이에요.\n[출고불가신청]을 철회하고 싶으면 21세기전파상 담당자에게 연락해 주세요.",
-        { duration: 4000 }
+        {
+          duration: 4000,
+          position: "bottom-center",
+          style: {
+            marginBottom: 100,
+          },
+        }
       );
       return;
     } else if (status === 160) {
       toast.success(
         "담당자가 주문 처리상태 확인중이에요.\n[출고불가확정] 처리된 주문은 되돌릴 수 없어요.",
-        { duration: 4000 }
+        {
+          duration: 4000,
+          position: "bottom-center",
+          style: {
+            marginBottom: 100,
+          },
+        }
       );
       return;
     } else if (status === 200) {
       toast.success("매입확정으로 처리가 완료된 주문 입니다.", {
         duration: 4000,
+        position: "bottom-center",
+        style: {
+          marginBottom: 100,
+        },
       });
       return;
     } else if (status === 990) {
       toast.success("주문취소로 처리가 완료된 주문 입니다.", {
         duration: 4000,
+        position: "bottom-center",
+        style: {
+          marginBottom: 100,
+        },
       });
       return;
     }

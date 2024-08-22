@@ -66,7 +66,13 @@ export const editOrderStatus = async (id, params) => {
     return res.data;
   } catch (e) {
     if (e.response.data.statusCode === 400) {
-      toast.error(e.response.data.message);
+      toast.error(e.response.data.message, {
+        duration: 4000,
+        position: "bottom-center",
+        style: {
+          marginBottom: 100,
+        },
+      });
     }
   }
 };
