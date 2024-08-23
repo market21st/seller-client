@@ -54,31 +54,33 @@ const StockListPage = () => {
   };
 
   const handleSearch = () => {
-    getList();
+    getList({ type: "ALL" });
   };
   const handleClickInit = () => {
     window.location.reload();
   };
   const handleChangePage = (value) => {
-    getList(value);
+    getList({ page: value });
   };
 
   const getCategoryList = async () => {};
-  const getList = async (pageValue) => {
-    const page = pageValue || 1;
+  const getList = async (query) => {
+    const pageQuery = query?.page || 1;
+    const typeQuery = query?.type || type;
     const searchData = {
       take,
-      page,
+      page: pageQuery,
       categoryId,
       optionText,
-      type,
+      type: typeQuery,
       orderBy,
     };
     const { data, statusCode } = await getStockList(searchData);
     if (statusCode === 200) {
       setTotal(data.total);
       setList(data.results);
-      setPage(page);
+      setPage(pageQuery);
+      setType(typeQuery);
     }
   };
 
@@ -177,7 +179,7 @@ const StockListPage = () => {
           >
             <Tabs value={type} onChange={(e, v) => setType(v)}>
               {STOCK_TAB_ITEMS.map((v) => (
-                <Tab label={v.label} value={v.value} />
+                <Tab key={v.value} label={v.label} value={v.value} />
               ))}
             </Tabs>
             <Grid display={"inline-flex"} gap={1}>
@@ -187,7 +189,9 @@ const StockListPage = () => {
                 size="small"
               >
                 {STOCK_ORDER_BY_OPTIONS.map((v) => (
-                  <MenuItem value={v.value}>{v.name}</MenuItem>
+                  <MenuItem key={v.value} value={v.value}>
+                    {v.name}
+                  </MenuItem>
                 ))}
               </Select>
               <Select
@@ -196,7 +200,9 @@ const StockListPage = () => {
                 size="small"
               >
                 {STOCK_TAKE_OPTIONS.map((v) => (
-                  <MenuItem value={v.value}>{v.name}</MenuItem>
+                  <MenuItem key={v.value} value={v.value}>
+                    {v.name}
+                  </MenuItem>
                 ))}
               </Select>
             </Grid>
