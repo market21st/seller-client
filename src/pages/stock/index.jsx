@@ -26,17 +26,12 @@ import {
   TemplateWrap,
 } from "../order";
 import Item from "../../components/stock/Item";
-
-const TABLE_HEAD_CELLS = [
-  "섬네일",
-  "상품명/옵션",
-  "등급",
-  "최저가",
-  "판매가",
-  "재고",
-  "판매가 수정 일시",
-  "",
-];
+import {
+  STOCK_ORDER_BY_OPTIONS,
+  STOCK_TAB_ITEMS,
+  STOCK_TABLE_HEAD_CELLS,
+  STOCK_TAKE_OPTIONS,
+} from "../../constants/stock";
 
 const StockListPage = () => {
   const [gradeModal, setGradeModal] = useState(false);
@@ -181,10 +176,9 @@ const StockListPage = () => {
             alignItems={"center"}
           >
             <Tabs value={type} onChange={(e, v) => setType(v)}>
-              <Tab label="전체" value={"ALL"} />
-              <Tab label="최저가 상품" value={1} />
-              <Tab label="최저가 아닌 상품" value={2} />
-              <Tab label="재고등록 대기" value={3} />
+              {STOCK_TAB_ITEMS.map((v) => (
+                <Tab label={v.label} value={v.value} />
+              ))}
             </Tabs>
             <Grid display={"inline-flex"} gap={1}>
               <Select
@@ -192,31 +186,32 @@ const StockListPage = () => {
                 onChange={(v) => setOrderBy(v.target.value)}
                 size="small"
               >
-                <MenuItem value={1}>가나다 순</MenuItem>
-                <MenuItem value={2}>최종수정일시 순</MenuItem>
+                {STOCK_ORDER_BY_OPTIONS.map((v) => (
+                  <MenuItem value={v.value}>{v.name}</MenuItem>
+                ))}
               </Select>
               <Select
                 value={take}
                 onChange={(v) => setTake(v.target.value)}
                 size="small"
               >
-                <MenuItem value={10}>10개씩 보기</MenuItem>
-                <MenuItem value={20}>20개씩 보기</MenuItem>
-                <MenuItem value={30}>30개씩 보기</MenuItem>
+                {STOCK_TAKE_OPTIONS.map((v) => (
+                  <MenuItem value={v.value}>{v.name}</MenuItem>
+                ))}
               </Select>
             </Grid>
           </Grid>
           <Table>
             <TableHead>
               <TableRow>
-                {TABLE_HEAD_CELLS.map((v) => (
-                  <TableCell key={`head_cell_${v}`}>{v}</TableCell>
+                {STOCK_TABLE_HEAD_CELLS.map((v) => (
+                  <TableCell key={v}>{v}</TableCell>
                 ))}
               </TableRow>
             </TableHead>
             <TableBody>
               {list.length ? (
-                list?.map((v) => <Item data={v} getList={getList} />)
+                list?.map((v) => <Item key={v.id} data={v} getList={getList} />)
               ) : (
                 <TableRow>
                   <TableCell>판매 상품이 없습니다.</TableCell>
