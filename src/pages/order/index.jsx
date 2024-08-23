@@ -320,14 +320,14 @@ const OrderListPage = () => {
                 sx={{ width: "300px" }}
               />
             </TemplateRow>
-            <ButtonWrap>
+            <TemplateButtonWrap>
               <Button variant="contained" size="large" type="submit">
                 조회
               </Button>
               <Button variant="outlined" size="large" onClick={handleClickInit}>
                 초기화
               </Button>
-            </ButtonWrap>
+            </TemplateButtonWrap>
           </Grid>
         </TemplateBox>
         <TemplateBox>
@@ -435,7 +435,7 @@ export const TemplateBox = styled.div`
   border: 1px solid #cfd4f0;
 `;
 
-const ButtonWrap = styled.div`
+export const TemplateButtonWrap = styled.div`
   padding-top: 20px;
   display: flex;
   gap: 16px;

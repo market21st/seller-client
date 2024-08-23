@@ -1,148 +1,235 @@
-import React, { useEffect, useCallback, useState } from "react";
-import styled from "styled-components";
-import Item from "../../components/stock/Item";
+import React, { useEffect, useState } from "react";
 import {
   Grid,
-  TextField,
   Pagination,
+  Button,
+  Table,
+  TableHead,
+  TableRow,
+  TableBody,
+  TableCell,
+  TextField,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
   Tabs,
   Tab,
-  Button,
-  InputAdornment,
 } from "@mui/material";
 import { getStockList } from "../../api/stock";
-import defaultIcon from "../../assets/default.png";
 import GradeModal from "../../components/stock/GradeModal";
-import { debounce } from "../../utils/debounce";
-import SearchIcon from "@mui/icons-material/Search";
-import { TemplateTitleWrap, TemplateWrap } from "../order";
+import {
+  TemplateBox,
+  TemplateButtonWrap,
+  TemplateRow,
+  TemplateTitleWrap,
+  TemplateWrap,
+} from "../order";
+import Item from "../../components/stock/Item";
 
-const StockList = () => {
-  const [listData, setListData] = useState([]);
-  const [optionText, setOptionText] = useState(null);
-  const [total, setTotal] = useState(0);
-  const [curpage, setCurPage] = useState(1);
+const TABLE_HEAD_CELLS = [
+  "섬네일",
+  "상품명/옵션",
+  "등급",
+  "최저가",
+  "판매가",
+  "재고",
+  "판매가 수정 일시",
+  "",
+];
+
+const StockListPage = () => {
   const [gradeModal, setGradeModal] = useState(false);
+
+  const [list, setList] = useState([]);
+  const [total, setTotal] = useState(0);
+  const [page, setPage] = useState(1);
+
+  const [take, setTake] = useState(10);
+  const [categoryId, setCategoryId] = useState(0);
+  const [optionText, setOptionText] = useState("");
   const [type, setType] = useState("ALL");
-  const getList = async (txt, t, v = 1) => {
-    const { data, statusCode } = await getStockList({
-      take: 10,
-      page: v ? v : curpage,
-      productInfoId: "",
-      isActive: "",
-      optionText: txt ? txt : optionText,
-      type: t ? t : type,
-    });
-    if (statusCode === 200) {
-      setTotal(data.total);
-      setListData(data.results);
-    }
+  const [orderBy, setOrderBy] = useState(1);
+
+  const handleOpenGradeModal = () => {
+    setGradeModal(true);
   };
-  const gradeModalClose = () => {
+  const handleCloseGradeModal = () => {
     setGradeModal(false);
   };
-  const onChangePage = (v) => {
-    setCurPage(v);
-    getList("", "", v);
+
+  const handleSearch = () => {
+    getList();
   };
-  const debounceInfo = debounce(getList, 100);
-  const handleChange = (event, newValue) => {
-    setType(newValue);
-    setCurPage(1);
-    setOptionText(null);
+  const handleClickInit = () => {
+    window.location.reload();
   };
-  const getdebounceInfo = useCallback((txt, t) => {
-    debounceInfo(txt, t);
-  }, []);
-  useEffect(() => {
-    if (optionText !== null) getdebounceInfo(optionText, type);
-  }, [optionText]);
+  const handleChangePage = (value) => {
+    getList(value);
+  };
+
+  const getCategoryList = async () => {};
+  const getList = async (pageValue) => {
+    const page = pageValue || 1;
+    const searchData = {
+      take,
+      page,
+      categoryId,
+      optionText,
+      type,
+      orderBy,
+    };
+    const { data, statusCode } = await getStockList(searchData);
+    if (statusCode === 200) {
+      setTotal(data.total);
+      setList(data.results);
+      setPage(page);
+    }
+  };
 
   useEffect(() => {
+    getCategoryList();
+  }, []);
+  useEffect(() => {
     getList();
-  }, [type]);
+  }, [type, orderBy, take]);
 
   return (
     <>
-      <GradeModal isOpen={gradeModal} onClose={gradeModalClose} />
+      <GradeModal isOpen={gradeModal} onClose={handleCloseGradeModal} />
       <TemplateWrap>
         <TemplateTitleWrap>
           <h2>판매 상품 관리</h2>
+          <h3>판매되고 있는 상품을 조회하고 수정할 수 있습니다.</h3>
         </TemplateTitleWrap>
-        <TextField
-          placeholder="모델명을 입력하세요."
-          value={optionText || ""}
-          onChange={(e) => setOptionText(e.target.value)}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <SearchIcon />
-              </InputAdornment>
-            ),
-          }}
-          sx={{ width: "500px" }}
-        />
-        <InfoTitle>
-          <p>
-            우선 판매권을 얻으려면 <span>현재 최저가 미만의 가격</span>을
-            입력해야 합니다.
-          </p>
-          <Button
-            variant="contained"
-            size="large"
-            onClick={() => {
-              setGradeModal(true);
+        <TemplateBox>
+          <Grid
+            component={"form"}
+            container
+            flexDirection={"column"}
+            gap={2}
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleSearch();
             }}
           >
-            등급 기준 보기
-          </Button>
-        </InfoTitle>
-        <div>
-          <Tabs
-            value={type}
-            onChange={handleChange}
-            aria-label="basic tabs example"
+            <h4>상품 검색</h4>
+            <TemplateRow>
+              <p>분류</p>
+              <Grid container gap={1}>
+                <FormControl sx={{ width: "200px" }}>
+                  <InputLabel>1차 분류</InputLabel>
+                  <Select
+                    label="1차 분류"
+                    value={categoryId}
+                    onChange={(v) => setCategoryId(v.target.value)}
+                  >
+                    <MenuItem value={10}>Ten</MenuItem>
+                    <MenuItem value={20}>Twenty</MenuItem>
+                    <MenuItem value={30}>Thirty</MenuItem>
+                  </Select>
+                </FormControl>
+                <FormControl sx={{ width: "200px" }}>
+                  <InputLabel>2차 분류</InputLabel>
+                  <Select
+                    label="2차 분류"
+                    value={categoryId}
+                    onChange={(v) => setCategoryId(v.target.value)}
+                  >
+                    <MenuItem value={10}>Ten</MenuItem>
+                    <MenuItem value={20}>Twenty</MenuItem>
+                    <MenuItem value={30}>Thirty</MenuItem>
+                  </Select>
+                </FormControl>
+                <FormControl sx={{ width: "200px" }}>
+                  <InputLabel>3차 분류</InputLabel>
+                  <Select
+                    label="3차 분류"
+                    value={categoryId}
+                    onChange={(v) => setCategoryId(v.target.value)}
+                  >
+                    <MenuItem value={10}>Ten</MenuItem>
+                    <MenuItem value={20}>Twenty</MenuItem>
+                    <MenuItem value={30}>Thirty</MenuItem>
+                  </Select>
+                </FormControl>
+              </Grid>
+            </TemplateRow>
+            <TemplateRow>
+              <p>상품명</p>
+              <TextField
+                label="상품명"
+                value={optionText}
+                onChange={(e) => setOptionText(e.target.value)}
+                sx={{ width: "300px" }}
+              />
+            </TemplateRow>
+            <TemplateButtonWrap>
+              <Button variant="contained" size="large" type="submit">
+                조회
+              </Button>
+              <Button variant="outlined" size="large" onClick={handleClickInit}>
+                초기화
+              </Button>
+            </TemplateButtonWrap>
+          </Grid>
+        </TemplateBox>
+        <TemplateBox>
+          <Grid
+            container
+            justifyContent={"space-between"}
+            alignItems={"center"}
           >
-            <Tab label="전체" value={"ALL"} />
-            <Tab label="최저가" value={"1"} />
-            <Tab label="최저가 아닌 상품" value={"2"} />
-            <Tab label="오늘 등록한 상품" value={"3"} />
-          </Tabs>
-          <List>
-            {listData.length > 0 ? (
-              listData.map((el, idx) => (
-                <Item
-                  key={idx}
-                  id={el.id}
-                  thumb={el.thumb ? el.thumb : defaultIcon}
-                  optionText={el.optionText}
-                  gradeText={el.gradeText}
-                  lowestPrice={el.lowestPrice}
-                  price={el.price}
-                  stock={el.stock}
-                  isActive={el.isActive}
-                  getList={getList}
-                  setListData={setListData}
-                  listData={listData}
-                  curpage={curpage}
-                  setNum={setCurPage}
-                />
-              ))
-            ) : (
-              <NoRows>등록된 상품이 없습니다.</NoRows>
-            )}
-          </List>
-        </div>
-        <Grid
-          container
-          justifyContent={"center"}
-          padding={"20px 0"}
-          backgroundColor="#f1f4f8"
-        >
+            <Tabs value={type} onChange={(e, v) => setType(v)}>
+              <Tab label="전체" value={"ALL"} />
+              <Tab label="최저가 상품" value={1} />
+              <Tab label="최저가 아닌 상품" value={2} />
+              <Tab label="재고등록 대기" value={3} />
+            </Tabs>
+            <Grid display={"inline-flex"} gap={1}>
+              <Select
+                value={orderBy}
+                onChange={(v) => setOrderBy(v.target.value)}
+                size="small"
+              >
+                <MenuItem value={1}>가나다 순</MenuItem>
+                <MenuItem value={2}>최종수정일시 순</MenuItem>
+              </Select>
+              <Select
+                value={take}
+                onChange={(v) => setTake(v.target.value)}
+                size="small"
+              >
+                <MenuItem value={10}>10개씩 보기</MenuItem>
+                <MenuItem value={20}>20개씩 보기</MenuItem>
+                <MenuItem value={30}>30개씩 보기</MenuItem>
+              </Select>
+            </Grid>
+          </Grid>
+          <Table>
+            <TableHead>
+              <TableRow>
+                {TABLE_HEAD_CELLS.map((v) => (
+                  <TableCell key={`head_cell_${v}`}>{v}</TableCell>
+                ))}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {list.length ? (
+                list?.map((v) => <Item data={v} getList={getList} />)
+              ) : (
+                <TableRow>
+                  <TableCell>판매 상품이 없습니다.</TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </TemplateBox>
+        <Grid container justifyContent={"center"}>
           <Pagination
-            count={Math.ceil(total / 10)}
-            page={curpage}
-            onChange={(e, page) => onChangePage(page)}
+            count={Math.ceil(total / take)}
+            page={page}
+            onChange={(e, v) => handleChangePage(v)}
             showFirstButton
             showLastButton
           />
@@ -151,61 +238,4 @@ const StockList = () => {
     </>
   );
 };
-export default StockList;
-
-const Container = styled.div`
-  width: 100%;
-  height: 100%;
-  h1 {
-    font-size: 20px;
-  }
-  em {
-    font-style: normal;
-  }
-  .area {
-    width: 279px;
-  }
-  & .MuiOutlinedInput-notchedOutline {
-    border: none !important;
-  }
-  a {
-    display: block;
-    padding: 10px 0 5px;
-  }
-  .scroll::-webkit-scrollbar {
-    width: 10px;
-  }
-  .scroll::-webkit-scrollbar-thumb {
-    background-color: #0082ff;
-    border-radius: 5px;
-  }
-  .scroll::-webkit-scrollbar-track {
-    background-color: #f8f8f8;
-  }
-`;
-
-const NoRows = styled.li`
-  font-weight: 500;
-`;
-
-const InfoTitle = styled.div`
-  margin-bottom: 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  p {
-    font-size: 20px;
-    font-weight: 500;
-  }
-  span {
-    color: #d74b4b;
-    padding: 0 4px;
-  }
-`;
-
-const List = styled.ul`
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  padding: 20px 0;
-`;
+export default StockListPage;
