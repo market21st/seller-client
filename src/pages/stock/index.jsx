@@ -16,7 +16,7 @@ import {
   Tabs,
   Tab,
 } from "@mui/material";
-import { getStockList } from "../../api/stock";
+import { getCategoryListApi, getStockList } from "../../api/stock";
 import GradeModal from "../../components/stock/GradeModal";
 import {
   TemplateBox,
@@ -39,6 +39,13 @@ const StockListPage = () => {
   const [list, setList] = useState([]);
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
+
+  const [category1, setCategory1] = useState({});
+  const [category2, setCategory2] = useState({});
+  const [category3, setCategory3] = useState({});
+  const [category1List, setCategory1List] = useState([]);
+  const [category2List, setCategory2List] = useState([]);
+  const [category3List, setCategory3List] = useState([]);
 
   const [take, setTake] = useState(10);
   const [categoryId, setCategoryId] = useState(0);
@@ -63,7 +70,31 @@ const StockListPage = () => {
     getList({ page: value });
   };
 
-  const getCategoryList = async () => {};
+  const handleChange1depthCategory = (category) => {
+    setCategoryId(category.fkCategoryId);
+    setCategory1(category);
+
+    setCategory2({});
+    setCategory2List(category.children);
+    setCategory3({});
+    setCategory3List([]);
+  };
+  const handleChange2depthCategory = (category) => {
+    setCategoryId(category.fkCategoryId);
+    setCategory2(category);
+
+    setCategory3({});
+    setCategory3List(category.children);
+  };
+  const handleChange3depthCategory = (category) => {
+    setCategoryId(category.fkCategoryId);
+    setCategory3List(category);
+  };
+
+  const getCategoryList = async () => {
+    const { statusCode, data } = await getCategoryListApi();
+    if (statusCode === 200) setCategory1List(data);
+  };
   const getList = async (query) => {
     const pageQuery = query?.page || 1;
     const typeQuery = query?.type || type;
@@ -118,36 +149,42 @@ const StockListPage = () => {
                   <InputLabel>1차 분류</InputLabel>
                   <Select
                     label="1차 분류"
-                    value={categoryId}
-                    onChange={(v) => setCategoryId(v.target.value)}
+                    value={category1}
+                    onChange={(v) => handleChange1depthCategory(v.target.value)}
                   >
-                    <MenuItem value={10}>Ten</MenuItem>
-                    <MenuItem value={20}>Twenty</MenuItem>
-                    <MenuItem value={30}>Thirty</MenuItem>
+                    {category1List?.map((v) => (
+                      <MenuItem key={v.id} value={v}>
+                        {v.name}
+                      </MenuItem>
+                    ))}
                   </Select>
                 </FormControl>
                 <FormControl sx={{ width: "200px" }}>
                   <InputLabel>2차 분류</InputLabel>
                   <Select
                     label="2차 분류"
-                    value={categoryId}
-                    onChange={(v) => setCategoryId(v.target.value)}
+                    value={category2}
+                    onChange={(v) => handleChange2depthCategory(v.target.value)}
                   >
-                    <MenuItem value={10}>Ten</MenuItem>
-                    <MenuItem value={20}>Twenty</MenuItem>
-                    <MenuItem value={30}>Thirty</MenuItem>
+                    {category2List?.map((v) => (
+                      <MenuItem key={v.id} value={v}>
+                        {v.name}
+                      </MenuItem>
+                    ))}
                   </Select>
                 </FormControl>
                 <FormControl sx={{ width: "200px" }}>
                   <InputLabel>3차 분류</InputLabel>
                   <Select
                     label="3차 분류"
-                    value={categoryId}
-                    onChange={(v) => setCategoryId(v.target.value)}
+                    value={category3}
+                    onChange={(v) => handleChange3depthCategory(v.target.value)}
                   >
-                    <MenuItem value={10}>Ten</MenuItem>
-                    <MenuItem value={20}>Twenty</MenuItem>
-                    <MenuItem value={30}>Thirty</MenuItem>
+                    {category3List?.map((v) => (
+                      <MenuItem key={v.id} value={v}>
+                        {v.name}
+                      </MenuItem>
+                    ))}
                   </Select>
                 </FormControl>
               </Grid>

@@ -95,3 +95,13 @@ export const postProduct = async (params) => {
     return err.response;
   }
 };
+
+export const getCategoryListApi = async () => {
+  try {
+    const res = await instance.get(`/product/categoryList`);
+    return res.data;
+  } catch (err) {
+    console.log(err.response);
+    return err.response;
+  }
+};
