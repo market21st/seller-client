@@ -8,7 +8,8 @@ import toast from "react-hot-toast";
 const Item = ({ data, getList }) => {
   const [price, setPrice] = useState(data.price);
   const [stock, setStock] = useState(data.stock);
-  const [alert, setAlert] = useState("");
+  const [updateAlert, setUpdateAlert] = useState("");
+  const [deleteAlert, setDeleteAlert] = useState("");
 
   const rowCells = (data) => [
     <img
@@ -38,7 +39,7 @@ const Item = ({ data, getList }) => {
       ? dayjs(data.latestPriceChangedAt).format("YYYY.MM.DD HH:mm:ss")
       : "-",
     <Grid container gap={1}>
-      <Button variant="text" color="secondary" onClick={handleDelete}>
+      <Button variant="text" color="secondary" onClick={handleOpenDeleteAlert}>
         삭제
       </Button>
       <Button variant="outlined" onClick={handleUpdate}>
@@ -47,17 +48,27 @@ const Item = ({ data, getList }) => {
     </Grid>,
   ];
 
-  const handleCloseAlert = () => {
-    setAlert("");
+  const handleOpenDeleteAlert = () => {
+    setDeleteAlert("삭제하시겠어요?");
+  };
+  const handleCloseDeleteAlert = () => {
+    setDeleteAlert("");
+  };
+
+  const handleOpenUpdateAlert = (text) => {
+    setUpdateAlert(text);
+  };
+  const handleCloseUpdateAlert = () => {
+    setUpdateAlert("");
   };
 
   const handleUpdate = async () => {
     if (!price || price < 0) {
-      setAlert("판매가가 0 이하일 수 없습니다.");
+      handleOpenUpdateAlert("판매가가 0 이하일 수 없습니다.");
       return;
     }
     if (price.slice(-3) != "000" || price.length < 4) {
-      setAlert("가격 입력의 최소단위는 1,000원입니다.");
+      handleOpenUpdateAlert("가격 입력의 최소단위는 1,000원입니다.");
       return;
     }
 
@@ -88,7 +99,17 @@ const Item = ({ data, getList }) => {
 
   return (
     <>
-      <AlertModal open={!!alert} onClose={handleCloseAlert} text={alert} />
+      <AlertModal
+        open={!!updateAlert}
+        text={updateAlert}
+        onClose={handleCloseUpdateAlert}
+      />
+      <AlertModal
+        open={!!deleteAlert}
+        text={deleteAlert}
+        onClose={handleCloseDeleteAlert}
+        onConfirm={handleDelete}
+      />
       <TableRow
         sx={{
           "&:last-child td, &:last-child th": { border: 0 },
