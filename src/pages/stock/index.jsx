@@ -60,16 +60,6 @@ const StockListPage = () => {
     setGradeModal(false);
   };
 
-  const handleSearch = () => {
-    getList({ type: "ALL" });
-  };
-  const handleClickInit = () => {
-    window.location.reload();
-  };
-  const handleChangePage = (value) => {
-    getList({ page: value });
-  };
-
   const handleChange1depthCategory = (category) => {
     setCategoryId(category.fkCategoryId);
     setCategory1(category);
@@ -89,6 +79,37 @@ const StockListPage = () => {
   const handleChange3depthCategory = (category) => {
     setCategoryId(category.fkCategoryId);
     setCategory3List(category);
+  };
+
+  const categoryFilter = [
+    {
+      label: "1차 분류",
+      value: category1,
+      onChange: handleChange1depthCategory,
+      list: category1List,
+    },
+    {
+      label: "2차 분류",
+      value: category2,
+      onChange: handleChange2depthCategory,
+      list: category2List,
+    },
+    {
+      label: "3차 분류",
+      value: category3,
+      onChange: handleChange3depthCategory,
+      list: category3List,
+    },
+  ];
+
+  const handleSearch = () => {
+    getList({ type: "ALL" });
+  };
+  const handleClickInit = () => {
+    window.location.reload();
+  };
+  const handleChangePage = (value) => {
+    getList({ page: value });
   };
 
   const getCategoryList = async () => {
@@ -145,48 +166,22 @@ const StockListPage = () => {
             <TemplateRow>
               <p>분류</p>
               <Grid container gap={1}>
-                <FormControl sx={{ width: "200px" }}>
-                  <InputLabel>1차 분류</InputLabel>
-                  <Select
-                    label="1차 분류"
-                    value={category1}
-                    onChange={(v) => handleChange1depthCategory(v.target.value)}
-                  >
-                    {category1List?.map((v) => (
-                      <MenuItem key={v.id} value={v}>
-                        {v.name}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-                <FormControl sx={{ width: "200px" }}>
-                  <InputLabel>2차 분류</InputLabel>
-                  <Select
-                    label="2차 분류"
-                    value={category2}
-                    onChange={(v) => handleChange2depthCategory(v.target.value)}
-                  >
-                    {category2List?.map((v) => (
-                      <MenuItem key={v.id} value={v}>
-                        {v.name}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-                <FormControl sx={{ width: "200px" }}>
-                  <InputLabel>3차 분류</InputLabel>
-                  <Select
-                    label="3차 분류"
-                    value={category3}
-                    onChange={(v) => handleChange3depthCategory(v.target.value)}
-                  >
-                    {category3List?.map((v) => (
-                      <MenuItem key={v.id} value={v}>
-                        {v.name}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
+                {categoryFilter.map((v) => (
+                  <FormControl sx={{ width: "200px" }} key={v.label}>
+                    <InputLabel>{v.label}</InputLabel>
+                    <Select
+                      label={v.label}
+                      value={v.value}
+                      onChange={(v) => v.onChnage(v.target.value)}
+                    >
+                      {v.list?.map((v) => (
+                        <MenuItem key={v.id} value={v}>
+                          {v.name}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                ))}
               </Grid>
             </TemplateRow>
             <TemplateRow>
