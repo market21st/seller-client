@@ -68,9 +68,8 @@ export const editOrderStatus = async (id, params) => {
     if (e.response.data.statusCode === 400) {
       toast.error(e.response.data.message, {
         duration: 4000,
-        position: "bottom-center",
         style: {
-          marginBottom: 100,
+          marginTop: "20px",
         },
       });
     }

@@ -107,18 +107,16 @@ const Item = ({
     if (statusCode == 200) {
       toast.success(`저장 완료`, {
         duration: 4000,
-        position: "bottom-center",
         style: {
-          marginBottom: 100,
+          marginTop: "20px",
         },
       });
       getList("", "", curpage);
     } else {
       toast.success(`저장 실패`, {
         duration: 4000,
-        position: "bottom-center",
         style: {
-          marginBottom: 100,
+          marginTop: "20px",
         },
       });
     }
@@ -129,18 +127,16 @@ const Item = ({
     if (statusCode == 200) {
       toast.error(`삭제 완료`, {
         duration: 4000,
-        position: "bottom-center",
         style: {
-          marginBottom: 100,
+          marginTop: "20px",
         },
       });
       getList("", "", curpage);
     } else {
       toast.error(`삭제 실패`, {
         duration: 4000,
-        position: "bottom-center",
         style: {
-          marginBottom: 100,
+          marginTop: "20px",
         },
       });
     }

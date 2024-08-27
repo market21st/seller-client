@@ -40,9 +40,8 @@ const ListModal = ({ isOpen, onClose, id }) => {
     if (statusCode === 200) {
       toast.success("상품 등록 완료", {
         duration: 4000,
-        position: "bottom-center",
         style: {
-          marginBottom: 100,
+          marginTop: "20px",
         },
       });
       getMyList();

@@ -65,9 +65,8 @@ const Item = ({ data, getList }) => {
     if (statusCode === 200) {
       toast.success("저장되었습니다.", {
         duration: 4000,
-        position: "bottom-center",
         style: {
-          marginBottom: 100,
+          marginTop: "20px",
         },
       });
       getList();
@@ -79,9 +78,8 @@ const Item = ({ data, getList }) => {
     if (statusCode === 200) {
       toast.success("삭제되었습니다.", {
         duration: 4000,
-        position: "bottom-center",
         style: {
-          marginBottom: 100,
+          marginTop: "20px",
         },
       });
       getList();
