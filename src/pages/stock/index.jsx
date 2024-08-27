@@ -36,16 +36,12 @@ import {
 const StockListPage = () => {
   const [gradeModal, setGradeModal] = useState(false);
 
-  const [list, setList] = useState([]);
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
+  const [list, setList] = useState([]);
 
-  const [category1, setCategory1] = useState({});
-  const [category2, setCategory2] = useState({});
-  const [category3, setCategory3] = useState({});
-  const [category1List, setCategory1List] = useState([]);
-  const [category2List, setCategory2List] = useState([]);
-  const [category3List, setCategory3List] = useState([]);
+  const [category, setCategory] = useState({ 1: {}, 2: {}, 3: {} });
+  const [categoryList, setCategoryList] = useState({ 1: [], 2: [], 3: [] });
 
   const [take, setTake] = useState(10);
   const [categoryId, setCategoryId] = useState(0);
@@ -60,45 +56,42 @@ const StockListPage = () => {
     setGradeModal(false);
   };
 
-  const handleChange1depthCategory = (category) => {
-    setCategoryId(category.fkCategoryId);
-    setCategory1(category);
+  const handleChange1depthCategory = (v) => {
+    setCategoryId(v.fkCategoryId);
 
-    setCategory2({});
-    setCategory2List(category.children);
-    setCategory3({});
-    setCategory3List([]);
+    setCategory({ 1: v, 2: {}, 3: {} });
+    setCategoryList({ ...categoryList, 2: v.children, 3: [] });
   };
-  const handleChange2depthCategory = (category) => {
-    setCategoryId(category.fkCategoryId);
-    setCategory2(category);
+  const handleChange2depthCategory = (v) => {
+    setCategoryId(v.fkCategoryId);
 
-    setCategory3({});
-    setCategory3List(category.children);
+    setCategory({ ...category, 2: v, 3: {} });
+    setCategoryList({ ...categoryList, 3: v.children });
   };
-  const handleChange3depthCategory = (category) => {
-    setCategoryId(category.fkCategoryId);
-    setCategory3List(category);
+  const handleChange3depthCategory = (v) => {
+    setCategoryId(v.fkCategoryId);
+
+    setCategory({ ...category, 3: v });
   };
 
   const categoryFilter = [
     {
       label: "1차 분류",
-      value: category1,
+      value: category[1],
       onChange: handleChange1depthCategory,
-      list: category1List,
+      list: categoryList[1],
     },
     {
       label: "2차 분류",
-      value: category2,
+      value: category[2],
       onChange: handleChange2depthCategory,
-      list: category2List,
+      list: categoryList[2],
     },
     {
       label: "3차 분류",
-      value: category3,
+      value: category[3],
       onChange: handleChange3depthCategory,
-      list: category3List,
+      list: categoryList[3],
     },
   ];
 
@@ -114,7 +107,7 @@ const StockListPage = () => {
 
   const getCategoryList = async () => {
     const { statusCode, data } = await getCategoryListApi();
-    if (statusCode === 200) setCategory1List(data);
+    if (statusCode === 200) setCategoryList({ 1: data, 2: [], 3: [] });
   };
   const getList = async (query) => {
     const pageQuery = query?.page || 1;
@@ -172,7 +165,7 @@ const StockListPage = () => {
                     <Select
                       label={v.label}
                       value={v.value}
-                      onChange={(v) => v.onChnage(v.target.value)}
+                      onChange={(e) => v.onChange(e.target.value)}
                     >
                       {v.list?.map((v) => (
                         <MenuItem key={v.id} value={v}>
