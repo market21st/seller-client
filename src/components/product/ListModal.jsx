@@ -32,7 +32,7 @@ const ListModal = ({ isOpen, onClose, infoId }) => {
     };
     const { statusCode, message } = await postProductApi(payload);
     if (statusCode === 200) {
-      toast.success("상품 등록 완료", {
+      toast.success("등록되었습니다.", {
         duration: 4000,
         style: {
           marginTop: "20px",
