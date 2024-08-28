@@ -16,34 +16,43 @@ import SearchIcon from "@mui/icons-material/Search";
 import { getStock } from "../../api/stock";
 import { TemplateBox, TemplateTitleWrap, TemplateWrap } from "../order";
 import ListModal from "../../components/product/ListModal";
+import GradeModal from "../../components/stock/GradeModal";
 
 const TAKE = 10;
 const TABLE_HEAD_CELLS = ["번호", "모델명", "관리"];
 
 const ProductList = () => {
+  const [optionText, setOptionText] = useState("");
   const [list, setList] = useState([]);
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
 
-  const [optionText, setOptionText] = useState("");
-  const [modal, setModal] = useState({
+  const [listModal, setListModal] = useState({
     open: false,
     infoId: 0,
   });
+  const [openGradeModal, setOpenGradeModal] = useState(false);
 
   const rowCells = (row, idx) => [
     idx + 1,
     row.name,
-    <Button variant="contained" onClick={() => handleOpenModal(row.id)}>
+    <Button variant="contained" onClick={() => handleOpenListModal(row.id)}>
       추가
     </Button>,
   ];
 
-  const handleOpenModal = (infoId) => {
-    setModal({ open: true, infoId });
+  const handleOpenListModal = (infoId) => {
+    setListModal({ open: true, infoId });
   };
-  const handleCloseModal = () => {
-    setModal({ open: false, infoId: 0 });
+  const handleCloseListModal = () => {
+    setListModal({ open: false, infoId: 0 });
+  };
+
+  const handleOpenGradeModal = () => {
+    setOpenGradeModal(true);
+  };
+  const handleCloseGradeModal = () => {
+    setOpenGradeModal(false);
   };
 
   const handleChangePage = (v) => {
@@ -75,27 +84,38 @@ const ProductList = () => {
   return (
     <>
       <ListModal
-        isOpen={modal.open}
-        infoId={modal.infoId}
-        onClose={handleCloseModal}
+        isOpen={listModal.open}
+        infoId={listModal.infoId}
+        onClose={handleCloseListModal}
       />
+      <GradeModal isOpen={openGradeModal} onClose={handleCloseGradeModal} />
       <TemplateWrap>
         <TemplateTitleWrap>
           <h2>판매 상품 등록</h2>
         </TemplateTitleWrap>
-        <TextField
-          placeholder="모델명을 입력하세요."
-          value={optionText || ""}
-          onChange={(e) => setOptionText(e.target.value)}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <SearchIcon />
-              </InputAdornment>
-            ),
-          }}
-          sx={{ width: "500px" }}
-        />
+        <Grid container justifyContent={"space-between"} alignItems={"center"}>
+          <TextField
+            placeholder="모델명을 입력하세요."
+            value={optionText || ""}
+            onChange={(e) => setOptionText(e.target.value)}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchIcon />
+                </InputAdornment>
+              ),
+            }}
+            sx={{ width: "500px" }}
+          />
+          <Button
+            variant="outlined"
+            color="secondary"
+            style={{ background: "#fff" }}
+            onClick={handleOpenGradeModal}
+          >
+            등급 기준 보기
+          </Button>
+        </Grid>
         <TemplateBox>
           <Table>
             <TableHead>
