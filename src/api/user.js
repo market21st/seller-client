@@ -11,8 +11,8 @@ export const registerUser = async (params) => {
       },
     });
     return res.data;
-  } catch (e) {
-    return e.response.data;
+  } catch (err) {
+    return err.response.data;
   }
 };
 
@@ -20,8 +20,8 @@ export const idCheck = async (params) => {
   try {
     const res = await instance.get(`/auth/check/${params}`);
     return res.data;
-  } catch (e) {
-    return e.response.data;
+  } catch (err) {
+    return err.response.data;
   }
 };
 
@@ -29,8 +29,8 @@ export const logoutUser = async () => {
   try {
     const res = await instance.post(`/auth/logout`);
     return res.data;
-  } catch (e) {
-    return e.response.data;
+  } catch (err) {
+    return err.response.data;
   }
 };
 
@@ -53,7 +53,7 @@ export const loginUser = async (params) => {
       );
     }
     return res.data;
-  } catch (e) {
-    return e.response.data;
+  } catch (err) {
+    return err.response.data;
   }
 };
