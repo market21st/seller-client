@@ -19,11 +19,7 @@ const Container = styled.div`
   left: 0;
   width: 50px;
   height: 50px;
-  background: linear-gradient(
-    0deg,
-    rgba(255, 255, 255, 0.2) 0%,
-    rgba(255, 255, 255, 0.2) 100%
-  );
+  background: #ffffff20;
 `;
 
 const TextWrap = styled.div`
