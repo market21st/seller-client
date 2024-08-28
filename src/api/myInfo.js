@@ -5,8 +5,7 @@ export const myInfo = async () => {
     const res = await instance.get(`/manage/my`);
     return res.data;
   } catch (e) {
-    console.log(e);
-    return;
+    return e.response.data;
   }
 };
 
@@ -15,8 +14,7 @@ export const editMyInfo = async (params) => {
     const res = await instance.patch(`/manage/my`, params);
     return res.data;
   } catch (e) {
-    console.log(e);
-    return;
+    return e.response.data;
   }
 };
 
@@ -25,8 +23,7 @@ export const manageDate = async () => {
     const res = await instance.get(`/manage/my/statistics/dates`);
     return res.data;
   } catch (e) {
-    console.log(e);
-    return;
+    return e.response.data;
   }
 };
 
@@ -35,7 +32,6 @@ export const statistics = async (params) => {
     const res = await instance.get(`/manage/my/statistics`, { params: params });
     return res.data;
   } catch (e) {
-    console.log(e);
-    return;
+    return e.response.data;
   }
 };

@@ -5,17 +5,15 @@ export const getStock = async (params) => {
     const res = await instance.get(`/product/info`, { params });
     return res.data;
   } catch (e) {
-    console.log(e);
-    return;
+    return e.response.data;
   }
 };
 export const getMyProduct = async (id) => {
   try {
     const res = await instance.get(`/product/info/my/${id}`);
     return res.data;
-  } catch (err) {
-    console.log(err.response);
-    return err.response;
+  } catch (e) {
+    return e.response.data;
   }
 };
 export const getGrade = async () => {
@@ -23,8 +21,7 @@ export const getGrade = async () => {
     const res = await instance.get(`/product/grade`);
     return res.data;
   } catch (e) {
-    console.log(e);
-    return;
+    return e.response.data;
   }
 };
 
@@ -33,8 +30,7 @@ export const getStockList = async (params) => {
     const res = await instance.get(`/product`, { params: params });
     return res.data;
   } catch (e) {
-    console.log(e);
-    return;
+    return e.response.data;
   }
 };
 
@@ -43,8 +39,7 @@ export const editStock = async (id, params) => {
     const res = await instance.patch(`/product/${id}`, params);
     return res.data;
   } catch (e) {
-    console.log(e);
-    return;
+    return e.response.data;
   }
 };
 
@@ -53,8 +48,7 @@ export const DeleteItem = async (id, params) => {
     const res = await instance.delete(`/product/${id}`);
     return res.data;
   } catch (e) {
-    console.log(e);
-    return;
+    return e.response.data;
   }
 };
 
@@ -63,8 +57,7 @@ export const getProductInfo = async () => {
     const res = await instance.get(`/product/info`);
     return res.data;
   } catch (e) {
-    console.log(e);
-    return;
+    return e.response.data;
   }
 };
 export const getOptions = async (id) => {
@@ -72,8 +65,7 @@ export const getOptions = async (id) => {
     const res = await instance.get(`/product/info/${id}`);
     return res.data;
   } catch (e) {
-    console.log(e);
-    return;
+    return e.response.data;
   }
 };
 export const getPrice = async (params) => {
@@ -81,8 +73,7 @@ export const getPrice = async (params) => {
     const res = await instance.get(`/product/price`, { params: params });
     return res.data;
   } catch (e) {
-    console.log(e);
-    return;
+    return e.response.data;
   }
 };
 
@@ -90,9 +81,8 @@ export const postProduct = async (params) => {
   try {
     const res = await instance.post(`/product`, params);
     return res.data;
-  } catch (err) {
-    console.log(err.response);
-    return err.response;
+  } catch (e) {
+    return e.response.data;
   }
 };
 
@@ -100,8 +90,7 @@ export const getCategoryListApi = async () => {
   try {
     const res = await instance.get(`/product/categoryList`);
     return res.data;
-  } catch (err) {
-    console.log(err.response);
-    return err.response;
+  } catch (e) {
+    return e.response.data;
   }
 };
