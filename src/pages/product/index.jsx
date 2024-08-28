@@ -16,35 +16,43 @@ import SearchIcon from "@mui/icons-material/Search";
 import { getStock } from "../../api/stock";
 import { TemplateBox, TemplateTitleWrap, TemplateWrap } from "../order";
 import ListModal from "../../components/product/ListModal";
+import GradeModal from "../../components/stock/GradeModal";
 
-const take = 10;
-
+const TAKE = 10;
 const TABLE_HEAD_CELLS = ["번호", "모델명", "관리"];
 
-const ProductList = () => {
+const ProductListPage = () => {
+  const [optionText, setOptionText] = useState("");
   const [list, setList] = useState([]);
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
 
-  const [optionText, setOptionText] = useState("");
-  const [modal, setModal] = useState({
+  const [listModal, setListModal] = useState({
     open: false,
-    id: 0,
+    infoId: 0,
   });
+  const [openGradeModal, setOpenGradeModal] = useState(false);
 
   const rowCells = (row, idx) => [
     idx + 1,
     row.name,
-    <Button variant="contained" onClick={() => handleOpenModal(row.id)}>
+    <Button variant="contained" onClick={() => handleOpenListModal(row.id)}>
       추가
     </Button>,
   ];
 
-  const handleOpenModal = (id) => {
-    setModal({ open: true, id });
+  const handleOpenListModal = (infoId) => {
+    setListModal({ open: true, infoId });
   };
-  const handleCloseModal = () => {
-    setModal({ open: false, id: 0 });
+  const handleCloseListModal = () => {
+    setListModal({ open: false, infoId: 0 });
+  };
+
+  const handleOpenGradeModal = () => {
+    setOpenGradeModal(true);
+  };
+  const handleCloseGradeModal = () => {
+    setOpenGradeModal(false);
   };
 
   const handleChangePage = (v) => {
@@ -52,11 +60,10 @@ const ProductList = () => {
     getInfoList("", v);
   };
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   const getInfoList = async (txt = "", v = 1) => {
     const { data, statusCode } = await getStock({
       optionText: txt ? txt : optionText,
-      take: 10,
+      take: TAKE,
       page: v ? v : page,
     });
     if (statusCode === 200) {
@@ -76,24 +83,39 @@ const ProductList = () => {
 
   return (
     <>
-      <ListModal isOpen={modal.open} id={modal.id} onClose={handleCloseModal} />
+      <ListModal
+        isOpen={listModal.open}
+        infoId={listModal.infoId}
+        onClose={handleCloseListModal}
+      />
+      <GradeModal isOpen={openGradeModal} onClose={handleCloseGradeModal} />
       <TemplateWrap>
         <TemplateTitleWrap>
-          <h2>전체 상품 목록</h2>
+          <h2>판매 상품 등록</h2>
         </TemplateTitleWrap>
-        <TextField
-          placeholder="모델명을 입력하세요."
-          value={optionText || ""}
-          onChange={(e) => setOptionText(e.target.value)}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <SearchIcon />
-              </InputAdornment>
-            ),
-          }}
-          sx={{ width: "500px" }}
-        />
+        <Grid container justifyContent={"space-between"} alignItems={"end"}>
+          <TextField
+            placeholder="모델명을 입력하세요."
+            value={optionText || ""}
+            onChange={(e) => setOptionText(e.target.value)}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchIcon />
+                </InputAdornment>
+              ),
+            }}
+            sx={{ width: "500px" }}
+          />
+          <Button
+            variant="outlined"
+            color="secondary"
+            style={{ background: "#fff" }}
+            onClick={handleOpenGradeModal}
+          >
+            등급 기준 보기
+          </Button>
+        </Grid>
         <TemplateBox>
           <Table>
             <TableHead>
@@ -129,7 +151,7 @@ const ProductList = () => {
         </TemplateBox>
         <Grid container justifyContent={"center"}>
           <Pagination
-            count={Math.ceil(total / take)}
+            count={Math.ceil(total / TAKE)}
             page={page}
             onChange={(e, v) => handleChangePage(v)}
             showFirstButton
@@ -140,4 +162,4 @@ const ProductList = () => {
     </>
   );
 };
-export default ProductList;
+export default ProductListPage;

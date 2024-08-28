@@ -1,148 +1,273 @@
-import React, { useEffect, useCallback, useState } from "react";
-import styled from "styled-components";
-import Item from "../../components/stock/Item";
+import React, { useEffect, useState } from "react";
 import {
   Grid,
-  TextField,
   Pagination,
+  Button,
+  Table,
+  TableHead,
+  TableRow,
+  TableBody,
+  TableCell,
+  TextField,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
   Tabs,
   Tab,
-  Button,
-  InputAdornment,
 } from "@mui/material";
-import { getStockList } from "../../api/stock";
-import defaultIcon from "../../assets/default.png";
+import { getCategoryListApi, getStockList } from "../../api/stock";
 import GradeModal from "../../components/stock/GradeModal";
-import { debounce } from "../../utils/debounce";
-import SearchIcon from "@mui/icons-material/Search";
-import { TemplateTitleWrap, TemplateWrap } from "../order";
+import {
+  TemplateBox,
+  TemplateButtonWrap,
+  TemplateRow,
+  TemplateTitleWrap,
+  TemplateWrap,
+} from "../order";
+import StockItem from "../../components/stock/StockItem";
+import {
+  STOCK_ORDER_BY_OPTIONS,
+  STOCK_TAB_ITEMS,
+  STOCK_TABLE_HEAD_CELLS,
+  STOCK_TAKE_OPTIONS,
+} from "../../constants/stock";
 
-const StockList = () => {
-  const [listData, setListData] = useState([]);
-  const [optionText, setOptionText] = useState(null);
-  const [total, setTotal] = useState(0);
-  const [curpage, setCurPage] = useState(1);
+const StockListPage = () => {
   const [gradeModal, setGradeModal] = useState(false);
+
+  const [total, setTotal] = useState(0);
+  const [page, setPage] = useState(1);
+  const [list, setList] = useState([]);
+
+  const [category, setCategory] = useState({ 1: {}, 2: {}, 3: {} });
+  const [categoryList, setCategoryList] = useState({ 1: [], 2: [], 3: [] });
+
+  const [take, setTake] = useState(10);
+  const [categoryId, setCategoryId] = useState(0);
+  const [optionText, setOptionText] = useState("");
   const [type, setType] = useState("ALL");
-  const getList = async (txt, t, v = 1) => {
-    const { data, statusCode } = await getStockList({
-      take: 10,
-      page: v ? v : curpage,
-      productInfoId: "",
-      isActive: "",
-      optionText: txt ? txt : optionText,
-      type: t ? t : type,
-    });
-    if (statusCode === 200) {
-      setTotal(data.total);
-      setListData(data.results);
-    }
+  const [orderBy, setOrderBy] = useState(1);
+
+  const handleOpenGradeModal = () => {
+    setGradeModal(true);
   };
-  const gradeModalClose = () => {
+  const handleCloseGradeModal = () => {
     setGradeModal(false);
   };
-  const onChangePage = (v) => {
-    setCurPage(v);
-    getList("", "", v);
+
+  const handleChange1depthCategory = (v) => {
+    setCategoryId(v.id);
+
+    setCategory({ 1: v, 2: {}, 3: {} });
+    setCategoryList({ ...categoryList, 2: v.children, 3: [] });
   };
-  const debounceInfo = debounce(getList, 100);
-  const handleChange = (event, newValue) => {
-    setType(newValue);
-    setCurPage(1);
-    setOptionText(null);
+  const handleChange2depthCategory = (v) => {
+    setCategoryId(v.id);
+
+    setCategory({ ...category, 2: v, 3: {} });
+    setCategoryList({ ...categoryList, 3: v.children });
   };
-  const getdebounceInfo = useCallback((txt, t) => {
-    debounceInfo(txt, t);
-  }, []);
-  useEffect(() => {
-    if (optionText !== null) getdebounceInfo(optionText, type);
-  }, [optionText]);
+  const handleChange3depthCategory = (v) => {
+    setCategoryId(v.id);
+
+    setCategory({ ...category, 3: v });
+  };
+
+  const categoryFilter = [
+    {
+      label: "1차 분류",
+      value: category[1],
+      onChange: handleChange1depthCategory,
+      list: categoryList[1],
+    },
+    {
+      label: "2차 분류",
+      value: category[2],
+      onChange: handleChange2depthCategory,
+      list: categoryList[2],
+    },
+    {
+      label: "3차 분류",
+      value: category[3],
+      onChange: handleChange3depthCategory,
+      list: categoryList[3],
+    },
+  ];
+
+  const handleSearch = () => {
+    getList({ type: "ALL" });
+  };
+  const handleClickInit = () => {
+    window.location.reload();
+  };
+  const handleChangePage = (value) => {
+    getList({ page: value });
+  };
+
+  const getCategoryList = async () => {
+    const { statusCode, data } = await getCategoryListApi();
+    if (statusCode === 200) setCategoryList({ 1: data, 2: [], 3: [] });
+  };
+  const getList = async (query) => {
+    const pageQuery = query?.page || 1;
+    const typeQuery = query?.type || type;
+    const searchData = {
+      take,
+      page: pageQuery,
+      categoryId,
+      optionText,
+      type: typeQuery,
+      orderBy,
+    };
+    const { data, statusCode } = await getStockList(searchData);
+    if (statusCode === 200) {
+      setTotal(data.total);
+      setList(data.results);
+      setPage(pageQuery);
+      setType(typeQuery);
+    }
+  };
 
   useEffect(() => {
+    getCategoryList();
+  }, []);
+  useEffect(() => {
     getList();
-  }, [type]);
+  }, [type, orderBy, take]);
 
   return (
     <>
-      <GradeModal isOpen={gradeModal} onClose={gradeModalClose} />
+      <GradeModal isOpen={gradeModal} onClose={handleCloseGradeModal} />
       <TemplateWrap>
-        <TemplateTitleWrap>
-          <h2>판매중인 상품</h2>
-        </TemplateTitleWrap>
-        <TextField
-          placeholder="모델명을 입력하세요."
-          value={optionText || ""}
-          onChange={(e) => setOptionText(e.target.value)}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <SearchIcon />
-              </InputAdornment>
-            ),
-          }}
-          sx={{ width: "500px" }}
-        />
-        <InfoTitle>
-          <p>
-            우선 판매권을 얻으려면 <span>현재 최저가 미만의 가격</span>을
-            입력해야 합니다.
-          </p>
+        <Grid container justifyContent={"space-between"} alignItems={"end"}>
+          <TemplateTitleWrap>
+            <h2>판매 상품 관리</h2>
+            <h3>판매되고 있는 상품을 조회하고 수정할 수 있습니다.</h3>
+          </TemplateTitleWrap>
           <Button
-            variant="contained"
-            size="large"
-            onClick={() => {
-              setGradeModal(true);
-            }}
+            variant="outlined"
+            color="secondary"
+            style={{ background: "#fff" }}
+            onClick={handleOpenGradeModal}
           >
             등급 기준 보기
           </Button>
-        </InfoTitle>
-        <div>
-          <Tabs
-            value={type}
-            onChange={handleChange}
-            aria-label="basic tabs example"
+        </Grid>
+        <TemplateBox>
+          <Grid
+            component={"form"}
+            container
+            flexDirection={"column"}
+            gap={2}
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleSearch();
+            }}
           >
-            <Tab label="전체" value={"ALL"} />
-            <Tab label="최저가" value={"1"} />
-            <Tab label="최저가 아닌 상품" value={"2"} />
-            <Tab label="오늘 등록한 상품" value={"3"} />
-          </Tabs>
-          <List>
-            {listData.length > 0 ? (
-              listData.map((el, idx) => (
-                <Item
-                  key={idx}
-                  id={el.id}
-                  thumb={el.thumb ? el.thumb : defaultIcon}
-                  optionText={el.optionText}
-                  gradeText={el.gradeText}
-                  lowestPrice={el.lowestPrice}
-                  price={el.price}
-                  stock={el.stock}
-                  isActive={el.isActive}
-                  getList={getList}
-                  setListData={setListData}
-                  listData={listData}
-                  curpage={curpage}
-                  setNum={setCurPage}
-                />
-              ))
-            ) : (
-              <NoRows>등록된 상품이 없습니다.</NoRows>
-            )}
-          </List>
-        </div>
-        <Grid
-          container
-          justifyContent={"center"}
-          padding={"20px 0"}
-          backgroundColor="#f1f4f8"
-        >
+            <h4>상품 검색</h4>
+            <TemplateRow>
+              <p>분류</p>
+              <Grid container gap={1}>
+                {categoryFilter.map((v) => (
+                  <FormControl sx={{ width: "200px" }} key={v.label}>
+                    <InputLabel>{v.label}</InputLabel>
+                    <Select
+                      label={v.label}
+                      value={v.value}
+                      onChange={(e) => v.onChange(e.target.value)}
+                    >
+                      {v.list?.map((v) => (
+                        <MenuItem key={v.id} value={v}>
+                          {v.name}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                ))}
+              </Grid>
+            </TemplateRow>
+            <TemplateRow>
+              <p>상품명</p>
+              <TextField
+                label="상품명"
+                value={optionText}
+                onChange={(e) => setOptionText(e.target.value)}
+                sx={{ width: "300px" }}
+              />
+            </TemplateRow>
+            <TemplateButtonWrap>
+              <Button variant="contained" size="large" type="submit">
+                조회
+              </Button>
+              <Button variant="outlined" size="large" onClick={handleClickInit}>
+                초기화
+              </Button>
+            </TemplateButtonWrap>
+          </Grid>
+        </TemplateBox>
+        <TemplateBox>
+          <Grid
+            container
+            justifyContent={"space-between"}
+            alignItems={"center"}
+          >
+            <Tabs value={type} onChange={(e, v) => setType(v)}>
+              {STOCK_TAB_ITEMS.map((v) => (
+                <Tab key={v.value} label={v.label} value={v.value} />
+              ))}
+            </Tabs>
+            <Grid display={"inline-flex"} gap={1}>
+              <Select
+                value={orderBy}
+                onChange={(v) => setOrderBy(v.target.value)}
+                size="small"
+              >
+                {STOCK_ORDER_BY_OPTIONS.map((v) => (
+                  <MenuItem key={v.value} value={v.value}>
+                    {v.name}
+                  </MenuItem>
+                ))}
+              </Select>
+              <Select
+                value={take}
+                onChange={(v) => setTake(v.target.value)}
+                size="small"
+              >
+                {STOCK_TAKE_OPTIONS.map((v) => (
+                  <MenuItem key={v.value} value={v.value}>
+                    {v.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </Grid>
+          </Grid>
+          <Table>
+            <TableHead>
+              <TableRow>
+                {STOCK_TABLE_HEAD_CELLS.map((v) => (
+                  <TableCell key={v}>{v}</TableCell>
+                ))}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {list.length ? (
+                list?.map((v) => (
+                  <StockItem key={v.id} data={v} getList={getList} />
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell>판매 상품이 없습니다.</TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </TemplateBox>
+        <Grid container justifyContent={"center"}>
           <Pagination
-            count={Math.ceil(total / 10)}
-            page={curpage}
-            onChange={(e, page) => onChangePage(page)}
+            count={Math.ceil(total / take)}
+            page={page}
+            onChange={(e, v) => handleChangePage(v)}
             showFirstButton
             showLastButton
           />
@@ -151,61 +276,4 @@ const StockList = () => {
     </>
   );
 };
-export default StockList;
-
-const Container = styled.div`
-  width: 100%;
-  height: 100%;
-  h1 {
-    font-size: 20px;
-  }
-  em {
-    font-style: normal;
-  }
-  .area {
-    width: 279px;
-  }
-  & .MuiOutlinedInput-notchedOutline {
-    border: none !important;
-  }
-  a {
-    display: block;
-    padding: 10px 0 5px;
-  }
-  .scroll::-webkit-scrollbar {
-    width: 10px;
-  }
-  .scroll::-webkit-scrollbar-thumb {
-    background-color: #0082ff;
-    border-radius: 5px;
-  }
-  .scroll::-webkit-scrollbar-track {
-    background-color: #f8f8f8;
-  }
-`;
-
-const NoRows = styled.li`
-  font-weight: 500;
-`;
-
-const InfoTitle = styled.div`
-  margin-bottom: 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  p {
-    font-size: 20px;
-    font-weight: 500;
-  }
-  span {
-    color: #d74b4b;
-    padding: 0 4px;
-  }
-`;
-
-const List = styled.ul`
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  padding: 20px 0;
-`;
+export default StockListPage;
