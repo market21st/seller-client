@@ -17,8 +17,7 @@ import { getStock } from "../../api/stock";
 import { TemplateBox, TemplateTitleWrap, TemplateWrap } from "../order";
 import ListModal from "../../components/product/ListModal";
 
-const take = 10;
-
+const TAKE = 10;
 const TABLE_HEAD_CELLS = ["번호", "모델명", "관리"];
 
 const ProductList = () => {
@@ -29,7 +28,7 @@ const ProductList = () => {
   const [optionText, setOptionText] = useState("");
   const [modal, setModal] = useState({
     open: false,
-    id: 0,
+    infoId: 0,
   });
 
   const rowCells = (row, idx) => [
@@ -40,11 +39,11 @@ const ProductList = () => {
     </Button>,
   ];
 
-  const handleOpenModal = (id) => {
-    setModal({ open: true, id });
+  const handleOpenModal = (infoId) => {
+    setModal({ open: true, infoId });
   };
   const handleCloseModal = () => {
-    setModal({ open: false, id: 0 });
+    setModal({ open: false, infoId: 0 });
   };
 
   const handleChangePage = (v) => {
@@ -52,11 +51,10 @@ const ProductList = () => {
     getInfoList("", v);
   };
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   const getInfoList = async (txt = "", v = 1) => {
     const { data, statusCode } = await getStock({
       optionText: txt ? txt : optionText,
-      take: 10,
+      take: TAKE,
       page: v ? v : page,
     });
     if (statusCode === 200) {
@@ -76,7 +74,11 @@ const ProductList = () => {
 
   return (
     <>
-      <ListModal isOpen={modal.open} id={modal.id} onClose={handleCloseModal} />
+      <ListModal
+        isOpen={modal.open}
+        infoId={modal.infoId}
+        onClose={handleCloseModal}
+      />
       <TemplateWrap>
         <TemplateTitleWrap>
           <h2>판매 상품 등록</h2>
@@ -129,7 +131,7 @@ const ProductList = () => {
         </TemplateBox>
         <Grid container justifyContent={"center"}>
           <Pagination
-            count={Math.ceil(total / take)}
+            count={Math.ceil(total / TAKE)}
             page={page}
             onChange={(e, v) => handleChangePage(v)}
             showFirstButton

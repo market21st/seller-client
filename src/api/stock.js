@@ -8,7 +8,7 @@ export const getStock = async (params) => {
     return err.response.data;
   }
 };
-export const getMyProduct = async (id) => {
+export const getMyProductInfoApi = async (id) => {
   try {
     const res = await instance.get(`/product/info/my/${id}`);
     return res.data;
@@ -60,7 +60,7 @@ export const getProductInfo = async () => {
     return err.response.data;
   }
 };
-export const getOptions = async (id) => {
+export const getProductInfoApi = async (id) => {
   try {
     const res = await instance.get(`/product/info/${id}`);
     return res.data;
@@ -77,7 +77,7 @@ export const getPrice = async (params) => {
   }
 };
 
-export const postProduct = async (params) => {
+export const postProductApi = async (params) => {
   try {
     const res = await instance.post(`/product`, params);
     return res.data;
