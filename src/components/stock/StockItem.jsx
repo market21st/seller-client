@@ -6,8 +6,8 @@ import AlertModal from "../common/AlertModal";
 import toast from "react-hot-toast";
 
 const StockItem = ({ data, getList }) => {
-  const [price, setPrice] = useState(data.price);
-  const [stock, setStock] = useState(data.stock);
+  const [price, setPrice] = useState(String(data.price));
+  const [stock, setStock] = useState(String(data.stock));
   const [updateAlert, setUpdateAlert] = useState("");
   const [deleteAlert, setDeleteAlert] = useState("");
 
@@ -63,12 +63,14 @@ const StockItem = ({ data, getList }) => {
   };
 
   const handleUpdate = async () => {
-    if (!price || price < 0) {
-      handleOpenUpdateAlert("판매가가 0 이하일 수 없습니다.");
+    if (!price) {
+      handleOpenUpdateAlert("판매가를 입력해 주세요.");
       return;
-    }
-    if (price.slice(-3) != "000" || price.length < 4) {
-      handleOpenUpdateAlert("가격 입력의 최소단위는 1,000원입니다.");
+    } else if (!stock) {
+      handleOpenUpdateAlert("재고를 입력해 주세요.");
+      return;
+    } else if (price.slice(-3) !== "000" || price.length < 4) {
+      handleOpenUpdateAlert("판매가는 천원 단위로만 입력해 주세요.");
       return;
     }
 
