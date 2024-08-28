@@ -57,19 +57,19 @@ const StockListPage = () => {
   };
 
   const handleChange1depthCategory = (v) => {
-    setCategoryId(v.fkCategoryId);
+    setCategoryId(v.id);
 
     setCategory({ 1: v, 2: {}, 3: {} });
     setCategoryList({ ...categoryList, 2: v.children, 3: [] });
   };
   const handleChange2depthCategory = (v) => {
-    setCategoryId(v.fkCategoryId);
+    setCategoryId(v.id);
 
     setCategory({ ...category, 2: v, 3: {} });
     setCategoryList({ ...categoryList, 3: v.children });
   };
   const handleChange3depthCategory = (v) => {
-    setCategoryId(v.fkCategoryId);
+    setCategoryId(v.id);
 
     setCategory({ ...category, 3: v });
   };
