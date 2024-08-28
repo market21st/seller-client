@@ -25,7 +25,7 @@ import {
   TemplateTitleWrap,
   TemplateWrap,
 } from "../order";
-import Item from "../../components/stock/Item";
+import StockItem from "../../components/stock/StockItem";
 import {
   STOCK_ORDER_BY_OPTIONS,
   STOCK_TAB_ITEMS,
@@ -242,7 +242,9 @@ const StockListPage = () => {
             </TableHead>
             <TableBody>
               {list.length ? (
-                list?.map((v) => <Item key={v.id} data={v} getList={getList} />)
+                list?.map((v) => (
+                  <StockItem key={v.id} data={v} getList={getList} />
+                ))
               ) : (
                 <TableRow>
                   <TableCell>판매 상품이 없습니다.</TableCell>

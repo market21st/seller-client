@@ -5,7 +5,7 @@ import { DeleteItem, editStock } from "../../api/stock";
 import AlertModal from "../common/AlertModal";
 import toast from "react-hot-toast";
 
-const Item = ({ data, getList }) => {
+const StockItem = ({ data, getList }) => {
   const [price, setPrice] = useState(data.price);
   const [stock, setStock] = useState(data.stock);
   const [updateAlert, setUpdateAlert] = useState("");
@@ -128,4 +128,4 @@ const Item = ({ data, getList }) => {
   );
 };
 
-export default Item;
+export default StockItem;
