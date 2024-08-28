@@ -1,5 +1,6 @@
 import { Button, Grid, Typography } from "@mui/material";
 import { GRADE_LIST } from "../../constants/common";
+import RandomColorOverlay from "../common/RandomColorOverlay";
 
 const ProductItem = ({
   optionId,
@@ -17,13 +18,16 @@ const ProductItem = ({
       gap={2}
     >
       <Grid display={"inline-flex"} alignItems={"center"} gap={1}>
-        <img
-          src={thumb}
-          alt={optionText}
-          width={50}
-          height={50}
-          style={{ objectFit: "contain" }}
-        />
+        <Grid position={"relative"}>
+          <img
+            src={thumb}
+            alt={optionText}
+            width={50}
+            height={50}
+            style={{ objectFit: "contain" }}
+          />
+          {optionText.indexOf("랜덤") !== -1 ? <RandomColorOverlay /> : null}
+        </Grid>
         <Typography fontWeight={500} whiteSpace={"nowrap"}>
           {optionText}
         </Typography>

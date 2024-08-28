@@ -4,6 +4,7 @@ import { useState } from "react";
 import { DeleteItem, editStock } from "../../api/stock";
 import AlertModal from "../common/AlertModal";
 import toast from "react-hot-toast";
+import RandomColorOverlay from "../common/RandomColorOverlay";
 
 const StockItem = ({ data, getList }) => {
   const [price, setPrice] = useState(String(data.price));
@@ -12,13 +13,16 @@ const StockItem = ({ data, getList }) => {
   const [deleteAlert, setDeleteAlert] = useState("");
 
   const rowCells = (data) => [
-    <img
-      src={data.thumb}
-      alt={data.id}
-      width={50}
-      height={50}
-      style={{ objectFit: "contain" }}
-    />,
+    <Grid position={"relative"}>
+      <img
+        src={data.thumb}
+        alt={data.id}
+        width={50}
+        height={50}
+        style={{ objectFit: "contain" }}
+      />
+      {data.optionText.indexOf("랜덤") !== -1 ? <RandomColorOverlay /> : null}
+    </Grid>,
     `${data.optionText}`,
     data.gradeText,
     data.lowestPrice?.toLocaleString() || "-",
