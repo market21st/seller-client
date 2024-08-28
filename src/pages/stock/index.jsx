@@ -140,10 +140,20 @@ const StockListPage = () => {
     <>
       <GradeModal isOpen={gradeModal} onClose={handleCloseGradeModal} />
       <TemplateWrap>
-        <TemplateTitleWrap>
-          <h2>판매 상품 관리</h2>
-          <h3>판매되고 있는 상품을 조회하고 수정할 수 있습니다.</h3>
-        </TemplateTitleWrap>
+        <Grid container justifyContent={"space-between"} alignItems={"end"}>
+          <TemplateTitleWrap>
+            <h2>판매 상품 관리</h2>
+            <h3>판매되고 있는 상품을 조회하고 수정할 수 있습니다.</h3>
+          </TemplateTitleWrap>
+          <Button
+            variant="outlined"
+            color="secondary"
+            style={{ background: "#fff" }}
+            onClick={handleOpenGradeModal}
+          >
+            등급 기준 보기
+          </Button>
+        </Grid>
         <TemplateBox>
           <Grid
             component={"form"}

@@ -21,7 +21,7 @@ import GradeModal from "../../components/stock/GradeModal";
 const TAKE = 10;
 const TABLE_HEAD_CELLS = ["번호", "모델명", "관리"];
 
-const ProductList = () => {
+const ProductListPage = () => {
   const [optionText, setOptionText] = useState("");
   const [list, setList] = useState([]);
   const [total, setTotal] = useState(0);
@@ -93,7 +93,7 @@ const ProductList = () => {
         <TemplateTitleWrap>
           <h2>판매 상품 등록</h2>
         </TemplateTitleWrap>
-        <Grid container justifyContent={"space-between"} alignItems={"center"}>
+        <Grid container justifyContent={"space-between"} alignItems={"end"}>
           <TextField
             placeholder="모델명을 입력하세요."
             value={optionText || ""}
@@ -162,4 +162,4 @@ const ProductList = () => {
     </>
   );
 };
-export default ProductList;
+export default ProductListPage;
