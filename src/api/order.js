@@ -1,4 +1,3 @@
-import toast from "react-hot-toast";
 import { instance } from "../utils/axios";
 
 // 전체
@@ -61,14 +60,6 @@ export const editOrderStatus = async (id, params) => {
     const res = await instance.patch(`/order/status/${id}`, params);
     return res.data;
   } catch (err) {
-    // if (err.response.data.statusCode === 400) {
-    //   toast.error(err.response.data.message, {
-    //     duration: 4000,
-    //     style: {
-    //       marginTop: "20px",
-    //     },
-    //   });
-    // }
     return err.response.data;
   }
 };
