@@ -64,8 +64,15 @@ const ListModal = ({ isOpen, onClose, infoId }) => {
     >
       <ModalWrap>
         <h2>상품 리스트</h2>
-        <Typography py={1} fontWeight={500}>
-          판매할 상품을 어쩌고젖쩌고
+        <Typography py={1} fontWeight={500} whiteSpace={"pre-wrap"}>
+          등급별 판매 상품을 추가해 주세요.{"\n"}추가된 상품은{" "}
+          <Typography
+            component={"span"}
+            style={{ textDecoration: "underline" }}
+          >
+            [판매 상품 관리]
+          </Typography>{" "}
+          메뉴에서 관리 또는 삭제할 수 있어요.
         </Typography>
         <Grid component={"ul"} container flexDirection={"column"} gap={2}>
           {list?.map(({ id, optionText, thumb }) => (
