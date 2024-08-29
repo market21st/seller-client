@@ -21,7 +21,7 @@ const ProductItem = ({
         <Grid position={"relative"}>
           <img
             src={thumb}
-            alt={optionText}
+            alt="섬네일"
             width={50}
             height={50}
             style={{ objectFit: "contain" }}

@@ -16,7 +16,7 @@ const StockItem = ({ data, getList }) => {
     <Grid position={"relative"}>
       <img
         src={data.thumb}
-        alt={data.id}
+        alt="섬네일"
         width={50}
         height={50}
         style={{ objectFit: "contain" }}
