@@ -222,9 +222,14 @@ const StockListPage = () => {
                 value={orderBy}
                 onChange={(v) => setOrderBy(v.target.value)}
                 size="small"
+                sx={{ width: "220px" }}
               >
                 {STOCK_ORDER_BY_OPTIONS.map((v) => (
-                  <MenuItem key={v.value} value={v.value}>
+                  <MenuItem
+                    key={v.value}
+                    value={v.value}
+                    sx={{ justifyContent: "end" }}
+                  >
                     {v.name}
                   </MenuItem>
                 ))}
@@ -233,9 +238,14 @@ const StockListPage = () => {
                 value={take}
                 onChange={(v) => setTake(v.target.value)}
                 size="small"
+                sx={{ width: "220px" }}
               >
                 {STOCK_TAKE_OPTIONS.map((v) => (
-                  <MenuItem key={v.value} value={v.value}>
+                  <MenuItem
+                    key={v.value}
+                    value={v.value}
+                    sx={{ justifyContent: "end" }}
+                  >
                     {v.name}
                   </MenuItem>
                 ))}

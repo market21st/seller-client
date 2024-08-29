@@ -13,12 +13,12 @@ export const STOCK_TAB_ITEMS = [
   { label: "전체", value: "ALL" },
   { label: "최저가 상품", value: 1 },
   { label: "최저가 아닌 상품", value: 2 },
-  { label: "재고등록 대기", value: 3 },
+  { label: "재고 등록 대기", value: 3 },
 ];
 
 export const STOCK_ORDER_BY_OPTIONS = [
   { name: "가나다 순", value: 1 },
-  { name: "최종수정일시 순", value: 2 },
+  { name: "판매가 최종 수정 일시 순", value: 2 },
 ];
 
 export const STOCK_TAKE_OPTIONS = [
