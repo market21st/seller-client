@@ -100,7 +100,7 @@ const Sidebar = ({ children }) => {
                 to="/product"
                 className={location.pathname.includes("product") ? "focus" : ""}
               >
-                전체 상품 목록
+                판매 상품 등록
               </Link>
             </li>
             <li>
@@ -108,7 +108,7 @@ const Sidebar = ({ children }) => {
                 to="/stock"
                 className={location.pathname.includes("stock") ? "focus" : ""}
               >
-                판매중인 상품
+                판매 상품 관리
               </Link>
             </li>
             <li>
@@ -116,7 +116,7 @@ const Sidebar = ({ children }) => {
                 to="/order"
                 className={location.pathname.includes("order") ? "focus" : ""}
               >
-                주문 배송 관리
+                주문 출고 관리
               </Link>
             </li>
           </Menu>

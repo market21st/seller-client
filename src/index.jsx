@@ -5,13 +5,14 @@ import App from "./layout/index";
 import { Toaster } from "react-hot-toast";
 import { BrowserRouter } from "react-router-dom";
 import { createTheme, ThemeProvider } from "@mui/material";
-import { green, red } from "@mui/material/colors";
+import { blueGrey, green, red } from "@mui/material/colors";
 
 export const theme = createTheme({
   palette: {
     primary: { main: "#0082FF" },
-    error: { main: red[100] },
+    secondary: { main: blueGrey[400] },
     success: { main: green[100] },
+    error: { main: red[100] },
     excel: { main: "#2A8B53", contrastText: "#fff" },
   },
   components: {

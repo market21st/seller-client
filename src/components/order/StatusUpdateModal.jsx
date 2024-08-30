@@ -13,6 +13,7 @@ import { ModalButtonWrap, ModalWrap } from "./OrderHistoryModal";
 import styled from "styled-components";
 import { editOrderStatus, getDelivery } from "../../api/order";
 import AlertModal from "../common/AlertModal";
+import toast from "react-hot-toast";
 
 const DESC_LIST = {
   500: [
@@ -65,11 +66,18 @@ const StatusUpdateModal = ({
       ...data,
       comment: data.comment === "기타 (직접입력)" ? etcComment : data.comment,
     };
-    const { statusCode } = await editOrderStatus(id, formData);
+    const { statusCode, message } = await editOrderStatus(id, formData);
     if (statusCode === 200) {
       reload();
       handleCloseAlretModal();
       onClose();
+    } else if (statusCode === 400) {
+      toast.error(message, {
+        duration: 4000,
+        style: {
+          marginTop: "20px",
+        },
+      });
     }
   };
 

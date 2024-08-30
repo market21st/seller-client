@@ -11,8 +11,8 @@ export const registerUser = async (params) => {
       },
     });
     return res.data;
-  } catch (e) {
-    console.log(e);
+  } catch (err) {
+    return err.response.data;
   }
 };
 
@@ -21,7 +21,6 @@ export const idCheck = async (params) => {
     const res = await instance.get(`/auth/check/${params}`);
     return res.data;
   } catch (err) {
-    console.log(err);
     return err.response.data;
   }
 };
@@ -31,7 +30,7 @@ export const logoutUser = async () => {
     const res = await instance.post(`/auth/logout`);
     return res.data;
   } catch (err) {
-    console.log(err);
+    return err.response.data;
   }
 };
 
@@ -39,22 +38,8 @@ export const logoutUser = async () => {
 export const loginUser = async (params) => {
   try {
     const res = await instance.post(`/auth/login`, params);
-    if (res.data.statusCode === 200) {
-      localStorage.setItem("isLogin", "true");
-      localStorage.setItem("corpLogo", res.data.data.corpImage);
-      localStorage.setItem("corpName", res.data.data.corpName);
-      localStorage.setItem("id", res.data.data.id);
-      localStorage.setItem(
-        "deliveryPeriod",
-        res.data.data.deliveryPeriod || ""
-      );
-      localStorage.setItem(
-        "inspectionPassRate",
-        res.data.data.inspectionPassRate || ""
-      );
-    }
     return res.data;
   } catch (err) {
-    return err.response;
+    return err.response.data;
   }
 };

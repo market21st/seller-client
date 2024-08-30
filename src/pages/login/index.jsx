@@ -1,7 +1,6 @@
 import React, { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-// Mui
 import {
   Grid,
   TextField,
@@ -15,18 +14,27 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import AlertModal from "../../components/common/AlertModal";
 import InfoModal from "../../components/common/InfoModal";
-// Images
 import loginImg from "../../assets/login.png";
 import logoImg from "../../assets/header.png";
-// Api
 import { loginUser } from "../../api/user";
 
-const LogIn = () => {
+const LoginPage = () => {
   const navigate = useNavigate();
   const idRef = useRef();
   const pwRef = useRef();
 
-  //비밀번호 (미리보기)
+  // modal
+  const [alertOpen, setAlertOpen] = useState(false);
+  const [text, setText] = useState("");
+  const alertHandleClose = () => setAlertOpen(false);
+
+  // info
+  const [infoOpen, setInfoOpen] = useState(false);
+  const [contentNum, setContentNum] = useState(0);
+  const [title, setTitle] = useState("");
+  const infoHandleClose = () => setInfoOpen(false);
+
+  // 비밀번호 (미리보기)
   const [values, setValues] = useState({
     amount: "",
     password: "",
@@ -34,15 +42,6 @@ const LogIn = () => {
     weightRange: "",
     showPassword: false,
   });
-
-  const onClick = () => {
-    navigate("/register");
-  };
-
-  const handleChange = (prop) => (event) => {
-    setValues({ ...values, [prop]: event.target.value });
-  };
-
   const handleClickShowPassword = () => {
     setValues({
       ...values,
@@ -50,13 +49,11 @@ const LogIn = () => {
     });
   };
 
-  const handleMouseDownPassword = (event) => {
-    event.preventDefault();
+  const handleChange = (prop) => (event) => {
+    setValues({ ...values, [prop]: event.target.value });
   };
 
-  const login = async (e) => {
-    if (e) e.preventDefault();
-
+  const onLogin = async () => {
     const id = idRef.current.value;
     const pw = pwRef.current.value;
     if (!id || !pw) {
@@ -69,6 +66,12 @@ const LogIn = () => {
       password: pw,
     });
     if (statusCode === 200) {
+      localStorage.setItem("isLogin", "true");
+      localStorage.setItem("corpLogo", data.corpImage);
+      localStorage.setItem("corpName", data.corpName);
+      localStorage.setItem("id", data.id);
+      localStorage.setItem("deliveryPeriod", data.deliveryPeriod || "");
+      localStorage.setItem("inspectionPassRate", data.inspectionPassRate || "");
       window.location.reload();
       navigate("/");
     }
@@ -85,23 +88,6 @@ const LogIn = () => {
         `현재 계정이 활성화되지 않은 상태입니다. 관리자에게 문의해주세요.`
       );
       setAlertOpen(true);
-    }
-  };
-
-  // Modal
-  const [alertOpen, setAlertOpen] = useState(false);
-  const [text, setText] = useState("");
-  const alertHandleClose = () => setAlertOpen(false);
-
-  // info
-  const [infoOpen, setInfoOpen] = useState(false);
-  const [contentNum, setContentNum] = useState(0);
-  const [title, setTitle] = useState("");
-  const infoHandleClose = () => setInfoOpen(false);
-
-  const mykeydown = async (e) => {
-    if (window.event.keyCode == 13) {
-      login();
     }
   };
 
@@ -132,7 +118,12 @@ const LogIn = () => {
       >
         <Inner>
           <Title>Partner Admin</Title>
-          <form onKeyDown={mykeydown}>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              onLogin();
+            }}
+          >
             <TextField
               fullWidth
               size="small"
@@ -154,7 +145,7 @@ const LogIn = () => {
                     <IconButton
                       aria-label="toggle password visibility"
                       onClick={handleClickShowPassword}
-                      onMouseDown={handleMouseDownPassword}
+                      onMouseDown={(e) => e.preventDefault()}
                       edge="end"
                     >
                       {values.showPassword ? <VisibilityOff /> : <Visibility />}
@@ -163,15 +154,15 @@ const LogIn = () => {
                 }
               />
             </FormControl>
+            <Button
+              variant="contained"
+              fullWidth
+              sx={{ marginTop: 3 }}
+              type="submit"
+            >
+              로그인
+            </Button>
           </form>
-          <Button
-            variant="contained"
-            fullWidth
-            sx={{ marginTop: 3 }}
-            onClick={login}
-          >
-            로그인
-          </Button>
           <Info>
             회원이 아니신가요?<a href="/register">회원가입하기</a>
           </Info>
@@ -210,7 +201,7 @@ const LogIn = () => {
   );
 };
 
-export default LogIn;
+export default LoginPage;
 
 const Logo = styled.a`
   display: block;
