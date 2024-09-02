@@ -132,9 +132,9 @@ const Sidebar = ({ children }) => {
           </MyInfo>
         </div>
         <ButtonBox>
-          <button onClick={link1}>회사소개서</button>
+          {/* <button onClick={link1}>회사소개서</button>
           <button onClick={link4}>운영정책</button>
-          <button onClick={link2}>이용가이드</button>
+          <button onClick={link2}>이용가이드</button> */}
           <button onClick={link3}>사업자등록증</button>
         </ButtonBox>
       </Grid>
