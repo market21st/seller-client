@@ -21,7 +21,7 @@ const Home = () => {
 
   return (
     <>
-      <Popup />
+      {/* <Popup /> */}
       <Container>
         <Grid container justifyContent={"space-between"} alignItems={"center"}>
           <h2>대시보드</h2>
