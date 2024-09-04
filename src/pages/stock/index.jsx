@@ -263,7 +263,11 @@ const StockListPage = () => {
             <TableBody>
               {list.length ? (
                 list?.map((v) => (
-                  <StockItem key={v.id} data={v} getList={getList} />
+                  <StockItem
+                    key={v.id}
+                    data={v}
+                    getList={() => getList({ page })}
+                  />
                 ))
               ) : (
                 <TableRow>
