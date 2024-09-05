@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import popupImg from "../../assets/popup.png";
+import popupImg from "../../assets/popup/240905.png";
 import { Checkbox } from "@mui/material";
 import { useState } from "react";
 
@@ -61,7 +61,8 @@ const Wrap = styled.div`
 `;
 
 const ImgWrap = styled.div`
-  height: 65vh;
+  display: flex;
+  /* height: 65vh; */
   max-height: 680px;
   overflow-y: auto;
   border-radius: 8px 8px 0 0;
