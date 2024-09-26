@@ -66,7 +66,7 @@ const Sidebar = ({ children }) => {
               <img src={localStorage.getItem("corpLogo")} alt="브랜드로고" />
             </div>
             <span>{localStorage.getItem("corpName")}</span>
-            <a
+            {/* <a
               href={`https://www.21market.kr/partner/detail/${localStorage.getItem(
                 "id"
               )}`}
@@ -74,7 +74,7 @@ const Sidebar = ({ children }) => {
               rel="noreferrer"
             >
               내 스토어 바로가기
-            </a>
+            </a> */}
           </Profile>
           <SubProfile>
             <li>
