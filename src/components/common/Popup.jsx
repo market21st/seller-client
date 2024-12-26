@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import popupImg from "../../assets/popup/240905.png";
+import popupImg from "../../assets/popup.png";
 import { Checkbox } from "@mui/material";
 import { useState } from "react";
 
