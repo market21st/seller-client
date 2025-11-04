@@ -7,6 +7,8 @@ import {
   Modal,
   Select,
   TextField,
+  Checkbox,
+  FormControlLabel
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { ModalButtonWrap, ModalWrap } from "./OrderHistoryModal";
@@ -45,6 +47,8 @@ const StatusUpdateModal = ({
   const [etcComment, setEtcComment] = useState("");
   const [deliveryCorpList, setDeliveryCorpList] = useState([]);
 
+  const [sendAlim, setSendAlim] = useState(true) // 알림톡 발송 여부(default: true)
+
   const handleOpenAlretModal = () => {
     setOpenAlertModal(true);
   };
@@ -65,6 +69,7 @@ const StatusUpdateModal = ({
     const formData = {
       ...data,
       comment: data.comment === "기타 (직접입력)" ? etcComment : data.comment,
+      alim: data.status === 120 && sendAlim
     };
     const { statusCode, message } = await editOrderStatus(id, formData);
     if (statusCode === 200) {
@@ -176,6 +181,29 @@ const StatusUpdateModal = ({
                     }
                   />
                 </div>
+                <div>
+                  <p>고객에게 알림톡 발송</p>
+                  <div>
+                    <FormControlLabel
+                      label={"발송"}
+                      control={
+                        <Checkbox
+                          checked={sendAlim}
+                          onChange={()=>{setSendAlim(true)}}
+                        />
+                      }
+                    />
+                    <FormControlLabel
+                      label={"미발송"}
+                      control={
+                        <Checkbox
+                          checked={!sendAlim}
+                          onChange={()=>{setSendAlim(false)}}
+                        />
+                      }
+                    />
+                  </div>
+                </div>
               </OptionWrap>
             ) : null}
             {/* 출고불가신청 */}
@@ -238,7 +266,7 @@ const OptionWrap = styled.div`
   padding: 20px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 24px;
   border-radius: 8px;
   background: #f5f7fc;
   p {
@@ -248,6 +276,7 @@ const OptionWrap = styled.div`
   & > div {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 6px;
   }
+
 `;
