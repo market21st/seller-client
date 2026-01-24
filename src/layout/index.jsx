@@ -14,6 +14,10 @@ import ProductList from "../pages/product/index";
 import LogIn from "../pages/login/index";
 import Register from "../pages/register/index";
 import OrderDetail from "../pages/order/detail";
+
+import Products from "../pages/products/index";
+
+
 export const cookies = new Cookies();
 
 const App = () => {
@@ -29,6 +33,7 @@ const App = () => {
             <Route path="/order" element={<OrderList />} />
             <Route path="/product" element={<ProductList />} />
             <Route path="/order/item/:id" element={<OrderDetail />} />
+            <Route path="/products" element={<Products />} />
           </Routes>
         </Sidebar>
       ) : (
