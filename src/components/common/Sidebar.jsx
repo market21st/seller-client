@@ -98,7 +98,7 @@ const Sidebar = ({ children }) => {
             <li>
               <Link
                 to="/product"
-                className={location.pathname.includes("product") ? "focus" : ""}
+                className={location.pathname === ("/product") ? "focus" : ""}
               >
                 판매 상품 등록
               </Link>
@@ -106,7 +106,7 @@ const Sidebar = ({ children }) => {
             <li>
               <Link
                 to="/stock"
-                className={location.pathname.includes("stock") ? "focus" : ""}
+                className={location.pathname === "/stock" ? "focus" : ""}
               >
                 판매 상품 관리
               </Link>
@@ -114,27 +114,35 @@ const Sidebar = ({ children }) => {
             <li>
               <Link
                 to="/order"
-                className={location.pathname.includes("order") ? "focus" : ""}
+                className={location.pathname === "/order" ? "focus" : ""}
               >
                 주문 출고 관리
               </Link>
             </li>
-              {/*<li>
+              <li>
                   <Link
                       to="/products"
                       className={location.pathname.includes("products") ? "focus" : ""}
                   >
                      리퍼센트판매상품등록
                   </Link>
-              </li>*/}
-              {/*<li>
+              </li>
+              <li>
                   <Link
                       to="/stocks"
                       className={location.pathname.includes("stocks") ? "focus" : ""}
                   >
                       리퍼센트판매상품관리
                   </Link>
-              </li>*/}
+              </li>
+              <li>
+                  <Link
+                      to="/orders"
+                      className={location.pathname.includes("orders") ? "focus" : ""}
+                  >
+                      리퍼센트주문출고관리
+                  </Link>
+              </li>
           </Menu>
           <MyInfo>
             <button
