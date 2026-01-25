@@ -45,68 +45,41 @@ export const postProductVarietyApi = async (params) => {
     }
 };
 
-
-export const getGrade = async () => {
-  try {
-    const res = await instance.get(`/product/grade`);
-    return res.data;
-  } catch (err) {
-    return err.response.data;
-  }
+export const getCategoryListApi = async () => {
+    try {
+        const res = await productsApi.get(`/category`);
+        return res.data;
+    } catch (err) {
+        return err.response.data;
+    }
 };
 
 export const getStockList = async (params) => {
-  try {
-    const res = await instance.get(`/product`, { params: params });
-    return res.data;
-  } catch (err) {
-    return err.response.data;
-  }
+    try {
+        const res = await productsApi.get(`/variety/stock`, { params });
+        return res.data;
+    } catch (err) {
+        return err.response.data;
+    }
 };
 
-export const editStock = async (id, params) => {
-  try {
-    const res = await instance.patch(`/product/${id}`, params);
-    return res.data;
-  } catch (err) {
-    return err.response.data;
-  }
+export const patchProductVariety = async (params) => {
+    try {
+        const res = await productsApi.patch(`/variety`, params);
+        return res.data;
+    } catch (err) {
+        return err.response.data;
+    }
 };
 
-export const DeleteItem = async (id, params) => {
-  try {
-    const res = await instance.delete(`/product/${id}`);
-    return res.data;
-  } catch (err) {
-    return err.response.data;
-  }
-};
-
-export const getProductInfo = async () => {
-  try {
-    const res = await instance.get(`/product/info`);
-    return res.data;
-  } catch (err) {
-    return err.response.data;
-  }
-};
-
-export const getPrice = async (params) => {
-  try {
-    const res = await instance.get(`/product/price`, { params: params });
-    return res.data;
-  } catch (err) {
-    return err.response.data;
-  }
+export const deleteProductVariety = async (id, params) => {
+    try {
+        const res = await productsApi.delete(`/variety/${id}`);
+        return res.data;
+    } catch (err) {
+        return err.response.data;
+    }
 };
 
 
 
-export const getCategoryListApi = async () => {
-  try {
-    const res = await instance.get(`/product/categoryList`);
-    return res.data;
-  } catch (err) {
-    return err.response.data;
-  }
-};
