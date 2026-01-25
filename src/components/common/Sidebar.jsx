@@ -119,22 +119,22 @@ const Sidebar = ({ children }) => {
                 주문 출고 관리
               </Link>
             </li>
-              <li>
+              {/*<li>
                   <Link
                       to="/products"
                       className={location.pathname.includes("products") ? "focus" : ""}
                   >
                      리퍼센트판매상품등록
                   </Link>
-              </li>
-              <li>
+              </li>*/}
+              {/*<li>
                   <Link
                       to="/stocks"
                       className={location.pathname.includes("stocks") ? "focus" : ""}
                   >
                       리퍼센트판매상품관리
                   </Link>
-              </li>
+              </li>*/}
           </Menu>
           <MyInfo>
             <button
