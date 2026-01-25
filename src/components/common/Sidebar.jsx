@@ -127,6 +127,14 @@ const Sidebar = ({ children }) => {
                      리퍼센트판매상품등록
                   </Link>
               </li>
+              <li>
+                  <Link
+                      to="/stocks"
+                      className={location.pathname.includes("stocks") ? "focus" : ""}
+                  >
+                      리퍼센트판매상품관리
+                  </Link>
+              </li>
           </Menu>
           <MyInfo>
             <button
