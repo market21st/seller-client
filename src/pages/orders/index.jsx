@@ -22,7 +22,7 @@ import "dayjs/locale/ko";
 import dayjs from "dayjs";
 import StatusUpdateModal from "../../components/orders/StatusUpdateModal";
 import toast from "react-hot-toast";
-import {getExcel} from "../../api/excel";
+import {getExcel, getExcels} from "../../api/excel";
 import {getOrder} from "../../api/orders";
 import {getStatusToBeGroup, OrderDeliveryCorp, OrderStatus} from "../../constants/orders";
 
@@ -206,12 +206,12 @@ const OrderListPage = () => {
     };
 
     const handleClickDownloadExcel = async () => {
-        await getExcel("/order/excel", "order", {
-            status,
-            startDate,
-            endDate,
-            merchantUid,
-            productName,
+        await getExcels("/partner/orders/download", "orders", {
+            statuses : status,
+            startDate: startDate.format("YYYY-MM-DD"),
+            endDate : endDate.format("YYYY-MM-DD"),
+            orderUid : merchantUid,
+            productName : productName,
         });
     };
 
