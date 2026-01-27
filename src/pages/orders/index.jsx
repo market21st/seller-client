@@ -131,6 +131,7 @@ const OrderListPage = () => {
     };
 
     const handleChangePage = (value) => {
+        setPage(value);
         getList(value);
     };
 
@@ -236,7 +237,7 @@ const OrderListPage = () => {
         if (response && response.content) {
             setTotal(response.totalElements);
             setList(response.content);
-            setPage(page);
+            //setPage(page);
         }
     };
 

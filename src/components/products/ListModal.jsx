@@ -32,11 +32,12 @@ const ListModal = ({isOpen, onClose, infoId}) => {
         }
     };
 
-    const postProduct = async (productVarietyId, grade) => {
+    const postProduct = async (productVarietyId, grade, productImage) => {
         const partnerId = localStorage.getItem("id");
         const payload = {
             productVarietyId : productVarietyId,
             grade : grade,
+            productImage : productImage,
             partnerId: partnerId,
         };
         const response = await postProductVarietyApi(payload);
@@ -87,6 +88,7 @@ const ListModal = ({isOpen, onClose, infoId}) => {
                             optionId={productVarietyId}
                             optionText={`${productName} / ${storage} / ${color}`}
                             thumb={`https://image.21market.kr/${productImage}`}
+                            productImage={productImage}
                             postProduct={postProduct}
                             postedGrade={myList
                                 ?.find((v) =>

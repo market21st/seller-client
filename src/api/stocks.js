@@ -66,16 +66,17 @@ export const getStockList = async (params) => {
 export const patchProductVariety = async (params) => {
     try {
         const res = await productsApi.patch(`/variety`, params);
-        return res.data;
+        return res.data.data;
     } catch (err) {
         return err.response.data;
     }
 };
 
-export const deleteProductVariety = async (id, params) => {
+export const deleteProductVariety = async (id) => {
     try {
         const res = await productsApi.delete(`/variety/${id}`);
-        return res.data;
+        console.log(res);
+        return res.data.data;
     } catch (err) {
         return err.response.data;
     }

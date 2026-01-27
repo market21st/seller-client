@@ -103,6 +103,7 @@ const StockListPage = () => {
         window.location.reload();
     };
     const handleChangePage = (value) => {
+        setPage(value);
         getList({ page: value });
     };
 
@@ -114,7 +115,7 @@ const StockListPage = () => {
     };
     const getList = async (query) => {
         const partnerId = localStorage.getItem("id");
-        const pageQuery = query?.page ? query.page - 1 : 0;
+        const pageQuery = query?.page ? query.page  - 1: 0;
         const typeQuery = query?.type || type;
         const searchData = {
             page: pageQuery,
@@ -130,7 +131,7 @@ const StockListPage = () => {
         if (response && response.content) {
             setTotal(response.totalElements);
             setList(response.content);
-            setPage(pageQuery);
+            //setPage(pageQuery);
             setType(typeQuery);
         }
     };
