@@ -15,9 +15,9 @@ const StockItem = ({ data, getList }) => {
 
     const getGradeLabel = (grade) => {
         const gradeMap = {
-            0: "S급",
+            0: "B급",
             1: "A급",
-            2: "B급",
+            2: "S급",
         };
         return gradeMap[grade] || `${grade}급`;
     };
@@ -87,12 +87,12 @@ const StockItem = ({ data, getList }) => {
             return;
         }
 
-        const response= await patchProductVariety({
+        const { statusCode }= await patchProductVariety({
             productVarietyId : data.productVarietyId,
             productPrice: price,
             productStock: stock,
         });
-        if (response && response.content) {
+        if (statusCode === 200) {
             toast.success("저장되었습니다.", {
                 duration: 4000,
                 style: {
@@ -104,8 +104,9 @@ const StockItem = ({ data, getList }) => {
     };
 
     const handleDelete = async () => {
-        const response = await deleteProductVariety(data.productVarietyId);
-        if (response && response.content) {
+        const { statusCode }= await deleteProductVariety(data.productVarietyId);
+        console.log(statusCode);
+        if (statusCode === 200) {
             toast.success("삭제되었습니다.", {
                 duration: 4000,
                 style: {

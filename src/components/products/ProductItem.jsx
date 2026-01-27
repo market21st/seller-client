@@ -6,6 +6,7 @@ const ProductItem = ({
   optionId,
   optionText,
   thumb,
+ productImage,
   postProduct,
   postedGrade,
 }) => {
@@ -43,7 +44,7 @@ const ProductItem = ({
                 ? "primary"
                 : "secondary"
             }
-            onClick={() => postProduct(optionId, value)}
+            onClick={() => postProduct(optionId, value, productImage)}
           >
             {name}급
           </Button>

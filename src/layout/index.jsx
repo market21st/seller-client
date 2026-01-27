@@ -17,7 +17,8 @@ import OrderDetail from "../pages/order/detail";
 
 import Products from "../pages/products/index";
 import Stocks from "../pages/stocks/index";
-
+import Orders from "../pages/orders";
+import OrdersDetail from "../pages/orders/detail";
 
 export const cookies = new Cookies();
 
@@ -35,7 +36,9 @@ const App = () => {
             <Route path="/product" element={<ProductList />} />
             <Route path="/order/item/:id" element={<OrderDetail />} />
             <Route path="/products" element={<Products />} />
-             <Route path="/stocks" element={<Stocks />} />
+            <Route path="/stocks" element={<Stocks />} />
+            <Route path="/orders" element={<Orders />} />
+            <Route path="/orders/item/:id" element={<OrdersDetail />} />
           </Routes>
         </Sidebar>
       ) : (

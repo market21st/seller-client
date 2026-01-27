@@ -1,7 +1,7 @@
 import { instance } from "../utils/axios";
 import axios from "axios";
 
-const PRODUCTS_API_BASE_URL = "http://localhost:8080/products";
+const PRODUCTS_API_BASE_URL = process.env.REACT_APP_PRODUCT_API_URL;
 
 // axios 인스턴스 생성 (products 전용)
 const productsApi = axios.create({
@@ -66,16 +66,17 @@ export const getStockList = async (params) => {
 export const patchProductVariety = async (params) => {
     try {
         const res = await productsApi.patch(`/variety`, params);
-        return res.data;
+        return res.data.data;
     } catch (err) {
         return err.response.data;
     }
 };
 
-export const deleteProductVariety = async (id, params) => {
+export const deleteProductVariety = async (id) => {
     try {
         const res = await productsApi.delete(`/variety/${id}`);
-        return res.data;
+        console.log(res);
+        return res.data.data;
     } catch (err) {
         return err.response.data;
     }
