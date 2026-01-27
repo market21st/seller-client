@@ -223,6 +223,7 @@ const OrderListPage = () => {
         }
     };*/
     const getList = async (pageValue) => {
+        const partnerId = localStorage.getItem("id");
         const page = pageValue -1|| 0;
         const searchData = {
             limit : take,
@@ -231,6 +232,7 @@ const OrderListPage = () => {
             startDate: startDate.format("YYYY-MM-DD"),
             endDate : endDate.format("YYYY-MM-DD"),
             orderUid : merchantUid,
+            partnerId :  partnerId,
             productName : productName,
         };
         const response = await getOrder(searchData);
