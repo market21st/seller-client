@@ -29,10 +29,10 @@ export const getExcel = async (endUrl, fileName, params) => {
   }
 };
 
-const ORDERS_API_BASE_URL = process.env.REACT_APP_ORDER_API_URL;
+const REACT_APP_ORDER_EXCEL_API_URL = process.env.REACT_APP_ORDER_EXCEL_API_URL;
 
-const ordersApi = axios.create({
-    baseURL: ORDERS_API_BASE_URL,
+const ordersExcelApi = axios.create({
+    baseURL: REACT_APP_ORDER_EXCEL_API_URL,
     headers: {
         "Content-Type": "application/json",
     },
@@ -46,7 +46,7 @@ export const getExcels = async (endUrl, fileName, params) => {
     try {
         const today = dayjs().format("YYYYMMDD");
 
-        const res = await ordersApi({
+        const res = await ordersExcelApi({
             method: "get",
             url: endUrl,
             responseType: "blob",

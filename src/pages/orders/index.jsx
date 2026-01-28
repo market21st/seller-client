@@ -207,11 +207,13 @@ const OrderListPage = () => {
     };
 
     const handleClickDownloadExcel = async () => {
+        const partnerId = localStorage.getItem("id");
         await getExcels("/partner/orders/download", "orders", {
             statuses : status,
             startDate: startDate.format("YYYY-MM-DD"),
             endDate : endDate.format("YYYY-MM-DD"),
             orderUid : merchantUid,
+            partnerId : partnerId,
             productName : productName,
         });
     };
