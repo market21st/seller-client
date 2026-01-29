@@ -29,9 +29,9 @@ const TABLE_HEAD_CELLS = ["변경 일시", "처리 상태", "변경 주체", "�
 
 const getGradeLabel = (grade) => {
     const gradeMap = {
-        0: "S급",
+        2: "S급",
         1: "A급",
-        2: "B급",
+        0: "B급",
     };
     return gradeMap[grade] || `${grade}급`;
 };
