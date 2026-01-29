@@ -55,18 +55,18 @@ const statusList = Object.entries(OrderStatus).map(([value, key]) => ({
 
 const getGradeLabel = (grade) => {
     const gradeMap = {
-        0: "S급",
+        2: "S급",
         1: "A급",
-        2: "B급",
+        0: "B급",
     };
     return gradeMap[grade] || `${grade}급`;
 };
 
 const getGradeLabel2 = (grade) => {
     const gradeMap = {
-        0: "S",
+        2: "S",
         1: "A",
-        2: "B",
+        0: "B",
     };
     return gradeMap[grade] || `${grade}급`;
 };
