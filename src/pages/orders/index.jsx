@@ -24,7 +24,7 @@ import StatusUpdateModal from "../../components/orders/StatusUpdateModal";
 import toast from "react-hot-toast";
 import {getExcel, getExcels} from "../../api/excel";
 import {getOrder} from "../../api/orders";
-import {getStatusToBeGroup, OrderDeliveryCorp, OrderStatus} from "../../constants/orders";
+import {getStatusToBeGroup, OrderDeliveryCorp, OrderStatus, getDisplayStatus} from "../../constants/orders";
 
 const take = 10;
 
@@ -47,6 +47,8 @@ export const statusBgColor = (value) =>
             : "default";
 
 const statusKeys = [100, 110, 120, 130, 140, 150, 160, 200, 990];
+
+const defaultStatusKeys = [500, 501, 550, 560, 570, 580, 600, 999];
 
 const statusList = Object.entries(OrderStatus).map(([value, key]) => ({
     key,
@@ -106,8 +108,8 @@ const OrderListPage = () => {
         dayjs(row.createdAt).format("YYYY.MM.DD HH:mm:ss"),
         <div onClick={(e) => e.stopPropagation()}>
             <Chip
-                label={OrderStatus[row.status]}
-                color={statusBgColor(row.status)}
+                label={OrderStatus[getDisplayStatus(row.status)]}
+                color={statusBgColor(getDisplayStatus(row.status))}
                 onClick={() => handleClickChip(row)}
             />
         </div>,
@@ -209,7 +211,7 @@ const OrderListPage = () => {
     const handleClickDownloadExcel = async () => {
         const partnerId = localStorage.getItem("id");
         await getExcels("/partner/orders/download", "orders", {
-            statuses : status,
+            statuses : [...status, ...defaultStatusKeys],
             startDate: startDate.format("YYYY-MM-DD"),
             endDate : endDate.format("YYYY-MM-DD"),
             orderUid : merchantUid,
@@ -230,7 +232,7 @@ const OrderListPage = () => {
         const searchData = {
             limit : take,
             page: page,
-            statuses : status,
+            statuses : [...status, ...defaultStatusKeys],
             startDate: startDate.format("YYYY-MM-DD"),
             endDate : endDate.format("YYYY-MM-DD"),
             orderUid : merchantUid,
@@ -260,9 +262,9 @@ const OrderListPage = () => {
             <StatusUpdateModal
                 open={isOpenStatusUpdateModal}
                 onClose={handleCloseStatusUpdateModal}
-                status={item.status}
-                statusText={OrderStatus[item.status]}
-                statusToBeGroup={getStatusToBeGroup(item.status)}
+                status={getDisplayStatus(item.status)}
+                statusText={OrderStatus[getDisplayStatus(item.status)]}
+                statusToBeGroup={getStatusToBeGroup(getDisplayStatus(item.status))}
                 lastInspectionFailComment={item.rejectReason}
                 id={item.orderItemId}
                 productName={item.productName}
