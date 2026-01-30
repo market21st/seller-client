@@ -10,6 +10,10 @@ export const OrderStatus: Record<number, string> = {
     990: "주문취소",
 };
 
+export const getDisplayStatus = (status) => {
+    return OrderStatus[status] ? status : 200;
+};
+
 const statusToBeGroupMap = {
     100: [{ key: "출고대기", value: 110 }, { key: "출고불가신청", value: 150 }],
     110: [{ key: "출고완료", value: 120 }],

@@ -22,7 +22,7 @@ import dayjs from "dayjs";
 import toast from "react-hot-toast";
 import StatusUpdateModal from "../../components/orders/StatusUpdateModal";
 import { getOrderHistory, getOrderDetail } from "../../api/orders";
-import {getStatusToBeGroup, OrderStatus} from "../../constants/orders";
+import {getStatusToBeGroup, OrderStatus, getDisplayStatus} from "../../constants/orders";
 import historyList from "styled-components/test-utils";
 
 const TABLE_HEAD_CELLS = ["변경 일시", "처리 상태", "변경 주체", "사유"];
@@ -38,7 +38,7 @@ const getGradeLabel = (grade) => {
 
 const rowCells = (row) => [
   dayjs(row.createdAt).format("YYYY.MM.DD HH:mm:ss"),
-  OrderStatus[row.currentStatus],
+  OrderStatus[getDisplayStatus(row.currentStatus)],
   row.actorType ? row.actorType :  "Admin",
   row.reason? row.reason :  "-",
 ];
@@ -147,9 +147,9 @@ const OrderDetailPage = () => {
       <StatusUpdateModal
         open={isOpenStatusUpdateModal}
         onClose={handleCloseStatusUpdateModal}
-        status={detail.status}
-        statusText={OrderStatus[detail.status]}
-        statusToBeGroup={getStatusToBeGroup(detail.status)}
+        status={getDisplayStatus(detail.status)}
+        statusText={OrderStatus[getDisplayStatus(detail.status)]}
+        statusToBeGroup={getStatusToBeGroup(getDisplayStatus(detail.status))}
         lastInspectionFailComment={detail.rejectReason}
         id={detail.orderItemId}
         productName={detail.model}
@@ -172,8 +172,8 @@ const OrderDetailPage = () => {
           <TemplateRow>
             <p>처리상태</p>
             <Chip
-              label={OrderStatus[detail.status]}
-              color={statusBgColor(detail.status)}
+                label={OrderStatus[getDisplayStatus(detail.status)]}
+                color={statusBgColor(getDisplayStatus(detail.status))}
               onClick={handleClickChip}
             />
           </TemplateRow>
