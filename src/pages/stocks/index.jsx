@@ -46,6 +46,7 @@ const StockListPage = () => {
     const [take, setTake] = useState(10);
     const [categoryId, setCategoryId] = useState(0);
     const [subcategoryId, setSubcategoryId] = useState(0);
+    const [productId, setProductId] = useState(0);
     const [optionText, setOptionText] = useState("");
     const [type, setType] = useState(0);
     const [orderBy, setOrderBy] = useState(1);
@@ -62,16 +63,19 @@ const StockListPage = () => {
 
         setCategory({ 1: v, 2: {}, 3: {} });
         setCategoryList({ ...categoryList, 2: v.children, 3: [] });
+
+        setSubcategoryId(null);
+        setProductId(null);
     };
     const handleChange2depthCategory = (v) => {
         setSubcategoryId(v.id);
 
         setCategory({ ...category, 2: v, 3: {} });
         setCategoryList({ ...categoryList, 3: v.children });
+        setProductId(null);
     };
     const handleChange3depthCategory = (v) => {
-        setCategoryId(v.id);
-
+        setProductId(v.id);
         setCategory({ ...category, 3: v });
     };
 
@@ -123,6 +127,7 @@ const StockListPage = () => {
             partnerId: partnerId || 0,
             categoryId: categoryId || null,
             subcategoryId: subcategoryId || null,
+            productId: productId || null,
             productName: optionText ? optionText : null,
             orderBy: orderBy,
             type: typeQuery,
