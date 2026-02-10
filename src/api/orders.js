@@ -1,7 +1,7 @@
 import { instance } from "../utils/axios";
 import axios from "axios";
 
-const ORDERS_API_BASE_URL = "http://localhost:8080/orders"; //process.env.REACT_APP_ORDER_API_URL;;
+const ORDERS_API_BASE_URL =  process.env.REACT_APP_ORDER_API_URL;
 
 const ordersApi = axios.create({
     baseURL: ORDERS_API_BASE_URL,
