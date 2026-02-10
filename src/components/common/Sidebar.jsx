@@ -95,30 +95,30 @@ const Sidebar = ({ children }) => {
             </li>
           </SubProfile>
           <Menu>
-            <li>
+            {/*<li>
               <Link
                 to="/product"
                 className={location.pathname === ("/product") ? "focus" : ""}
               >
                 판매 상품 등록
               </Link>
-            </li>
-            <li>
+            </li>*/}
+            {/*<li>
               <Link
                 to="/stock"
                 className={location.pathname === "/stock" ? "focus" : ""}
               >
                 판매 상품 관리
               </Link>
-            </li>
-            <li>
+            </li>*/}
+            {/*<li>
               <Link
                 to="/order"
                 className={location.pathname === "/order" ? "focus" : ""}
               >
                 주문 출고 관리
               </Link>
-            </li>
+            </li>*/}
               <li>
                   <Link
                       to="/products"

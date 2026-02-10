@@ -52,9 +52,9 @@ const StockItem = ({ data, getList }) => {
             ? dayjs(data.updatedAt).format("YYYY.MM.DD HH:mm:ss")
             : "-",
         <Grid container gap={1}>
-            <Button variant="text" color="secondary" onClick={handleOpenDeleteAlert}>
+            {/*<Button variant="text" color="secondary" onClick={handleOpenDeleteAlert}>
                 삭제
-            </Button>
+            </Button>*/}
             <Button variant="outlined" onClick={handleUpdate}>
                 저장
             </Button>
