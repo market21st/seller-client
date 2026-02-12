@@ -189,7 +189,7 @@ const OrderDetailPage = () => {
           </TemplateRow>
           <TemplateRow>
             <p>판매가</p>
-            <span>{detail.price}</span>
+            <span>{detail.orderCost}</span>
           </TemplateRow>
           <TemplateRow>
             <p>수수료율</p>
