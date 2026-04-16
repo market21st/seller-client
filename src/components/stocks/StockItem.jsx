@@ -1,13 +1,11 @@
 import { Button, Grid, TableCell, TableRow, TextField } from "@mui/material";
 import dayjs from "dayjs";
 import { useState } from "react";
-import { DeleteItem, editStock } from "../../api/stock";
 import AlertModal from "../common/AlertModal";
 import toast from "react-hot-toast";
-import RandomColorOverlay from "../common/RandomColorOverlay";
 import {deleteProductVariety, patchProductVariety} from "../../api/stocks";
 
-const StockItem = ({ data, getList }) => {
+const StockItem = ({ data, type, getList }) => {
     const [price, setPrice] = useState(String(data.productPrice ? data.productPrice : 0));
     const [stock, setStock] = useState(String(data.productStock ? data.productStock : 0));
     const [updateAlert, setUpdateAlert] = useState("");
@@ -52,12 +50,19 @@ const StockItem = ({ data, getList }) => {
             ? dayjs(data.updatedAt).format("YYYY.MM.DD HH:mm:ss")
             : "-",
         <Grid container gap={1}>
-            {/*<Button variant="text" color="secondary" onClick={handleOpenDeleteAlert}>
-                삭제
-            </Button>*/}
             <Button variant="outlined" onClick={handleUpdate}>
-                저장
+                {type === 4 ? "등록" : "저장"}
             </Button>
+            {type !== 4 && (
+                <Button
+                    variant="text"
+                    color="secondary"
+                    onClick={handleOpenDeleteAlert}
+                    disabled={data.productSort === 0}
+                >
+                    삭제
+                </Button>
+            )}
         </Grid>,
     ];
 
@@ -91,6 +96,7 @@ const StockItem = ({ data, getList }) => {
             productVarietyId : data.productVarietyId,
             productPrice: price,
             productStock: stock,
+            ...(type === 4 && { productSort: 99 }),
         });
         if (statusCode === 200) {
             toast.success("저장되었습니다.", {
@@ -104,9 +110,9 @@ const StockItem = ({ data, getList }) => {
     };
 
     const handleDelete = async () => {
-        const { statusCode }= await deleteProductVariety(data.productVarietyId);
-        console.log(statusCode);
+        const { statusCode } = await deleteProductVariety(data.productVarietyId);
         if (statusCode === 200) {
+            handleCloseDeleteAlert();
             toast.success("삭제되었습니다.", {
                 duration: 4000,
                 style: {

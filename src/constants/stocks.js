@@ -5,7 +5,7 @@ export const STOCK_TABLE_HEAD_CELLS = [
   "최저가",
   "판매가",
   "재고",
-  "판매가 수정 일시",
+  "수정 일시",
   "",
 ];
 
@@ -14,6 +14,7 @@ export const STOCK_TAB_ITEMS = [
   { label: "최저가 상품", value: 1 },
   { label: "최저가 아닌 상품", value: 2 },
   { label: "재고 등록 대기", value: 3 },
+   { label: "삭제 상품", value: 4 },
 ];
 
 export const STOCK_ORDER_BY_OPTIONS = [
