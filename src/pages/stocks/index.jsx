@@ -131,6 +131,7 @@ const StockListPage = () => {
             productName: optionText ? optionText : null,
             orderBy: orderBy,
             type: typeQuery,
+            productSort: typeQuery === 4 ? 0 : null,
         };
         const response = await getStockList(searchData);
         if (response && response.content) {
@@ -278,12 +279,16 @@ const StockListPage = () => {
                                     <StockItem
                                         key={v.productVarietyId}
                                         data={v}
+                                        type={type}
                                         getList={() => getList({ page })}
                                     />
                                 ))
                             ) : (
                                 <TableRow>
                                     <TableCell>판매 상품이 없습니다.</TableCell>
+                                    <TableCell>
+                                        {type === 4 ? "삭제된 상품이 없습니다." : "판매 상품이 없습니다."}
+                                    </TableCell>
                                 </TableRow>
                             )}
                         </TableBody>

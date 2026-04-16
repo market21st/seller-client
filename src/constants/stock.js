@@ -5,7 +5,7 @@ export const STOCK_TABLE_HEAD_CELLS = [
   "최저가",
   "판매가",
   "재고",
-  "판매가 수정 일시",
+  "수정 일시",
   "",
 ];
 
