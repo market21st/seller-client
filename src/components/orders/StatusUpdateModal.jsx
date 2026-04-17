@@ -43,6 +43,7 @@ const StatusUpdateModal = ({
                                optionText,
                            }) => {
     const [isOpenAlertModal, setOpenAlertModal] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
 
     const [data, setData] = useState({});
     const [etcComment, setEtcComment] = useState("");
@@ -81,8 +82,12 @@ const StatusUpdateModal = ({
             trackingNumber :data.invoiceNo,
             cancelReason : data.status === 150 ? statusComment : null
         };
-        console.log(formData);
-        await editOrderStatus(formData);
+        const res = await editOrderStatus(formData);
+        if (res?.statusCode == 501) {
+            setErrorMessage(res?.message || "처리 중 오류가 발생했습니다.");
+            handleCloseAlretModal();
+            return;
+        }
         reload();
         handleCloseAlretModal();
         onClose();
@@ -105,6 +110,11 @@ const StatusUpdateModal = ({
                 text={`출고불가 신청을 하는 경우\n${productName}/${optionText} 상품의\n재고수량이 ‘0’으로 변경되어 품절처리 됩니다.`}
                 onConfirm={handleUpdateStatus}
                 onClose={handleCloseAlretModal}
+            />
+            <AlertModal
+                open={!!errorMessage}
+                text={errorMessage}
+                onClose={() => setErrorMessage("")}
             />
             <Modal
                 open={open}

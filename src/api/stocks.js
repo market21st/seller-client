@@ -1,5 +1,6 @@
 import { instance } from "../utils/axios";
 import axios from "axios";
+import logger from "../utils/logger";
 
 const PRODUCTS_API_BASE_URL = process.env.REACT_APP_PRODUCT_API_URL;
 
