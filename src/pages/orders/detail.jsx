@@ -36,12 +36,21 @@ const getGradeLabel = (grade) => {
     return gradeMap[grade] || `${grade}급`;
 };
 
-const rowCells = (row) => [
-  dayjs(row.createdAt).format("YYYY.MM.DD HH:mm:ss"),
-  OrderStatus[getDisplayStatus(row.currentStatus)],
-  row.actorType ? row.actorType :  "Admin",
-  row.reason? row.reason :  "-",
-];
+const STATUS_WITH_REASON = new Set([100,110,120,130,140,150,160,200,990]);
+
+const rowCells = (row: any) => {
+    const { currentStatus, reason, createdAt, actorType } = row;
+    if(STATUS_WITH_REASON.has(currentStatus) ){
+        return [
+            dayjs(createdAt).format("YYYY.MM.DD HH:mm:ss"),
+            OrderStatus[getDisplayStatus(currentStatus)],
+            actorType ?? "Admin",
+            reason,
+        ];
+    }else{
+        return null;
+    }
+};
 
 const OrderDetailPage = () => {
   const { id } = useParams();
@@ -264,23 +273,34 @@ const OrderDetailPage = () => {
                 ))}
               </TableRow>
             </TableHead>
-            <TableBody>
-              {history?.map((row, idx) => (
-                <TableRow
-                  key={`row_${idx}`}
-                  sx={{
-                    "&:last-child td, &:last-child th": { border: 0 },
-                    "&:hover": {
-                      background: "#F2F8FF",
-                    },
-                  }}
-                >
-                  {rowCells(row).map((v, idx) => (
-                    <TableCell key={`row_cell_${idx}`}>{v || "-"}</TableCell>
-                  ))}
-                </TableRow>
-              ))}
-            </TableBody>
+              <TableBody>
+                  {history?.map((row, idx) => {
+                      // 1. rowCells의 결과를 변수에 할당 (메모리 및 연산 효율)
+                      const cells = rowCells(row);
+
+                      // 2. [요구사항 반영] 결과가 null이면 이 행(TableRow)은 그리지 않고 건너뜀
+                      if (!cells) return null;
+
+                      return (
+                          <TableRow
+                              key={`row_${idx}`}
+                              sx={{
+                                  "&:last-child td, &:last-child th": { border: 0 },
+                                  "&:hover": {
+                                      background: "#F2F8FF",
+                                  },
+                              }}
+                          >
+                              {/* 3. 유효한 데이터가 있을 때만 Cell들을 렌더링 */}
+                              {cells.map((v, cellIdx) => (
+                                  <TableCell key={`row_cell_${cellIdx}`}>
+                                      {v || "-"}
+                                  </TableCell>
+                              ))}
+                          </TableRow>
+                      );
+                  })}
+              </TableBody>
           </Table>
         </TemplateBox>
         <BackButtonWrap>
