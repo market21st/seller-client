@@ -51,18 +51,16 @@ const StockItem = ({ data, type, getList }) => {
             : "-",
         <Grid container gap={1}>
             <Button variant="outlined" onClick={handleUpdate}>
-                {type === 4 ? "등록" : "저장"}
+                저장
             </Button>
-            {type !== 4 && (
-                <Button
-                    variant="text"
-                    color="secondary"
-                    onClick={handleOpenDeleteAlert}
-                    disabled={data.productSort === 0}
-                >
-                    삭제
-                </Button>
-            )}
+            <Button
+                variant="text"
+                color="secondary"
+                onClick={handleOpenDeleteAlert}
+                disabled={data.productSort === 0}
+            >
+                삭제
+            </Button>
         </Grid>,
     ];
 
@@ -96,7 +94,6 @@ const StockItem = ({ data, type, getList }) => {
             productVarietyId : data.productVarietyId,
             productPrice: price,
             productStock: stock,
-            ...(type === 4 && { productSort: 99 }),
         });
         if (statusCode === 200) {
             toast.success("저장되었습니다.", {
