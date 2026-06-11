@@ -1,76 +1,36 @@
-import { Button, Grid, TableCell, TableRow, TextField } from "@mui/material";
+import {
+    Button,
+    Checkbox,
+    Grid,
+    TableCell,
+    TableRow,
+    TextField,
+} from "@mui/material";
 import dayjs from "dayjs";
 import { useState } from "react";
 import AlertModal from "../common/AlertModal";
 import toast from "react-hot-toast";
-import {deleteProductVariety, patchProductVariety} from "../../api/stocks";
+import { deleteProductVariety, patchProductVariety } from "../../api/stocks";
 
-const StockItem = ({ data, type, getList }) => {
-    const [price, setPrice] = useState(String(data.productPrice ? data.productPrice : 0));
-    const [stock, setStock] = useState(String(data.productStock ? data.productStock : 0));
+const StockItem = ({ group, getList, checked, onCheck }) => {
+    const [price, setPrice] = useState(
+        String(group.lowestSellingPrice ? group.lowestSellingPrice : 0)
+    );
+    const [colorStocks, setColorStocks] = useState(
+        group.colors.map((c) => ({
+            ...c,
+            productStock: String(c.productStock || 0),
+        }))
+    );
     const [updateAlert, setUpdateAlert] = useState("");
     const [deleteAlert, setDeleteAlert] = useState("");
 
-    const getGradeLabel = (grade) => {
-        const gradeMap = {
-            0: "B급",
-            1: "A급",
-            2: "S급",
-        };
-        return gradeMap[grade] || `${grade}급`;
-    };
-
-    const rowCells = (data) => [
-        <Grid position={"relative"}>
-            <img
-                src={`https://image.21market.kr/${data.productImage}`}
-                alt="섬네일"
-                width={50}
-                height={50}
-                style={{ objectFit: "contain" }}
-            />
-        </Grid>,
-        `${data.productName},${data.color},${data.storage}`,
-        getGradeLabel(data.grade),
-        data.minPrice?.toLocaleString() || "-",
-        <TextField
-            value={price}
-            onChange={(e) => setPrice(e.target.value)}
-            sx={{ width: "220px" }}
-            size="small"
-            placeholder="천원 단위로만 입력해 주세요"
-        />,
-        <TextField
-            value={stock}
-            onChange={(e) => setStock(e.target.value)}
-            sx={{ width: "220px" }}
-            size="small"
-        />,
-        data.updatedAt
-            ? dayjs(data.updatedAt).format("YYYY.MM.DD HH:mm:ss")
-            : "-",
-        <Grid container gap={1}>
-            <Button variant="outlined" onClick={handleUpdate}>
-                저장
-            </Button>
-            <Button
-                variant="text"
-                color="secondary"
-                onClick={handleOpenDeleteAlert}
-                disabled={data.productSort === 0}
-            >
-                삭제
-            </Button>
-        </Grid>,
-    ];
-
     const handleOpenDeleteAlert = () => {
-        setDeleteAlert("삭제하시겠어요?");
+        setDeleteAlert("이 상품의 모든 색상을 삭제하시겠어요?");
     };
     const handleCloseDeleteAlert = () => {
         setDeleteAlert("");
     };
-
     const handleOpenUpdateAlert = (text) => {
         setUpdateAlert(text);
     };
@@ -78,47 +38,63 @@ const StockItem = ({ data, type, getList }) => {
         setUpdateAlert("");
     };
 
+    const handleColorStockChange = (index, value) => {
+        setColorStocks((prev) =>
+            prev.map((c, i) => (i === index ? { ...c, productStock: value } : c))
+        );
+    };
+
     const handleUpdate = async () => {
         if (!price) {
             handleOpenUpdateAlert("판매가를 입력해 주세요.");
             return;
-        } else if (!stock) {
-            handleOpenUpdateAlert("재고를 입력해 주세요.");
-            return;
-        } else if (price.slice(-3) !== "000" || price.length < 4) {
+        }
+        if (price.slice(-3) !== "000" || price.length < 4) {
             handleOpenUpdateAlert("판매가는 천원 단위로만 입력해 주세요.");
             return;
         }
 
-        const { statusCode }= await patchProductVariety({
-            productVarietyId : data.productVarietyId,
-            productPrice: price,
-            productStock: stock,
-        });
-        if (statusCode === 200) {
+        const hasEmptyStock = colorStocks.some((c) => c.productStock === "");
+        if (hasEmptyStock) {
+            handleOpenUpdateAlert("재고를 입력해 주세요.");
+            return;
+        }
+
+        try {
+            for (const colorItem of colorStocks) {
+                await patchProductVariety({
+                    productVarietyId: colorItem.productVarietyId,
+                    productPrice: price,
+                    productStock: colorItem.productStock,
+                });
+            }
             toast.success("저장되었습니다.", {
                 duration: 4000,
-                style: {
-                    marginTop: "20px",
-                },
+                style: { marginTop: "20px" },
             });
             getList();
+        } catch {
+            toast.error("저장에 실패했습니다.");
         }
     };
 
     const handleDelete = async () => {
-        const { statusCode } = await deleteProductVariety(data.productVarietyId);
-        if (statusCode === 200) {
+        try {
+            for (const colorItem of colorStocks) {
+                await deleteProductVariety(colorItem.productVarietyId);
+            }
             handleCloseDeleteAlert();
             toast.success("삭제되었습니다.", {
                 duration: 4000,
-                style: {
-                    marginTop: "20px",
-                },
+                style: { marginTop: "20px" },
             });
             getList();
+        } catch {
+            toast.error("삭제에 실패했습니다.");
         }
     };
+
+    const totalColumns = 7; // 헤더 컬럼 수 (체크박스 포함)
 
     return (
         <>
@@ -133,19 +109,171 @@ const StockItem = ({ data, type, getList }) => {
                 onClose={handleCloseDeleteAlert}
                 onConfirm={handleDelete}
             />
+
+            {/* 메인 행 */}
             <TableRow
                 sx={{
-                    "&:last-child td, &:last-child th": { border: 0 },
-                    "&:hover": {
-                        background: "#F2F8FF",
-                    },
+                    "&:hover": { background: "#F2F8FF" },
+                    "& td": { borderBottom: "none" },
                 }}
             >
-                {rowCells(data).map((v, idx) => (
-                    <TableCell key={`row_cell_${idx}`} sx={{ whiteSpace: "pre-wrap" }}>
-                        {v}
-                    </TableCell>
-                ))}
+                {/* 체크박스 */}
+                <TableCell padding="checkbox">
+                    <Checkbox
+                        checked={checked}
+                        onChange={(e) => onCheck(group.groupKey, e.target.checked)}
+                        size="small"
+                        sx={{
+                            color: "#bbb",
+                            "&.Mui-checked": { color: "#0082FF" },
+                        }}
+                    />
+                </TableCell>
+
+                {/* 섬네일 */}
+                <TableCell>
+                    <img
+                        src={`https://image.21market.kr/${group.productImage}`}
+                        alt="섬네일"
+                        width={50}
+                        height={50}
+                        style={{ objectFit: "contain" }}
+                    />
+                </TableCell>
+
+                {/* 용량 */}
+                <TableCell>{group.storage}</TableCell>
+
+                {/* 최저가 */}
+                <TableCell>
+                    {group.minPrice?.toLocaleString() || "-"}
+                </TableCell>
+
+                {/* 판매가 */}
+                <TableCell>
+                    <TextField
+                        value={price}
+                        onChange={(e) => setPrice(e.target.value)}
+                        sx={{ width: "160px" }}
+                        size="small"
+                        placeholder="천원 단위로만 입력"
+                    />
+                </TableCell>
+
+                {/* 최종 수정 일시 */}
+                <TableCell>
+                    {group.updatedAt
+                        ? dayjs(group.updatedAt).format("YYYY-MM-DD HH:mm:ss")
+                        : "-"}
+                </TableCell>
+
+                {/* 저장/삭제 */}
+                <TableCell>
+                    <Grid container gap={1} flexWrap="nowrap">
+                        <Button
+                            variant="contained"
+                            size="small"
+                            onClick={handleUpdate}
+                            sx={{
+                                backgroundColor: "#0082FF",
+                                color: "#fff",
+                                fontWeight: 600,
+                                fontSize: "13px",
+                                padding: "4px 16px",
+                                borderRadius: "6px",
+                                boxShadow: "none",
+                                "&:hover": {
+                                    backgroundColor: "#006AD6",
+                                    boxShadow: "none",
+                                },
+                            }}
+                        >
+                            저장
+                        </Button>
+                        <Button
+                            variant="outlined"
+                            size="small"
+                            onClick={handleOpenDeleteAlert}
+                            sx={{
+                                color: "#888",
+                                borderColor: "#ccc",
+                                fontWeight: 500,
+                                fontSize: "13px",
+                                padding: "4px 16px",
+                                borderRadius: "6px",
+                                "&:hover": {
+                                    borderColor: "#999",
+                                    backgroundColor: "#f5f5f5",
+                                },
+                            }}
+                        >
+                            삭제
+                        </Button>
+                    </Grid>
+                </TableCell>
+            </TableRow>
+
+            {/* 재고 현황 행 */}
+            <TableRow>
+                <TableCell
+                    colSpan={totalColumns}
+                    sx={{
+                        borderBottom: "1px solid #e0e0e0",
+                        paddingTop: 0,
+                        paddingBottom: "12px",
+                    }}
+                >
+                    <Grid container alignItems="center" flexWrap="wrap">
+                        <span
+                            style={{
+                                fontSize: "14px",
+                                color: "#888",
+                                marginRight: "16px",
+                                whiteSpace: "nowrap",
+                            }}
+                        >
+                            재고 현황
+                        </span>
+                        {colorStocks.map((c, idx) => (
+                            <Grid
+                                key={c.productVarietyId}
+                                container
+                                alignItems="center"
+                                sx={{
+                                    width: "auto",
+                                    marginRight: "12px",
+                                    gap: "4px",
+                                }}
+                            >
+                                <span
+                                    style={{
+                                        fontSize: "16px",
+                                        color: "#555",
+                                    }}
+                                >
+                                    {c.color}
+                                </span>
+                                <input
+                                    value={c.productStock}
+                                    onChange={(e) =>
+                                        handleColorStockChange(idx, e.target.value)
+                                    }
+                                    style={{
+                                        width: "30px",
+                                        height: "24px",
+                                        textAlign: "center",
+                                        fontSize: "16px",
+                                        border: "1px solid #ddd",
+                                        borderRadius: "4px",
+                                        outline: "none",
+                                        background: "#fff",
+                                        color: "#333",
+                                    }}
+                                />
+                            </Grid>
+                        ))}
+                    </Grid>
+                </TableCell>
             </TableRow>
         </>
     );
