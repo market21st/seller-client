@@ -3,6 +3,7 @@ import {
     Grid,
     Pagination,
     Button,
+    Checkbox,
     Table,
     TableHead,
     TableRow,
@@ -16,6 +17,9 @@ import {
     Tabs,
     Tab,
 } from "@mui/material";
+import toast from "react-hot-toast";
+import { deleteProductVariety } from "../../api/stocks";
+import AlertModal from "../../components/common/AlertModal";
 import { getCategoryListApi, getStockList } from "../../api/stocks";
 import GradeModal from "../../components/stock/GradeModal";
 import {
@@ -32,6 +36,9 @@ import {
     STOCK_TABLE_HEAD_CELLS,
     STOCK_TAKE_OPTIONS,
 } from "../../constants/stocks";
+import { groupStocksByProduct } from "../../utils/groupStocks";
+
+const GRADE_LABEL = { 0: "B급", 1: "A급", 2: "S급" };
 
 const StockListPage = () => {
     const [gradeModal, setGradeModal] = useState(false);
@@ -50,6 +57,62 @@ const StockListPage = () => {
     const [optionText, setOptionText] = useState("");
     const [type, setType] = useState(0);
     const [orderBy, setOrderBy] = useState(1);
+    const [selectedKeys, setSelectedKeys] = useState(new Set());
+    const [bulkDeleteAlert, setBulkDeleteAlert] = useState(false);
+
+    // 모든 그룹의 groupKey 목록
+    const allGroupKeys = list.flatMap((g) => g.items.map((item) => item.groupKey));
+
+    const isAllChecked = allGroupKeys.length > 0 && allGroupKeys.every((key) => selectedKeys.has(key));
+
+    const handleCheckItem = (groupKey, checked) => {
+        setSelectedKeys((prev) => {
+            const next = new Set(prev);
+            if (checked) {
+                next.add(groupKey);
+            } else {
+                next.delete(groupKey);
+            }
+            return next;
+        });
+    };
+
+    const handleCheckAll = (checked) => {
+        if (checked) {
+            setSelectedKeys(new Set(allGroupKeys));
+        } else {
+            setSelectedKeys(new Set());
+        }
+    };
+
+    const handleBulkDelete = async () => {
+        // 선택된 그룹들의 모든 productVarietyId 수집
+        const varietyIds = [];
+        list.forEach((gradeGroup) => {
+            gradeGroup.items.forEach((group) => {
+                if (selectedKeys.has(group.groupKey)) {
+                    group.colors.forEach((c) => {
+                        varietyIds.push(c.productVarietyId);
+                    });
+                }
+            });
+        });
+
+        try {
+            for (const id of varietyIds) {
+                await deleteProductVariety(id);
+            }
+            setBulkDeleteAlert(false);
+            setSelectedKeys(new Set());
+            toast.success(`${selectedKeys.size}개 상품이 삭제되었습니다.`, {
+                duration: 4000,
+                style: { marginTop: "20px" },
+            });
+            getList({ page });
+        } catch {
+            toast.error("삭제에 실패했습니다.");
+        }
+    };
 
     const handleOpenGradeModal = () => {
         setGradeModal(true);
@@ -136,7 +199,8 @@ const StockListPage = () => {
         const response = await getStockList(searchData);
         if (response && response.content) {
             setTotal(response.totalElements);
-            setList(response.content);
+            const grouped = groupStocksByProduct(response.content);
+            setList(grouped);
             //setPage(pageQuery);
             setType(typeQuery);
         }
@@ -151,6 +215,12 @@ const StockListPage = () => {
 
     return (
         <>
+            <AlertModal
+                open={bulkDeleteAlert}
+                text={`선택한 ${selectedKeys.size}개 상품을 삭제하시겠어요?`}
+                onClose={() => setBulkDeleteAlert(false)}
+                onConfirm={handleBulkDelete}
+            />
             <GradeModal isOpen={gradeModal} onClose={handleCloseGradeModal} />
             <TemplateWrap>
                 <Grid container justifyContent={"space-between"} alignItems={"end"}>
@@ -179,27 +249,6 @@ const StockListPage = () => {
                         }}
                     >
                         <h4>상품 검색</h4>
-                        <TemplateRow>
-                            <p>분류</p>
-                            <Grid container gap={1}>
-                                {categoryFilter.map((v) => (
-                                    <FormControl sx={{ width: "200px" }} key={v.label}>
-                                        <InputLabel>{v.label}</InputLabel>
-                                        <Select
-                                            label={v.label}
-                                            value={v.value}
-                                            onChange={(e) => v.onChange(e.target.value)}
-                                        >
-                                            {v.list?.map((v) => (
-                                                <MenuItem key={v.id} value={v}>
-                                                    {v.name}
-                                                </MenuItem>
-                                            ))}
-                                        </Select>
-                                    </FormControl>
-                                ))}
-                            </Grid>
-                        </TemplateRow>
                         <TemplateRow>
                             <p>상품명</p>
                             <TextField
@@ -230,7 +279,32 @@ const StockListPage = () => {
                                 <Tab key={v.value} label={v.label} value={v.value} />
                             ))}
                         </Tabs>
-                        <Grid display={"inline-flex"} gap={1}>
+                        <Grid display={"inline-flex"} gap={1} alignItems="center">
+                            <Button
+                                variant="contained"
+                                size="small"
+                                disabled={selectedKeys.size === 0}
+                                onClick={() => setBulkDeleteAlert(true)}
+                                sx={{
+                                    backgroundColor: selectedKeys.size > 0 ? "#0082FF" : undefined,
+                                    color: selectedKeys.size > 0 ? "#fff" : undefined,
+                                    fontWeight: 600,
+                                    fontSize: "13px",
+                                    padding: "6px 20px",
+                                    borderRadius: "6px",
+                                    boxShadow: "none",
+                                    "&:hover": {
+                                        backgroundColor: selectedKeys.size > 0 ? "#006AD6" : undefined,
+                                        boxShadow: "none",
+                                    },
+                                    "&.Mui-disabled": {
+                                        backgroundColor: "#e0e0e0",
+                                        color: "#aaa",
+                                    },
+                                }}
+                            >
+                                선택 삭제{selectedKeys.size > 0 ? ` (${selectedKeys.size})` : ""}
+                            </Button>
                             <Select
                                 value={orderBy}
                                 onChange={(v) => setOrderBy(v.target.value)}
@@ -268,6 +342,19 @@ const StockListPage = () => {
                     <Table>
                         <TableHead>
                             <TableRow>
+                                <TableCell padding="checkbox">
+                                    <Checkbox
+                                        checked={isAllChecked}
+                                        indeterminate={selectedKeys.size > 0 && !isAllChecked}
+                                        onChange={(e) => handleCheckAll(e.target.checked)}
+                                        size="small"
+                                        sx={{
+                                            color: "#bbb",
+                                            "&.Mui-checked": { color: "#0082FF" },
+                                            "&.MuiCheckbox-indeterminate": { color: "#0082FF" },
+                                        }}
+                                    />
+                                </TableCell>
                                 {STOCK_TABLE_HEAD_CELLS.map((v) => (
                                     <TableCell key={v}>{v}</TableCell>
                                 ))}
@@ -275,17 +362,42 @@ const StockListPage = () => {
                         </TableHead>
                         <TableBody>
                             {list.length ? (
-                                list?.map((v) => (
-                                    <StockItem
-                                        key={v.productVarietyId}
-                                        data={v}
-                                        type={type}
-                                        getList={() => getList({ page })}
-                                    />
+                                list.map((gradeGroup) => (
+                                    <React.Fragment key={gradeGroup.grade}>
+                                        {gradeGroup.items.map((group, idx) => (
+                                            <React.Fragment key={group.groupKey}>
+                                                {/* 상품명 + 등급 섹션 헤더 (같은 등급 내 상품명이 바뀔 때마다 표시) */}
+                                                {(idx === 0 || gradeGroup.items[idx - 1].productName !== group.productName) && (
+                                                    <TableRow>
+                                                        <TableCell
+                                                            colSpan={STOCK_TABLE_HEAD_CELLS.length + 1}
+                                                            sx={{
+                                                                fontWeight: 700,
+                                                                fontSize: "15px",
+                                                                backgroundColor: "#f9f9f9",
+                                                                borderBottom: "2px solid #ddd",
+                                                                padding: "12px 10px",
+                                                            }}
+                                                        >
+                                                            {group.productName}&nbsp;&nbsp;/&nbsp;&nbsp;{GRADE_LABEL[gradeGroup.grade] || `${gradeGroup.grade}급`}
+                                                        </TableCell>
+                                                    </TableRow>
+                                                )}
+                                                <StockItem
+                                                    group={group}
+                                                    getList={() => getList({ page })}
+                                                    checked={selectedKeys.has(group.groupKey)}
+                                                    onCheck={handleCheckItem}
+                                                />
+                                            </React.Fragment>
+                                        ))}
+                                    </React.Fragment>
                                 ))
                             ) : (
                                 <TableRow>
-                                    <TableCell>판매 상품이 없습니다.</TableCell>
+                                    <TableCell colSpan={STOCK_TABLE_HEAD_CELLS.length + 1}>
+                                        판매 상품이 없습니다.
+                                    </TableCell>
                                 </TableRow>
                             )}
                         </TableBody>
