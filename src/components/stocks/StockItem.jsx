@@ -12,7 +12,7 @@ import AlertModal from "../common/AlertModal";
 import toast from "react-hot-toast";
 import { deleteProductVariety, patchProductVariety } from "../../api/stocks";
 
-const StockItem = ({ group, getList, checked, onCheck }) => {
+const StockItem = ({ group, gradeLabel, getList, checked, onCheck }) => {
     const groupKey = group.groupKey;
 
     const [price, setPrice] = useState(
@@ -96,7 +96,7 @@ const StockItem = ({ group, getList, checked, onCheck }) => {
         }
     };
 
-    const totalColumns = 7; // 헤더 컬럼 수 (체크박스 포함)
+    const totalColumns = 10; // 헤더 컬럼 수 (체크박스 포함)
 
     return (
         <>
@@ -141,6 +141,17 @@ const StockItem = ({ group, getList, checked, onCheck }) => {
                         height={50}
                         style={{ objectFit: "contain" }}
                     />
+                </TableCell>
+
+                {/* 상품명 */}
+                <TableCell>{group.productName}</TableCell>
+
+                {/* 용량 */}
+                <TableCell>{group.storage}</TableCell>
+
+                {/* 등급 */}
+                <TableCell>
+                    {gradeLabel}
                 </TableCell>
 
                 {/* 최저가 */}

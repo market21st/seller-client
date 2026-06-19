@@ -242,6 +242,27 @@ const StockListPage = () => {
                     >
                         <h4>상품 검색</h4>
                         <TemplateRow>
+                            <p>분류</p>
+                            <Grid container gap={1}>
+                                {categoryFilter.map((v) => (
+                                    <FormControl sx={{ width: "200px" }} key={v.label}>
+                                        <InputLabel>{v.label}</InputLabel>
+                                        <Select
+                                            label={v.label}
+                                            value={v.value}
+                                            onChange={(e) => v.onChange(e.target.value)}
+                                        >
+                                            {v.list?.map((v) => (
+                                                <MenuItem key={v.id} value={v}>
+                                                    {v.name}
+                                                </MenuItem>
+                                            ))}
+                                        </Select>
+                                    </FormControl>
+                                ))}
+                            </Grid>
+                        </TemplateRow>
+                        <TemplateRow>
                             <p>상품명</p>
                             <TextField
                                 label="상품명"
@@ -355,28 +376,14 @@ const StockListPage = () => {
                         <TableBody>
                             {list.length ? (
                                 list.map((section) => (
-                                    <React.Fragment key={section.groupKey}>
-                                        <TableRow>
-                                            <TableCell
-                                                colSpan={STOCK_TABLE_HEAD_CELLS.length + 1}
-                                                sx={{
-                                                    fontWeight: 700,
-                                                    fontSize: "15px",
-                                                    backgroundColor: "#f9f9f9",
-                                                    borderBottom: "2px solid #ddd",
-                                                    padding: "12px 10px",
-                                                }}
-                                            >
-                                                {section.productName}&nbsp;&nbsp;/&nbsp;&nbsp;{GRADE_LABEL[section.grade] || `${section.grade}급`}&nbsp;&nbsp;/&nbsp;&nbsp;{section.storage}
-                                            </TableCell>
-                                        </TableRow>
-                                        <StockItem
-                                            group={section}
-                                            getList={() => getList({ page })}
-                                            checked={selectedKeys.has(section.groupKey)}
-                                            onCheck={handleCheckItem}
-                                        />
-                                    </React.Fragment>
+                                    <StockItem
+                                        key={section.groupKey}
+                                        group={section}
+                                        gradeLabel={GRADE_LABEL[section.grade] || `${section.grade}급`}
+                                        getList={() => getList({ page })}
+                                        checked={selectedKeys.has(section.groupKey)}
+                                        onCheck={handleCheckItem}
+                                    />
                                 ))
                             ) : (
                                 <TableRow>

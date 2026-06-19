@@ -1,5 +1,8 @@
 export const STOCK_TABLE_HEAD_CELLS = [
   "섬네일",
+  "상품명",
+  "용량",
+  "등급",
   "최저가",
   "최대가",
   "판매가",
