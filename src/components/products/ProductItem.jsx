@@ -1,55 +1,44 @@
-import { Button, Grid, Typography } from "@mui/material";
+import { Button, Grid } from "@mui/material";
 import { GRADE_LIST } from "../../constants/common";
-import RandomColorOverlay from "../common/RandomColorOverlay";
 
-const ProductItem = ({
-  optionId,
-  optionText,
-  thumb,
- productImage,
-  postProduct,
-  postedGrade,
-}) => {
+const ProductItem = ({ group, postProductGroup, myList }) => {
+  // 그룹 내 모든 색상에 대해 해당 등급이 등록되었는지 확인
+  const isGradePosted = (gradeValue) => {
+    return group.items.every((item) => {
+      const found = myList?.find(
+        (v) =>
+          v.productName === item.productName &&
+          v.storage === item.storage &&
+          v.color === item.color
+      );
+      return found?.productsGrade?.map(Number)?.includes(gradeValue);
+    });
+  };
 
   return (
     <Grid
-      component={"li"}
       container
-      justifyContent={"space-between"}
-      alignItems={"center"}
-      gap={2}
+      justifyContent="flex-start"
+      gap={1}
+      sx={{ padding: "10px 0" }}
     >
-      <Grid display={"inline-flex"} alignItems={"center"} gap={1}>
-        <Grid position={"relative"}>
-          <img
-            src={thumb}
-            alt="섬네일"
-            width={50}
-            height={50}
-            style={{ objectFit: "contain" }}
-          />
-          {optionText.indexOf("랜덤") !== -1 ? <RandomColorOverlay /> : null}
-        </Grid>
-        <Typography fontWeight={500} whiteSpace={"nowrap"}>
-          {optionText}
-        </Typography>
-      </Grid>
-      <Grid display={"inline-flex"} gap={1}>
-        {GRADE_LIST.map(({ name, value }) => (
-          <Button
-            key={value}
-            variant="outlined"
-            color={
-              (postedGrade || []).indexOf(value) !== -1
-                ? "primary"
-                : "secondary"
-            }
-            onClick={() => postProduct(optionId, value, productImage)}
-          >
-            {name}급
-          </Button>
-        ))}
-      </Grid>
+      {GRADE_LIST.map(({ name, value }) => (
+        <Button
+          key={value}
+          variant="outlined"
+          size="small"
+          color={isGradePosted(value) ? "primary" : "secondary"}
+          onClick={() => postProductGroup(group.items, value)}
+          sx={{
+            fontSize: "13px",
+            padding: "4px 20px",
+            borderRadius: "6px",
+            fontWeight: isGradePosted(value) ? 700 : 500,
+          }}
+        >
+          {name}급
+        </Button>
+      ))}
     </Grid>
   );
 };

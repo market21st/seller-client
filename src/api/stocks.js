@@ -63,6 +63,20 @@ export const getStockList = async (params) => {
     }
 };
 
+/**
+ * 상품+등급 단위로 그룹핑된 재고 목록 조회
+ * - page, limit은 그룹(섹션) 단위
+ * - 응답의 totalElements도 그룹 단위 총 개수
+ */
+export const getStockListGrouped = async (params) => {
+    try {
+        const res = await productsApi.get(`/variety/stock/grouped`, { params });
+        return res.data;
+    } catch (err) {
+        return err.response.data;
+    }
+};
+
 export const patchProductVariety = async (params) => {
     try {
         const res = await productsApi.patch(`/variety`, params);

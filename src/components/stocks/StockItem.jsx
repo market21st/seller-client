@@ -13,11 +13,13 @@ import toast from "react-hot-toast";
 import { deleteProductVariety, patchProductVariety } from "../../api/stocks";
 
 const StockItem = ({ group, getList, checked, onCheck }) => {
+    const groupKey = group.groupKey;
+
     const [price, setPrice] = useState(
         String(group.lowestSellingPrice ? group.lowestSellingPrice : 0)
     );
     const [colorStocks, setColorStocks] = useState(
-        group.colors.map((c) => ({
+        (group.varieties || group.colors || []).map((c) => ({
             ...c,
             productStock: String(c.productStock || 0),
         }))
@@ -121,7 +123,7 @@ const StockItem = ({ group, getList, checked, onCheck }) => {
                 <TableCell padding="checkbox">
                     <Checkbox
                         checked={checked}
-                        onChange={(e) => onCheck(group.groupKey, e.target.checked)}
+                        onChange={(e) => onCheck(groupKey, e.target.checked)}
                         size="small"
                         sx={{
                             color: "#bbb",
@@ -141,12 +143,14 @@ const StockItem = ({ group, getList, checked, onCheck }) => {
                     />
                 </TableCell>
 
-                {/* 용량 */}
-                <TableCell>{group.storage}</TableCell>
-
                 {/* 최저가 */}
                 <TableCell>
                     {group.minPrice?.toLocaleString() || "-"}
+                </TableCell>
+
+                {/* 최대가 */}
+                <TableCell>
+                    {group.lowestSellingPrice?.toLocaleString() || "-"}
                 </TableCell>
 
                 {/* 판매가 */}

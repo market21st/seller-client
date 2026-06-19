@@ -20,7 +20,7 @@ import {
 import toast from "react-hot-toast";
 import { deleteProductVariety } from "../../api/stocks";
 import AlertModal from "../../components/common/AlertModal";
-import { getCategoryListApi, getStockList } from "../../api/stocks";
+import { getCategoryListApi, getStockListGrouped } from "../../api/stocks";
 import GradeModal from "../../components/stock/GradeModal";
 import {
     TemplateBox,
@@ -36,14 +36,14 @@ import {
     STOCK_TABLE_HEAD_CELLS,
     STOCK_TAKE_OPTIONS,
 } from "../../constants/stocks";
-import { groupStocksByProduct } from "../../utils/groupStocks";
+// 프론트 그룹핑 불필요 — 백엔드에서 그룹핑된 데이터를 내려줌
 
 const GRADE_LABEL = { 0: "B급", 1: "A급", 2: "S급" };
 
 const StockListPage = () => {
     const [gradeModal, setGradeModal] = useState(false);
 
-    const [total, setTotal] = useState(0);
+    const [totalPages, setTotalPages] = useState(0);
     const [page, setPage] = useState(1);
     const [list, setList] = useState([]);
 
@@ -61,7 +61,7 @@ const StockListPage = () => {
     const [bulkDeleteAlert, setBulkDeleteAlert] = useState(false);
 
     // 모든 그룹의 groupKey 목록
-    const allGroupKeys = list.flatMap((g) => g.items.map((item) => item.groupKey));
+    const allGroupKeys = list.map((section) => section.groupKey);
 
     const isAllChecked = allGroupKeys.length > 0 && allGroupKeys.every((key) => selectedKeys.has(key));
 
@@ -88,14 +88,12 @@ const StockListPage = () => {
     const handleBulkDelete = async () => {
         // 선택된 그룹들의 모든 productVarietyId 수집
         const varietyIds = [];
-        list.forEach((gradeGroup) => {
-            gradeGroup.items.forEach((group) => {
-                if (selectedKeys.has(group.groupKey)) {
-                    group.colors.forEach((c) => {
-                        varietyIds.push(c.productVarietyId);
-                    });
-                }
-            });
+        list.forEach((section) => {
+            if (selectedKeys.has(section.groupKey)) {
+                section.varieties.forEach((v) => {
+                    varietyIds.push(v.productVarietyId);
+                });
+            }
         });
 
         try {
@@ -182,26 +180,20 @@ const StockListPage = () => {
     };
     const getList = async (query) => {
         const partnerId = localStorage.getItem("id");
-        const pageQuery = query?.page ? query.page  - 1: 0;
+        const pageQuery = query?.page ? query.page - 1 : 0;
         const typeQuery = query?.type || type;
         const searchData = {
             page: pageQuery,
             limit: take,
             partnerId: partnerId || 0,
-            categoryId: categoryId || null,
-            subcategoryId: subcategoryId || null,
-            productId: productId || null,
             productName: optionText ? optionText : null,
             orderBy: orderBy,
             type: typeQuery,
-            productSort: null,
         };
-        const response = await getStockList(searchData);
+        const response = await getStockListGrouped(searchData);
         if (response && response.content) {
-            setTotal(response.totalElements);
-            const grouped = groupStocksByProduct(response.content);
-            setList(grouped);
-            //setPage(pageQuery);
+            setTotalPages(response.totalPages);
+            setList(response.content);
             setType(typeQuery);
         }
     };
@@ -362,35 +354,28 @@ const StockListPage = () => {
                         </TableHead>
                         <TableBody>
                             {list.length ? (
-                                list.map((gradeGroup) => (
-                                    <React.Fragment key={gradeGroup.grade}>
-                                        {gradeGroup.items.map((group, idx) => (
-                                            <React.Fragment key={group.groupKey}>
-                                                {/* 상품명 + 등급 섹션 헤더 (같은 등급 내 상품명이 바뀔 때마다 표시) */}
-                                                {(idx === 0 || gradeGroup.items[idx - 1].productName !== group.productName) && (
-                                                    <TableRow>
-                                                        <TableCell
-                                                            colSpan={STOCK_TABLE_HEAD_CELLS.length + 1}
-                                                            sx={{
-                                                                fontWeight: 700,
-                                                                fontSize: "15px",
-                                                                backgroundColor: "#f9f9f9",
-                                                                borderBottom: "2px solid #ddd",
-                                                                padding: "12px 10px",
-                                                            }}
-                                                        >
-                                                            {group.productName}&nbsp;&nbsp;/&nbsp;&nbsp;{GRADE_LABEL[gradeGroup.grade] || `${gradeGroup.grade}급`}
-                                                        </TableCell>
-                                                    </TableRow>
-                                                )}
-                                                <StockItem
-                                                    group={group}
-                                                    getList={() => getList({ page })}
-                                                    checked={selectedKeys.has(group.groupKey)}
-                                                    onCheck={handleCheckItem}
-                                                />
-                                            </React.Fragment>
-                                        ))}
+                                list.map((section) => (
+                                    <React.Fragment key={section.groupKey}>
+                                        <TableRow>
+                                            <TableCell
+                                                colSpan={STOCK_TABLE_HEAD_CELLS.length + 1}
+                                                sx={{
+                                                    fontWeight: 700,
+                                                    fontSize: "15px",
+                                                    backgroundColor: "#f9f9f9",
+                                                    borderBottom: "2px solid #ddd",
+                                                    padding: "12px 10px",
+                                                }}
+                                            >
+                                                {section.productName}&nbsp;&nbsp;/&nbsp;&nbsp;{GRADE_LABEL[section.grade] || `${section.grade}급`}&nbsp;&nbsp;/&nbsp;&nbsp;{section.storage}
+                                            </TableCell>
+                                        </TableRow>
+                                        <StockItem
+                                            group={section}
+                                            getList={() => getList({ page })}
+                                            checked={selectedKeys.has(section.groupKey)}
+                                            onCheck={handleCheckItem}
+                                        />
                                     </React.Fragment>
                                 ))
                             ) : (
@@ -405,7 +390,7 @@ const StockListPage = () => {
                 </TemplateBox>
                 <Grid container justifyContent={"center"}>
                     <Pagination
-                        count={Math.ceil(total / take)}
+                        count={totalPages}
                         page={page}
                         onChange={(e, v) => handleChangePage(v)}
                         showFirstButton
