@@ -36,7 +36,7 @@ import {
     STOCK_TABLE_HEAD_CELLS,
     STOCK_TAKE_OPTIONS,
 } from "../../constants/stocks";
-// 프론트 그룹핑 불필요 — 백엔드에서 그룹핑된 데이터를 내려줌
+// 백엔드에서 그룹핑된 데이터를 내려줌 — 프론트 그룹핑 불필요
 
 const GRADE_LABEL = { 0: "B급", 1: "A급", 2: "S급" };
 
@@ -60,8 +60,12 @@ const StockListPage = () => {
     const [selectedKeys, setSelectedKeys] = useState(new Set());
     const [bulkDeleteAlert, setBulkDeleteAlert] = useState(false);
 
+    // groupKey 생성 헬퍼
+    const getGroupKey = (section) =>
+        section.groupKey || `${section.productName}_${section.storage}_${section.grade}`;
+
     // 모든 그룹의 groupKey 목록
-    const allGroupKeys = list.map((section) => section.groupKey);
+    const allGroupKeys = list.map((section) => getGroupKey(section));
 
     const isAllChecked = allGroupKeys.length > 0 && allGroupKeys.every((key) => selectedKeys.has(key));
 
@@ -89,7 +93,7 @@ const StockListPage = () => {
         // 선택된 그룹들의 모든 productVarietyId 수집
         const varietyIds = [];
         list.forEach((section) => {
-            if (selectedKeys.has(section.groupKey)) {
+            if (selectedKeys.has(getGroupKey(section))) {
                 section.varieties.forEach((v) => {
                     varietyIds.push(v.productVarietyId);
                 });
@@ -189,8 +193,13 @@ const StockListPage = () => {
             productName: optionText ? optionText : null,
             orderBy: orderBy,
             type: typeQuery,
+            categoryId: category[1]?.id ||  null,
+            subcategoryId: category[2]?.id || null,
+            productId: category[3]?.id || null
         };
+        console.log("categoryFilter", category);
         const response = await getStockListGrouped(searchData);
+        console.log("response", response.content);
         if (response && response.content) {
             setTotalPages(response.totalPages);
             setList(response.content);
@@ -375,16 +384,40 @@ const StockListPage = () => {
                         </TableHead>
                         <TableBody>
                             {list.length ? (
-                                list.map((section) => (
-                                    <StockItem
-                                        key={section.groupKey}
-                                        group={section}
-                                        gradeLabel={GRADE_LABEL[section.grade] || `${section.grade}급`}
-                                        getList={() => getList({ page })}
-                                        checked={selectedKeys.has(section.groupKey)}
-                                        onCheck={handleCheckItem}
-                                    />
-                                ))
+                                list.map((section, idx) => {
+                                    const prev = idx > 0 ? list[idx - 1] : null;
+                                    const showHeader = !prev
+                                        || prev.productName !== section.productName
+                                        || prev.grade !== section.grade
+                                        || prev.storage !== section.storage;
+
+                                    return (
+                                        <React.Fragment key={getGroupKey(section)}>
+                                            {showHeader && (
+                                                <TableRow>
+                                                    <TableCell
+                                                        colSpan={STOCK_TABLE_HEAD_CELLS.length + 1}
+                                                        sx={{
+                                                            fontWeight: 700,
+                                                            fontSize: "15px",
+                                                            padding: "10px",
+                                                            borderBottom: "none",
+                                                            backgroundColor: "#fff",
+                                                        }}
+                                                    >
+                                                        {section.productName}&nbsp;&nbsp;{GRADE_LABEL[section.grade] || `${section.grade}급`}
+                                                    </TableCell>
+                                                </TableRow>
+                                            )}
+                                            <StockItem
+                                                group={{...section, groupKey: getGroupKey(section)}}
+                                                getList={() => getList({ page })}
+                                                checked={selectedKeys.has(getGroupKey(section))}
+                                                onCheck={handleCheckItem}
+                                            />
+                                        </React.Fragment>
+                                    );
+                                })
                             ) : (
                                 <TableRow>
                                     <TableCell colSpan={STOCK_TABLE_HEAD_CELLS.length + 1}>

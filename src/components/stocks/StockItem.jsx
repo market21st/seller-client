@@ -12,14 +12,14 @@ import AlertModal from "../common/AlertModal";
 import toast from "react-hot-toast";
 import { deleteProductVariety, patchProductVariety } from "../../api/stocks";
 
-const StockItem = ({ group, gradeLabel, getList, checked, onCheck }) => {
+const StockItem = ({ group, getList, checked, onCheck }) => {
     const groupKey = group.groupKey;
 
-    const [price, setPrice] = useState(
-        String(group.lowestSellingPrice ? group.lowestSellingPrice : 0)
-    );
+    // 초기 판매가: varieties 중 첫 번째 가격 사용
+    const initialPrice = group.varieties?.[0]?.productPrice || 0;
+    const [price, setPrice] = useState(String(initialPrice));
     const [colorStocks, setColorStocks] = useState(
-        (group.varieties || group.colors || []).map((c) => ({
+        (group.varieties || []).map((c) => ({
             ...c,
             productStock: String(c.productStock || 0),
         }))
@@ -56,19 +56,40 @@ const StockItem = ({ group, gradeLabel, getList, checked, onCheck }) => {
             return;
         }
 
-        const hasEmptyStock = colorStocks.some((c) => c.productStock === "");
+        const priceNum = Number(price);
+        const minPrice = group.productMinPrice;
+        const maxPrice = group.productMaxPrice;
+
+        if (minPrice && priceNum < minPrice) {
+            handleOpenUpdateAlert(
+                `판매가가 하한가(${minPrice.toLocaleString()}원)보다 낮습니다.\n하한가 이상으로 입력해 주세요.`
+            );
+            return;
+        }
+        if (maxPrice && priceNum > maxPrice) {
+            handleOpenUpdateAlert(
+                `판매가가 상한가(${maxPrice.toLocaleString()}원)보다 높습니다.\n상한가 이하로 입력해 주세요.`
+            );
+            return;
+        }
+
+        const hasEmptyStock = colorStocks.some((c) => !c.productStock && c.productStock !== "0");
         if (hasEmptyStock) {
             handleOpenUpdateAlert("재고를 입력해 주세요.");
             return;
         }
-
         try {
             for (const colorItem of colorStocks) {
-                await patchProductVariety({
+                const { data } = await patchProductVariety({
                     productVarietyId: colorItem.productVarietyId,
                     productPrice: price,
                     productStock: colorItem.productStock,
                 });
+
+                if (data.statusCode != 200) {
+                    toast.error("저장에 실패했습니다.");
+                    return;
+                }
             }
             toast.success("저장되었습니다.", {
                 duration: 4000,
@@ -96,7 +117,7 @@ const StockItem = ({ group, gradeLabel, getList, checked, onCheck }) => {
         }
     };
 
-    const totalColumns = 10; // 헤더 컬럼 수 (체크박스 포함)
+    const totalColumns = 8; // 체크박스 + 헤더 7개
 
     return (
         <>
@@ -143,40 +164,28 @@ const StockItem = ({ group, gradeLabel, getList, checked, onCheck }) => {
                     />
                 </TableCell>
 
-                {/* 상품명 */}
-                <TableCell>{group.productName}</TableCell>
-
                 {/* 용량 */}
                 <TableCell>{group.storage}</TableCell>
 
-                {/* 등급 */}
-                <TableCell>
-                    {gradeLabel}
-                </TableCell>
-
                 {/* 최저가 */}
-                <TableCell>
-                    {group.minPrice?.toLocaleString() || "-"}
-                </TableCell>
-
-                {/* 최대가 */}
-                <TableCell>
-                    {group.lowestSellingPrice?.toLocaleString() || "-"}
-                </TableCell>
+                <TableCell>{group.minPrice?.toLocaleString() || "-"}</TableCell>
 
                 {/* 판매가 */}
                 <TableCell>
                     <TextField
                         value={price}
                         onChange={(e) => setPrice(e.target.value)}
-                        sx={{ width: "160px" }}
+                        sx={{ width: "140px" }}
                         size="small"
-                        placeholder="천원 단위로만 입력"
+                        placeholder="천원 단위로만 입력해 주세요"
                     />
                 </TableCell>
 
+                {/* 추천가 */}
+                <TableCell>{group.productSuggestPrice?.toLocaleString() || "-"}</TableCell>
+
                 {/* 최종 수정 일시 */}
-                <TableCell>
+                <TableCell sx={{ fontSize: "13px" }}>
                     {group.updatedAt
                         ? dayjs(group.updatedAt).format("YYYY-MM-DD HH:mm:ss")
                         : "-"}
@@ -184,7 +193,7 @@ const StockItem = ({ group, gradeLabel, getList, checked, onCheck }) => {
 
                 {/* 저장/삭제 */}
                 <TableCell>
-                    <Grid container gap={1} flexWrap="nowrap">
+                    <Grid container flexDirection="column" gap={0.5} alignItems="flex-end">
                         <Button
                             variant="contained"
                             size="small"
@@ -197,6 +206,7 @@ const StockItem = ({ group, gradeLabel, getList, checked, onCheck }) => {
                                 padding: "4px 16px",
                                 borderRadius: "6px",
                                 boxShadow: "none",
+                                width: "60px",
                                 "&:hover": {
                                     backgroundColor: "#006AD6",
                                     boxShadow: "none",
@@ -216,6 +226,7 @@ const StockItem = ({ group, gradeLabel, getList, checked, onCheck }) => {
                                 fontSize: "13px",
                                 padding: "4px 16px",
                                 borderRadius: "6px",
+                                width: "60px",
                                 "&:hover": {
                                     borderColor: "#999",
                                     backgroundColor: "#f5f5f5",
@@ -260,12 +271,7 @@ const StockItem = ({ group, gradeLabel, getList, checked, onCheck }) => {
                                     gap: "4px",
                                 }}
                             >
-                                <span
-                                    style={{
-                                        fontSize: "16px",
-                                        color: "#555",
-                                    }}
-                                >
+                                <span style={{ fontSize: "14px", color: "#555" }}>
                                     {c.color}
                                 </span>
                                 <input
@@ -277,7 +283,7 @@ const StockItem = ({ group, gradeLabel, getList, checked, onCheck }) => {
                                         width: "30px",
                                         height: "24px",
                                         textAlign: "center",
-                                        fontSize: "16px",
+                                        fontSize: "14px",
                                         border: "1px solid #ddd",
                                         borderRadius: "4px",
                                         outline: "none",

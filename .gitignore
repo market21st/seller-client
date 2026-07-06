@@ -22,3 +22,7 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+/.claude/worktrees/objective-mcclintock-81416f/
+/.idea/.gitignore
+/.idea/git_toolbox_prj.xml
+/.idea/seller-client.iml
