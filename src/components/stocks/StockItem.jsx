@@ -165,13 +165,13 @@ const StockItem = ({ group, getList, checked, onCheck }) => {
                 </TableCell>
 
                 {/* 용량 */}
-                <TableCell>{group.storage}</TableCell>
+                <TableCell sx={{ minWidth: "100px" }}>{group.storage}</TableCell>
 
                 {/* 최저가 */}
-                <TableCell>{group.minPrice?.toLocaleString() || "-"}</TableCell>
+                <TableCell sx={{ minWidth: "120px" }}>{group.minPrice?.toLocaleString() || "-"}</TableCell>
 
                 {/* 판매가 */}
-                <TableCell>
+                <TableCell sx={{ minWidth: "120px" }}>
                     <TextField
                         value={price}
                         onChange={(e) => setPrice(e.target.value)}
@@ -198,20 +198,6 @@ const StockItem = ({ group, getList, checked, onCheck }) => {
                             variant="contained"
                             size="small"
                             onClick={handleUpdate}
-                            sx={{
-                                backgroundColor: "#0082FF",
-                                color: "#fff",
-                                fontWeight: 600,
-                                fontSize: "13px",
-                                padding: "4px 16px",
-                                borderRadius: "6px",
-                                boxShadow: "none",
-                                width: "60px",
-                                "&:hover": {
-                                    backgroundColor: "#006AD6",
-                                    boxShadow: "none",
-                                },
-                            }}
                         >
                             저장
                         </Button>
