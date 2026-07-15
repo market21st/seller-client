@@ -188,7 +188,7 @@ const OrderDetailPage = () => {
           </TemplateRow>
           <TemplateRow>
             <p>주문일자</p>
-            <span>{dayjs(detail.createdAt).format("YYYY.MM.DD HH:mm:ss")}</span>
+            <span>{dayjs(detail.approvedAt).format("YYYY.MM.DD HH:mm:ss")}</span>
           </TemplateRow>
           <TemplateRow>
             <p>상품명 - 옵션</p>
