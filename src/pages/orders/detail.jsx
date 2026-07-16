@@ -21,7 +21,7 @@ import {
 import dayjs from "dayjs";
 import toast from "react-hot-toast";
 import StatusUpdateModal from "../../components/orders/StatusUpdateModal";
-import { getOrderHistory, getOrderDetail } from "../../api/orders";
+import { getOrderDetail, getOrderAdminDetail } from "../../api/orders";
 import {getStatusToBeGroup, OrderStatus, getDisplayStatus} from "../../constants/orders";
 import historyList from "styled-components/test-utils";
 
@@ -56,6 +56,7 @@ const OrderDetailPage = () => {
   const { id } = useParams();
 
   const [detail, setDetail] = useState({});
+  const [detail2, setDetail2] = useState({});
   const [history, setHistory] = useState([]);
   const [isOpenStatusUpdateModal, setIsOpenStatusUpdateModal] = useState(false);
   const [deliveryInfo, setDeliveryInfo] = useState({ deliveryCompany: null, trackingNumber: null });
@@ -66,9 +67,19 @@ const OrderDetailPage = () => {
   const handleCloseStatusUpdateModal = () => {
     setIsOpenStatusUpdateModal(false);
   };
-  console.log(detail);
 
-  const handleClickChip = () => {
+  console.log(detail2);
+  let productSettlementPrice = 0;
+
+
+  if(detail2.isChange == 'N'){
+        productSettlementPrice = detail2.orderItemPrice - detail2.productAddPrice;
+  }else if(detail2.isChange == 'Y'){
+        productSettlementPrice = detail2.changePrice - detail2.productAddPrice;
+  }
+
+
+    const handleClickChip = () => {
     const status = detail.status;
     if (status === 120 || status === 130 || status === 200) {
       toast.success("담당자가 주문 처리상태 확인중이에요.", {
@@ -117,6 +128,7 @@ const OrderDetailPage = () => {
 
   const getDetail = async () => {
     const response = await getOrderDetail(id);
+
     if (response) {
         setDetail(response);
         setHistory(response.histories);
@@ -140,8 +152,15 @@ const OrderDetailPage = () => {
                 createdAt : returnItem.createdAt
             });
         }
+
+        console.log(response);
+        const response2 = await getOrderAdminDetail(response.orderItemId);
+        if (response2) {
+            setDetail2(response2);
+        }
     }
   };
+
   /*const getHistory = async () => {
     const { data, statusCode } = await getOrderHistory(id, "status");
     if (statusCode === 200) setHistory(data);
@@ -203,7 +222,7 @@ const OrderDetailPage = () => {
           </TemplateRow>
           <TemplateRow>
             <p>판매가</p>
-            <span>{detail.orderCost}</span>
+            <span>{productSettlementPrice}</span>
           </TemplateRow>
           <TemplateRow>
             <p>수수료율</p>

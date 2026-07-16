@@ -13,6 +13,18 @@ const ordersApi = axios.create({
     }
 });
 
+const ORDERS_ADMIN_API_BASE_URL =  process.env.REACT_APP_ORDER_ADMIN_API_URL;
+
+const ordersAdminApi = axios.create({
+    baseURL: ORDERS_ADMIN_API_BASE_URL,
+    headers: {
+        "Content-Type": "application/json",
+    },
+    paramsSerializer: {
+        indexes: null,
+    }
+});
+
 // 전체
 export const getOrder = async (params) => {
   try {
@@ -49,6 +61,15 @@ export const editOrderStatus = async (params) => {
 export const getOrderDetail = async (id) => {
   try {
     const res = await ordersApi.get(`/item/${id}`);
+    return res.data;
+  } catch (err) {
+    return err.response.data;
+  }
+};
+// 상세 2
+export const getOrderAdminDetail = async (id) => {
+  try {
+    const res = await ordersAdminApi.get(`/${id}`);
     return res.data;
   } catch (err) {
     return err.response.data;
