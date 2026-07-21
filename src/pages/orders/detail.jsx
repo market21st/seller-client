@@ -68,15 +68,17 @@ const OrderDetailPage = () => {
     setIsOpenStatusUpdateModal(false);
   };
 
-  console.log(detail2);
+
   let productSettlementPrice = 0;
+    const orderItemPrice = detail2.orderItemPrice || 0;
+    const changePrice = detail2.changePrice || 0;
+    const addPrice = detail2.productAddPrice || 0;
 
-
-  if(detail2.isChange == 'N'){
-        productSettlementPrice = detail2.orderItemPrice - detail2.productAddPrice;
-  }else if(detail2.isChange == 'Y'){
-        productSettlementPrice = detail2.changePrice - detail2.productAddPrice;
-  }
+    if (detail2.isChange === 'Y') {
+        productSettlementPrice = changePrice - addPrice;
+    } else {
+        productSettlementPrice = orderItemPrice - addPrice;
+    }
 
 
     const handleClickChip = () => {
