@@ -63,10 +63,19 @@ export const getStockList = async (params) => {
     }
 };
 
+export const getStockListGrouped = async (params) => {
+    try {
+        const res = await productsApi.get(`/variety/stock/grouped`, { params });
+        return res.data;
+    } catch (err) {
+        return err.response.data;
+    }
+};
+
 export const patchProductVariety = async (params) => {
     try {
         const res = await productsApi.patch(`/variety`, params);
-        return res.data.data;
+        return res.data;
     } catch (err) {
         return err.response.data;
     }

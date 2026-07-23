@@ -3,6 +3,7 @@ import {
     Grid,
     Pagination,
     Button,
+    Checkbox,
     Table,
     TableHead,
     TableRow,
@@ -16,7 +17,10 @@ import {
     Tabs,
     Tab,
 } from "@mui/material";
-import { getCategoryListApi, getStockList } from "../../api/stocks";
+import toast from "react-hot-toast";
+import { deleteProductVariety } from "../../api/stocks";
+import AlertModal from "../../components/common/AlertModal";
+import { getCategoryListApi, getStockListGrouped } from "../../api/stocks";
 import GradeModal from "../../components/stock/GradeModal";
 import {
     TemplateBox,
@@ -32,11 +36,14 @@ import {
     STOCK_TABLE_HEAD_CELLS,
     STOCK_TAKE_OPTIONS,
 } from "../../constants/stocks";
+// 백엔드에서 그룹핑된 데이터를 내려줌 — 프론트 그룹핑 불필요
+
+const GRADE_LABEL = { 0: "B급", 1: "A급", 2: "S급" };
 
 const StockListPage = () => {
     const [gradeModal, setGradeModal] = useState(false);
 
-    const [total, setTotal] = useState(0);
+    const [totalPages, setTotalPages] = useState(0);
     const [page, setPage] = useState(1);
     const [list, setList] = useState([]);
 
@@ -50,6 +57,77 @@ const StockListPage = () => {
     const [optionText, setOptionText] = useState("");
     const [type, setType] = useState(0);
     const [orderBy, setOrderBy] = useState(1);
+    const [selectedKeys, setSelectedKeys] = useState(new Set());
+    const [bulkDeleteAlert, setBulkDeleteAlert] = useState(false);
+
+    // groupKey 생성 헬퍼
+    const getGroupKey = (section) =>
+        section.groupKey || `${section.productName}_${section.storage}_${section.grade}`;
+
+    // 그룹의 색상별 재고 합계
+    const getTotalStock = (section) =>
+        (section.varieties || []).reduce((sum, v) => sum + Number(v.productStock || 0), 0);
+
+    // 재고 합계와 탭이 어긋나는 항목은 프론트에서 보정해서 노출
+    // (재고 합 0 -> 재고 등록 대기 / 재고 합 1 이상 -> 최저가 상품 or 최저가 아닌 상품)
+    const filteredList = list.filter((section) => {
+        const totalStock = getTotalStock(section);
+        if (type === 3) return totalStock === 0;
+        if (type === 1 || type === 2) return totalStock >= 1;
+        return true;
+    });
+
+    // 화면에 보이는(필터링된) 그룹의 groupKey 목록
+    const allGroupKeys = filteredList.map((section) => getGroupKey(section));
+
+    const isAllChecked = allGroupKeys.length > 0 && allGroupKeys.every((key) => selectedKeys.has(key));
+
+    const handleCheckItem = (groupKey, checked) => {
+        setSelectedKeys((prev) => {
+            const next = new Set(prev);
+            if (checked) {
+                next.add(groupKey);
+            } else {
+                next.delete(groupKey);
+            }
+            return next;
+        });
+    };
+
+    const handleCheckAll = (checked) => {
+        if (checked) {
+            setSelectedKeys(new Set(allGroupKeys));
+        } else {
+            setSelectedKeys(new Set());
+        }
+    };
+
+    const handleBulkDelete = async () => {
+        // 선택된 그룹들의 모든 productVarietyId 수집
+        const varietyIds = [];
+        list.forEach((section) => {
+            if (selectedKeys.has(getGroupKey(section))) {
+                section.varieties.forEach((v) => {
+                    varietyIds.push(v.productVarietyId);
+                });
+            }
+        });
+
+        try {
+            for (const id of varietyIds) {
+                await deleteProductVariety(id);
+            }
+            setBulkDeleteAlert(false);
+            setSelectedKeys(new Set());
+            toast.success(`${selectedKeys.size}개 상품이 삭제되었습니다.`, {
+                duration: 4000,
+                style: { marginTop: "20px" },
+            });
+            getList({ page });
+        } catch {
+            toast.error("삭제에 실패했습니다.");
+        }
+    };
 
     const handleOpenGradeModal = () => {
         setGradeModal(true);
@@ -119,25 +197,25 @@ const StockListPage = () => {
     };
     const getList = async (query) => {
         const partnerId = localStorage.getItem("id");
-        const pageQuery = query?.page ? query.page  - 1: 0;
+        const pageQuery = query?.page ? query.page - 1 : 0;
         const typeQuery = query?.type || type;
         const searchData = {
             page: pageQuery,
             limit: take,
             partnerId: partnerId || 0,
-            categoryId: categoryId || null,
-            subcategoryId: subcategoryId || null,
-            productId: productId || null,
             productName: optionText ? optionText : null,
             orderBy: orderBy,
             type: typeQuery,
-            productSort: null,
+            categoryId: category[1]?.id ||  null,
+            subcategoryId: category[2]?.id || null,
+            productId: category[3]?.id || null
         };
-        const response = await getStockList(searchData);
+        console.log("categoryFilter", category);
+        const response = await getStockListGrouped(searchData);
+        console.log("response", response.content);
         if (response && response.content) {
-            setTotal(response.totalElements);
+            setTotalPages(response.totalPages);
             setList(response.content);
-            //setPage(pageQuery);
             setType(typeQuery);
         }
     };
@@ -151,6 +229,12 @@ const StockListPage = () => {
 
     return (
         <>
+            <AlertModal
+                open={bulkDeleteAlert}
+                text={`선택한 ${selectedKeys.size}개 상품을 삭제하시겠어요?`}
+                onClose={() => setBulkDeleteAlert(false)}
+                onConfirm={handleBulkDelete}
+            />
             <GradeModal isOpen={gradeModal} onClose={handleCloseGradeModal} />
             <TemplateWrap>
                 <Grid container justifyContent={"space-between"} alignItems={"end"}>
@@ -230,7 +314,32 @@ const StockListPage = () => {
                                 <Tab key={v.value} label={v.label} value={v.value} />
                             ))}
                         </Tabs>
-                        <Grid display={"inline-flex"} gap={1}>
+                        <Grid display={"inline-flex"} gap={1} alignItems="center">
+                            <Button
+                                variant="contained"
+                                size="small"
+                                disabled={selectedKeys.size === 0}
+                                onClick={() => setBulkDeleteAlert(true)}
+                                sx={{
+                                    backgroundColor: selectedKeys.size > 0 ? "#0082FF" : undefined,
+                                    color: selectedKeys.size > 0 ? "#fff" : undefined,
+                                    fontWeight: 600,
+                                    fontSize: "13px",
+                                    padding: "6px 20px",
+                                    borderRadius: "6px",
+                                    boxShadow: "none",
+                                    "&:hover": {
+                                        backgroundColor: selectedKeys.size > 0 ? "#006AD6" : undefined,
+                                        boxShadow: "none",
+                                    },
+                                    "&.Mui-disabled": {
+                                        backgroundColor: "#e0e0e0",
+                                        color: "#aaa",
+                                    },
+                                }}
+                            >
+                                선택 삭제{selectedKeys.size > 0 ? ` (${selectedKeys.size})` : ""}
+                            </Button>
                             <Select
                                 value={orderBy}
                                 onChange={(v) => setOrderBy(v.target.value)}
@@ -268,24 +377,65 @@ const StockListPage = () => {
                     <Table>
                         <TableHead>
                             <TableRow>
+                                <TableCell padding="checkbox">
+                                    <Checkbox
+                                        checked={isAllChecked}
+                                        indeterminate={selectedKeys.size > 0 && !isAllChecked}
+                                        onChange={(e) => handleCheckAll(e.target.checked)}
+                                        size="small"
+                                        sx={{
+                                            color: "#bbb",
+                                            "&.Mui-checked": { color: "#0082FF" },
+                                            "&.MuiCheckbox-indeterminate": { color: "#0082FF" },
+                                        }}
+                                    />
+                                </TableCell>
                                 {STOCK_TABLE_HEAD_CELLS.map((v) => (
                                     <TableCell key={v}>{v}</TableCell>
                                 ))}
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {list.length ? (
-                                list?.map((v) => (
-                                    <StockItem
-                                        key={v.productVarietyId}
-                                        data={v}
-                                        type={type}
-                                        getList={() => getList({ page })}
-                                    />
-                                ))
+                            {filteredList.length ? (
+                                filteredList.map((section, idx) => {
+                                    const prev = idx > 0 ? filteredList[idx - 1] : null;
+                                    const showHeader = !prev
+                                        || prev.productName !== section.productName
+                                        || prev.grade !== section.grade
+                                        || prev.storage !== section.storage;
+
+                                    return (
+                                        <React.Fragment key={getGroupKey(section)}>
+                                            {showHeader && (
+                                                <TableRow>
+                                                    <TableCell
+                                                        colSpan={STOCK_TABLE_HEAD_CELLS.length + 1}
+                                                        sx={{
+                                                            fontWeight: 700,
+                                                            fontSize: "15px",
+                                                            padding: "10px",
+                                                            borderBottom: "none",
+                                                            backgroundColor: "#fff",
+                                                        }}
+                                                    >
+                                                        {section.productName}&nbsp;&nbsp;{GRADE_LABEL[section.grade] || `${section.grade}급`}
+                                                    </TableCell>
+                                                </TableRow>
+                                            )}
+                                            <StockItem
+                                                group={{...section, groupKey: getGroupKey(section)}}
+                                                getList={() => getList({ page })}
+                                                checked={selectedKeys.has(getGroupKey(section))}
+                                                onCheck={handleCheckItem}
+                                            />
+                                        </React.Fragment>
+                                    );
+                                })
                             ) : (
                                 <TableRow>
-                                    <TableCell>판매 상품이 없습니다.</TableCell>
+                                    <TableCell colSpan={STOCK_TABLE_HEAD_CELLS.length + 1}>
+                                        판매 상품이 없습니다.
+                                    </TableCell>
                                 </TableRow>
                             )}
                         </TableBody>
@@ -293,7 +443,7 @@ const StockListPage = () => {
                 </TemplateBox>
                 <Grid container justifyContent={"center"}>
                     <Pagination
-                        count={Math.ceil(total / take)}
+                        count={totalPages}
                         page={page}
                         onChange={(e, v) => handleChangePage(v)}
                         showFirstButton
