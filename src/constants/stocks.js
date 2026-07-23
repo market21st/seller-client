@@ -1,9 +1,9 @@
 export const STOCK_TABLE_HEAD_CELLS = [
   "",
   "용량",
+  "추천가",
   "최저가",
   "판매가",
-  "추천가",
   "최종 수정 일시",
   "",
 ];

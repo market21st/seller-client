@@ -64,8 +64,21 @@ const StockListPage = () => {
     const getGroupKey = (section) =>
         section.groupKey || `${section.productName}_${section.storage}_${section.grade}`;
 
-    // 모든 그룹의 groupKey 목록
-    const allGroupKeys = list.map((section) => getGroupKey(section));
+    // 그룹의 색상별 재고 합계
+    const getTotalStock = (section) =>
+        (section.varieties || []).reduce((sum, v) => sum + Number(v.productStock || 0), 0);
+
+    // 재고 합계와 탭이 어긋나는 항목은 프론트에서 보정해서 노출
+    // (재고 합 0 -> 재고 등록 대기 / 재고 합 1 이상 -> 최저가 상품 or 최저가 아닌 상품)
+    const filteredList = list.filter((section) => {
+        const totalStock = getTotalStock(section);
+        if (type === 3) return totalStock === 0;
+        if (type === 1 || type === 2) return totalStock >= 1;
+        return true;
+    });
+
+    // 화면에 보이는(필터링된) 그룹의 groupKey 목록
+    const allGroupKeys = filteredList.map((section) => getGroupKey(section));
 
     const isAllChecked = allGroupKeys.length > 0 && allGroupKeys.every((key) => selectedKeys.has(key));
 
@@ -383,9 +396,9 @@ const StockListPage = () => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {list.length ? (
-                                list.map((section, idx) => {
-                                    const prev = idx > 0 ? list[idx - 1] : null;
+                            {filteredList.length ? (
+                                filteredList.map((section, idx) => {
+                                    const prev = idx > 0 ? filteredList[idx - 1] : null;
                                     const showHeader = !prev
                                         || prev.productName !== section.productName
                                         || prev.grade !== section.grade

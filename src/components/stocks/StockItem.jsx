@@ -7,10 +7,11 @@ import {
     TextField,
 } from "@mui/material";
 import dayjs from "dayjs";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AlertModal from "../common/AlertModal";
 import toast from "react-hot-toast";
 import { deleteProductVariety, patchProductVariety } from "../../api/stocks";
+import defaultImage from "../../assets/default.png";
 
 const StockItem = ({ group, getList, checked, onCheck }) => {
     const groupKey = group.groupKey;
@@ -26,6 +27,22 @@ const StockItem = ({ group, getList, checked, onCheck }) => {
     );
     const [updateAlert, setUpdateAlert] = useState("");
     const [deleteAlert, setDeleteAlert] = useState("");
+    const [imageError, setImageError] = useState(false);
+
+    // group.varieties가 새로 조회되면(색상 추가/삭제, 재고 변경 등) 최신 값으로 동기화
+    useEffect(() => {
+        setPrice(String(group.varieties?.[0]?.productPrice || 0));
+        setColorStocks(
+            (group.varieties || []).map((c) => ({
+                ...c,
+                productStock: String(c.productStock || 0),
+            }))
+        );
+    }, [group.varieties]);
+
+    useEffect(() => {
+        setImageError(false);
+    }, [group.productImage]);
 
     const handleOpenDeleteAlert = () => {
         setDeleteAlert("이 상품의 모든 색상을 삭제하시겠어요?");
@@ -46,30 +63,33 @@ const StockItem = ({ group, getList, checked, onCheck }) => {
         );
     };
 
+    // 상한가/하한가를 벗어난 금액은 막지 않고 상한가/하한가로 자동 보정
+    const clampToPriceRange = (value) => {
+        const num = Number(value);
+        const minPrice = group.productMinPrice;
+        const maxPrice = group.productMaxPrice;
+        if (minPrice && num < minPrice) return String(minPrice);
+        if (maxPrice && num > maxPrice) return String(maxPrice);
+        return value;
+    };
+
+    const handlePriceBlur = () => {
+        setPrice((prev) => (prev ? clampToPriceRange(prev) : prev));
+    };
+
     const handleUpdate = async () => {
         if (!price) {
             handleOpenUpdateAlert("판매가를 입력해 주세요.");
             return;
         }
-        if (price.slice(-3) !== "000" || price.length < 4) {
+
+        const clampedPrice = clampToPriceRange(price);
+        if (clampedPrice !== price) {
+            setPrice(clampedPrice);
+        }
+
+        if (clampedPrice.slice(-3) !== "000" || clampedPrice.length < 4) {
             handleOpenUpdateAlert("판매가는 천원 단위로만 입력해 주세요.");
-            return;
-        }
-
-        const priceNum = Number(price);
-        const minPrice = group.productMinPrice;
-        const maxPrice = group.productMaxPrice;
-
-        if (minPrice && priceNum < minPrice) {
-            handleOpenUpdateAlert(
-                `판매가가 하한가(${minPrice.toLocaleString()}원)보다 낮습니다.\n하한가 이상으로 입력해 주세요.`
-            );
-            return;
-        }
-        if (maxPrice && priceNum > maxPrice) {
-            handleOpenUpdateAlert(
-                `판매가가 상한가(${maxPrice.toLocaleString()}원)보다 높습니다.\n상한가 이하로 입력해 주세요.`
-            );
             return;
         }
 
@@ -82,7 +102,7 @@ const StockItem = ({ group, getList, checked, onCheck }) => {
             for (const colorItem of colorStocks) {
                 const { data } = await patchProductVariety({
                     productVarietyId: colorItem.productVarietyId,
-                    productPrice: price,
+                    productPrice: clampedPrice,
                     productStock: colorItem.productStock,
                 });
 
@@ -155,34 +175,55 @@ const StockItem = ({ group, getList, checked, onCheck }) => {
 
                 {/* 섬네일 */}
                 <TableCell>
-                    <img
-                        src={`https://image.21market.kr/${group.productImage}`}
-                        alt="섬네일"
-                        width={50}
-                        height={50}
-                        style={{ objectFit: "contain" }}
-                    />
+                    {!group.productImage || imageError ? (
+                        <Grid
+                            container
+                            flexDirection="column"
+                            alignItems="center"
+                            justifyContent="center"
+                            sx={{
+                                width: 50,
+                                height: 50,
+                                border: "1px solid #eee",
+                                borderRadius: "4px",
+                                backgroundColor: "#fafafa",
+                            }}
+                        >
+                            <img src={defaultImage} alt="이미지 없음" width={24} height={24} />
+                            <span style={{ fontSize: "9px", color: "#aaa" }}>이미지 없음</span>
+                        </Grid>
+                    ) : (
+                        <img
+                            src={`https://image.21market.kr/${group.productImage}`}
+                            alt="섬네일"
+                            width={50}
+                            height={50}
+                            style={{ objectFit: "contain" }}
+                            onError={() => setImageError(true)}
+                        />
+                    )}
                 </TableCell>
 
                 {/* 용량 */}
                 <TableCell sx={{ minWidth: "100px" }}>{group.storage}</TableCell>
 
+                {/* 추천가 */}
+                <TableCell sx={{ minWidth: "100px" }}>{group.productSuggestPrice?.toLocaleString() || "-"}</TableCell>
+
                 {/* 최저가 */}
-                <TableCell sx={{ minWidth: "120px" }}>{group.minPrice?.toLocaleString() || "-"}</TableCell>
+                <TableCell sx={{ minWidth: "100px" }}>{group.minPrice?.toLocaleString() || "-"}</TableCell>
 
                 {/* 판매가 */}
                 <TableCell sx={{ minWidth: "120px" }}>
                     <TextField
                         value={price}
                         onChange={(e) => setPrice(e.target.value)}
+                        onBlur={handlePriceBlur}
                         sx={{ width: "140px" }}
                         size="small"
                         placeholder="천원 단위로만 입력해 주세요"
                     />
                 </TableCell>
-
-                {/* 추천가 */}
-                <TableCell>{group.productSuggestPrice?.toLocaleString() || "-"}</TableCell>
 
                 {/* 최종 수정 일시 */}
                 <TableCell sx={{ fontSize: "13px" }}>
