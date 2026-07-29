@@ -75,7 +75,7 @@ const OrderDetailPage = () => {
     const addPrice = detail2.productAddPrice || 0;
 
     if (detail2.isChange === 'Y') {
-        productSettlementPrice = changePrice - addPrice;
+        productSettlementPrice = changePrice;
     } else {
         productSettlementPrice = orderItemPrice - addPrice;
     }
