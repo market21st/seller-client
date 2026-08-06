@@ -26,3 +26,4 @@ yarn-error.log*
 /.idea/.gitignore
 /.idea/git_toolbox_prj.xml
 /.idea/seller-client.iml
+/.claude/launch.json
