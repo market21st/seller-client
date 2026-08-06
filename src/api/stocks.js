@@ -72,6 +72,26 @@ export const getStockListGrouped = async (params) => {
     }
 };
 
+export const getStockListAll = async (params) => {
+    try {
+        const res = await productsApi.get(`/variety/stock/all`, { params });
+        return res.data;
+    } catch (err) {
+        return err.response.data;
+    }
+};
+
+// 탭별 건수(전체/최저가 상품/최저가 아닌 상품/재고등록 대기) 조회
+// 응답 예상 형태: { content: { all, minPrice, notMinPrice, pending } } - 백엔드 확정 필요
+export const getStockCountApi = async (params) => {
+    try {
+        const res = await productsApi.get(`/variety/stock/count`, { params });
+        return res.data;
+    } catch (err) {
+        return err.response.data;
+    }
+};
+
 export const patchProductVariety = async (params) => {
     try {
         const res = await productsApi.patch(`/variety`, params);

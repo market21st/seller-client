@@ -1,6 +1,5 @@
 import {
     Button,
-    Checkbox,
     Grid,
     TableCell,
     TableRow,
@@ -11,9 +10,10 @@ import { useState } from "react";
 import AlertModal from "../common/AlertModal";
 import toast from "react-hot-toast";
 import { deleteProductVariety, patchProductVariety } from "../../api/stocks";
+import defaultImage from "../../assets/default.png";
 
-const StockItem = ({ group, getList, checked, onCheck }) => {
-    const groupKey = group.groupKey;
+const StockItem = ({ group, getList }) => {
+    const [imageError, setImageError] = useState(false);
 
     // 초기 판매가: varieties 중 첫 번째 가격 사용
     const initialPrice = group.varieties?.[0]?.productPrice || 0;
@@ -117,7 +117,7 @@ const StockItem = ({ group, getList, checked, onCheck }) => {
         }
     };
 
-    const totalColumns = 8; // 체크박스 + 헤더 7개
+    const totalColumns = 7; // 섬네일 + 데이터 5개 + 저장/삭제
 
     return (
         <>
@@ -140,28 +140,20 @@ const StockItem = ({ group, getList, checked, onCheck }) => {
                     "& td": { borderBottom: "none" },
                 }}
             >
-                {/* 체크박스 */}
-                <TableCell padding="checkbox">
-                    <Checkbox
-                        checked={checked}
-                        onChange={(e) => onCheck(groupKey, e.target.checked)}
-                        size="small"
-                        sx={{
-                            color: "#bbb",
-                            "&.Mui-checked": { color: "#0082FF" },
-                        }}
-                    />
-                </TableCell>
-
                 {/* 섬네일 */}
                 <TableCell>
-                    <img
-                        src={`https://image.21market.kr/${group.productImage}`}
-                        alt="섬네일"
-                        width={50}
-                        height={50}
-                        style={{ objectFit: "contain" }}
-                    />
+                    {!group.productImage || imageError ? (
+                        <img src={defaultImage} alt="이미지 없음" width={40} height={40} />
+                    ) : (
+                        <img
+                            src={`https://image.21market.kr/${group.productImage}`}
+                            alt="섬네일"
+                            width={40}
+                            height={40}
+                            style={{ objectFit: "contain" }}
+                            onError={() => setImageError(true)}
+                        />
+                    )}
                 </TableCell>
 
                 {/* 용량 */}
@@ -182,40 +174,51 @@ const StockItem = ({ group, getList, checked, onCheck }) => {
                 </TableCell>
 
                 {/* 추천가 */}
-                <TableCell>{group.productSuggestPrice?.toLocaleString() || "-"}</TableCell>
+                <TableCell sx={{ whiteSpace: "nowrap" }}>{group.productSuggestPrice?.toLocaleString() || "-"}</TableCell>
 
                 {/* 최종 수정 일시 */}
-                <TableCell sx={{ fontSize: "13px" }}>
+                <TableCell sx={{ fontSize: "13px", whiteSpace: "nowrap" }}>
                     {group.updatedAt
                         ? dayjs(group.updatedAt).format("YYYY-MM-DD HH:mm:ss")
                         : "-"}
                 </TableCell>
 
                 {/* 저장/삭제 */}
-                <TableCell>
+                <TableCell sx={{ whiteSpace: "nowrap" }}>
                     <Grid container flexDirection="column" gap={0.5} alignItems="flex-end">
                         <Button
-                            variant="contained"
                             size="small"
                             onClick={handleUpdate}
+                            sx={{
+                                backgroundColor: "#EAF2FF",
+                                color: "#0082FF",
+                                border: "1px solid #0082FF",
+                                fontWeight: 600,
+                                fontSize: "13px",
+                                padding: "2px 16px",
+                                borderRadius: "6px",
+                                width: "60px",
+                                boxShadow: "none",
+                                "&:hover": {
+                                    backgroundColor: "#DCEBFF",
+                                    boxShadow: "none",
+                                },
+                            }}
                         >
                             저장
                         </Button>
                         <Button
-                            variant="outlined"
                             size="small"
                             onClick={handleOpenDeleteAlert}
                             sx={{
                                 color: "#888",
-                                borderColor: "#ccc",
                                 fontWeight: 500,
                                 fontSize: "13px",
-                                padding: "4px 16px",
-                                borderRadius: "6px",
-                                width: "60px",
+                                padding: "2px 16px",
+                                minWidth: "60px",
                                 "&:hover": {
-                                    borderColor: "#999",
-                                    backgroundColor: "#f5f5f5",
+                                    backgroundColor: "transparent",
+                                    color: "#555",
                                 },
                             }}
                         >
@@ -225,7 +228,7 @@ const StockItem = ({ group, getList, checked, onCheck }) => {
                 </TableCell>
             </TableRow>
 
-            {/* 재고 현황 행 */}
+            {/* 재고 색상별 수량 행 */}
             <TableRow>
                 <TableCell
                     colSpan={totalColumns}
@@ -236,16 +239,6 @@ const StockItem = ({ group, getList, checked, onCheck }) => {
                     }}
                 >
                     <Grid container alignItems="center" flexWrap="wrap">
-                        <span
-                            style={{
-                                fontSize: "14px",
-                                color: "#888",
-                                marginRight: "16px",
-                                whiteSpace: "nowrap",
-                            }}
-                        >
-                            재고 현황
-                        </span>
                         {colorStocks.map((c, idx) => (
                             <Grid
                                 key={c.productVarietyId}
